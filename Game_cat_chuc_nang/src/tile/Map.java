@@ -68,9 +68,9 @@ public class Map extends TileManager{
         g2.drawImage(gp.player.down1,playerX,playerY,playerSize,playerSize,null);
 
         //Hint
-        g2.setFont(gp.ui.determinationSans.deriveFont(32f));
+        g2.setFont(gp.ui.determinationSans.deriveFont(28f));
         g2.setColor(Color.white);
-        g2.drawString("Press M to close", 750, 550);
+        g2.drawString("Nhấn M để đóng", 750, 550);
     }
 
 }
