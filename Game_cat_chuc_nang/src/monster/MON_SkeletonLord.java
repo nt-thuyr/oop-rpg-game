@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class MON_SkeletonLord extends Entity {
     GamePanel gp; // cuz of different package
-    public static final String monName = "Skeleton Lord";
+    public static final String monName = "Hài cốt vương";
     public MON_SkeletonLord(GamePanel gp) {
         super(gp);
 
@@ -104,9 +104,9 @@ public class MON_SkeletonLord extends Entity {
     }
     public void setDialogue()
     {
-        dialogues[0][0] = "No one can steal my treasure.";
-        dialogues[0][1] = "You will die here.";
-        dialogues[0][2] = "WELCOME TO YOUR DOOM!";
+        dialogues[0][0] = "Không ai có thể đánh cắp kho báu của ta!";
+        dialogues[0][1] = "Mi sẽ bỏ mạng thôi!";
+        dialogues[0][2] = "HÃY ĐÓN NHẬN CÁI CHẾT CỦA NGƯƠI ĐI!";
 
     }
     public void setAction()

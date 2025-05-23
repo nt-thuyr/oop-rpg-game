@@ -8,7 +8,7 @@ import java.awt.*;
 public class OBJ_Coin_Bronze extends Entity {
 
     GamePanel gp;
-    public static final String objName = "Bronze Coin";
+    public static final String objName = "Tiền đồng";
     public OBJ_Coin_Bronze(GamePanel gp) {
         super(gp);
         this.gp = gp;

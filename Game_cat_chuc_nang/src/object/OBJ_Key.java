@@ -8,7 +8,7 @@ import java.awt.*;
 public class OBJ_Key extends Entity {
 
     GamePanel gp;
-    public static final String objName = "Key";
+    public static final String objName = "Chìa khoá";
 
     public OBJ_Key(GamePanel gp)
     {
@@ -17,7 +17,7 @@ public class OBJ_Key extends Entity {
         type = type_consumable;
         name = objName;
         down1 = setup("/objects/key",gp.tileSize,gp.tileSize);
-        description = "[" + name + "]\nIt opens a door.";
+        description = "[" + name + "]\nDùng để mở cửa.";
         price = 350;
         stackable = true;
 
@@ -25,9 +25,9 @@ public class OBJ_Key extends Entity {
     }
     public void setDialogue()
     {
-        dialogues[0][0] = "You use the " + name + " and open the door.";
+        dialogues[0][0] = "Bạn đã dùng " + name + " để mở cánh cửa này.";
 
-        dialogues[1][0] = "What are you doing?";
+        dialogues[1][0] = "Làm cái gì zậy?";
     }
     public boolean use(Entity entity)
     {

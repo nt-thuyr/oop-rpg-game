@@ -94,7 +94,7 @@ public class CutsceneManager {
             y = gp.screenHeight / 2;
 
             // Có thể thay bằng credit đơn giản hoặc bỏ hẳn
-            drawString(alpha, 38f, y, "Thank you for playing!", 40);
+            drawString(alpha, 38f, y, "Cam on vi da den!", 40);
 
             if (counterReached(240) && alpha == 1f) {
                 scenePhase++;
@@ -104,7 +104,7 @@ public class CutsceneManager {
         if (scenePhase == 8) {
             drawBlackBackground(1f);
             y--;
-            drawString(1f, 38f, y, "Thank you for playing!", 40);
+            drawString(1f, 38f, y, "Cam on vi da den!", 40);
             if (counterReached(1320)) {
                 sceneNum = NA;
                 scenePhase = 0;
