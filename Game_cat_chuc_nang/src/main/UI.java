@@ -491,17 +491,6 @@ public class UI {
                         npc.startDialogue(npc,3);
                     }
                 }
-//                else if(gp.player.inventory.size() == gp.player.maxInventorySize) //full inventory
-//                {
-//                    subState = 0;
-//                    gp.gameState = gp.dialogueState;
-//                    currentDialogue = "You can not carry any more!";
-//                }
-//                else
-//                {
-//                    gp.player.coin -= npc.inventory.get(itemIndex).price;  //-price
-//                    gp.player.inventory.add(npc.inventory.get(itemIndex)); //add item to player's inventory
-//                }
             }
         }
     }
