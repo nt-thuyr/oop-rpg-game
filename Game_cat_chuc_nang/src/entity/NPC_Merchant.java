@@ -39,10 +39,12 @@ public class NPC_Merchant extends Entity{
     public void setDialogue()
     {
         dialogues[0][0] = "He he ha, so you found me.\nI have some good stuff. \nDo you want to trade?";
-        dialogues[1][0] = "Come again, hehe!";
+        dialogues[1][0] = "Come again, he he!";
         dialogues[2][0] = "You need more coin to buy that!";
         dialogues[3][0] = "You can not carry any more!";
         dialogues[4][0] = "You can not sell an equipped item!";
+        dialogues[5][0] = "He he! You sure have good eyes.";
+        dialogues[6][0] = "He he! What a nice stuff you have.";
     }
     public void setItems()
     {

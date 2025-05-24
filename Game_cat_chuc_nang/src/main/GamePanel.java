@@ -287,7 +287,7 @@ public class GamePanel extends JPanel implements Runnable{
     {
         //DEBUG
         long drawStart = 0;
-        if(keyH.showDebugText == true)
+        if(keyH.showDebugText)
         {
             drawStart = System.nanoTime();
         }
