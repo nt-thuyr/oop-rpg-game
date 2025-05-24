@@ -43,6 +43,9 @@ public class NPC_Merchant extends Entity{
         dialogues[2][0] = "Thêm mấy đồng nữa ta mới bán nhe!";
         dialogues[3][0] = "Đầy quá rồi, không chứa thêm được đâu!";
         dialogues[4][0] = "Đồ đang dùng sao mà bán hả cưng!?";
+        dialogues[5][0] = "He he cưng cũng biết chọn phết đấy!";
+        dialogues[6][0] = "Hề hề cưng có đồ ngon quá nhể!";
+
     }
     public void setItems()
     {
