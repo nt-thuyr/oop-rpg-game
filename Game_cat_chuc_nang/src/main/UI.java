@@ -15,7 +15,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
 
-    public Font maruMonica, purisaB;
+    public Font determinationSans, purisaB;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
 
     ArrayList<String> message = new ArrayList<>();
@@ -38,9 +38,11 @@ public class UI {
 
     public UI(GamePanel gp) {
         this.gp = gp;
-        try {
-            InputStream is = getClass().getResourceAsStream("/font/x12y16pxMaruMonica.ttf");
-            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+        try
+        {
+            InputStream is = getClass().getResourceAsStream("/font/SVN-Determination Sans.ttf");
+            determinationSans = Font.createFont(Font.TRUETYPE_FONT, is);
+
             is = getClass().getResourceAsStream("/font/Purisa Bold.ttf");
             purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
         } catch (FontFormatException | IOException e) {
@@ -73,7 +75,8 @@ public class UI {
 
         drawSubWindow(x, y, width, height);
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25F));
         x += gp.tileSize;
         y += gp.tileSize;
 
@@ -132,7 +135,7 @@ public class UI {
         int statsY = charY + 24;
 
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(28F));
+        g2.setFont(g2.getFont().deriveFont(20F));
         final int lineHeight = 35;
         final int spacing = 105;
 
@@ -240,7 +243,7 @@ public class UI {
 
             // DISPLAY AMOUNT
             if (entity == gp.player && entity.inventory.get(i).amount > 1) {
-                g2.setFont(g2.getFont().deriveFont(32f));
+                g2.setFont(g2.getFont().deriveFont(27F));
                 int amountX;
                 int amountY;
 
@@ -302,7 +305,7 @@ public class UI {
         int invFrameWidth = slotSize * maxCols + 40;
         int invFrameHeight = slotSize * 4 + 40;
         drawSubWindow(frameX, frameY, invFrameWidth, invFrameHeight);
-
+      
         // Draw Items
         for (int i = 0; i < entity.inventory.size(); i++) {
             if (entity.inventory.get(i) == entity.currentWeapon ||
@@ -474,7 +477,7 @@ public class UI {
         int levelTextX = expBarX + 12;
         int levelTextY = expBarY + 12;
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14F));
         String text = "Level " + gp.player.level;
         g2.drawString(text, levelTextX, levelTextY);
     }
@@ -523,7 +526,7 @@ public class UI {
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect(x, y, (int) hpBarValue, 20);
 
-                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 22f));
                     g2.setColor(Color.white);
                     g2.drawString(monster.name, x + 4, y - 10);
                 }
@@ -536,6 +539,7 @@ public class UI {
         int messageX = gp.tileSize;
         int messageY = gp.tileSize * 4;
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24F));
+
 
         for (int i = 0; i < message.size(); i++) {
             if (message.get(i) != null) {
@@ -567,7 +571,7 @@ public class UI {
         if (titleScreenState == 0) {
 
             //TITLE NAME
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
             String text = "Blue Boy Adventure\n";
             int x = getXforCenteredText(text);
             int y = gp.tileSize * 3;
@@ -606,7 +610,7 @@ public class UI {
         else if (titleScreenState == 1) {
             //CLASS SELECTION SCREEN
             g2.setColor(Color.white);
-            g2.setFont(g2.getFont().deriveFont(42F));
+            g2.setFont(g2.getFont().deriveFont(40F));
 
             String text = "- You are -";
             int x = getXforCenteredText(text);
@@ -667,7 +671,7 @@ public class UI {
 
     public void drawOptionsScreen() {
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(32F));
+        g2.setFont(g2.getFont().deriveFont(30F));
 
         // SUB WINDOW
 
@@ -939,7 +943,7 @@ public class UI {
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-        g2.setFont(maruMonica);
+        g2.setFont(determinationSans);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
         g2.setColor(Color.white);
 

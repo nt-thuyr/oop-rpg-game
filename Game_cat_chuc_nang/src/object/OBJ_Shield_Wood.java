@@ -5,7 +5,7 @@ import main.GamePanel;
 
 public class OBJ_Shield_Wood extends Entity {
 
-    public static final String objName = "Wood Shield";
+    public static final String objName = "Khiên gỗ";
 
     public OBJ_Shield_Wood(GamePanel gp) {
         super(gp);
@@ -14,7 +14,7 @@ public class OBJ_Shield_Wood extends Entity {
         name = objName;
         down1 = setup("/objects/shield_wood",gp.tileSize,gp.tileSize);
         defenseValue = 1;
-        description = "[" + name + "]\nMade by wood.";
+        description = "[" + name + "]\nLàm bằng...gỗ.";
         price = 30;
     }
 }

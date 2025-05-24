@@ -16,12 +16,12 @@ public class MON_Bat extends Entity {
         this.gp = gp;
 
         type = type_monster;
-        name = "Bat";
+        name = "Dơi";
         defaultSpeed = 4;
         speed = defaultSpeed;
         maxLife = 7;
         life = maxLife;
-        attack = 6;
+        attack = 4;
         defense = 0;
         exp = 2;
         //projectile = new OBJ_Rock(gp);
