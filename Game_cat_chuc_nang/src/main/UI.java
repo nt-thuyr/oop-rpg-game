@@ -126,20 +126,21 @@ public class UI {
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         // CHARACTER IMAGE
-        int charX = frameX + 40;
+        int charX = frameX + 36;
         int charY = frameY + 20;
         g2.drawImage(gp.player.down1, charX, charY, gp.tileSize * 2, gp.tileSize * 2, null);
 
         // CHARACTER STATS
-        int statsX = charX + gp.tileSize * 3; // Bên phải hình ảnh nhân vật
+        int statsX = charX + gp.tileSize * 2 + 30; // Bên phải hình ảnh nhân vật
         int statsY = charY + 24;
 
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(20F));
+        g2.setFont(g2.getFont().deriveFont(22F));
 
         // NAMES AND VALUES
         final int lineHeight = 32;
-        final int spacing = 110;
+        final int spacing = 118;
+
         g2.drawString("Life", statsX, statsY);
         String hpValue = gp.player.life + "/" + gp.player.maxLife;
         g2.drawString(hpValue, statsX + spacing, statsY);
@@ -150,7 +151,7 @@ public class UI {
         g2.drawString("Dexterity", statsX, statsY + lineHeight * 2);
         g2.drawString(String.valueOf(gp.player.dexterity), statsX + spacing, statsY + lineHeight * 2);
 
-        statsX += gp.tileSize * 4; // Dịch sang phải để hiển thị các chỉ số khác
+        statsX += gp.tileSize * 4 + 20; // Dịch sang phải để hiển thị các chỉ số khác
         g2.drawString("Attack", statsX, statsY);
         g2.drawString(String.valueOf(gp.player.attack), statsX + spacing - 5, statsY);
 
@@ -160,13 +161,13 @@ public class UI {
         g2.drawString("Coin", statsX, statsY + lineHeight * 2);
         g2.drawString(String.valueOf(gp.player.coin), statsX + spacing - 5, statsY + +lineHeight * 2);
 
-        statsX += gp.tileSize * 4; // Dịch sang phải để hiển thị các chỉ số khác
+        statsX += gp.tileSize * 4 - 20; // Dịch sang phải để hiển thị các chỉ số khác
         g2.drawString("Experience", statsX, statsY);
         String expValue = gp.player.exp + "/" + gp.player.nextLevelExp;
-        g2.drawString(expValue, statsX + spacing + 5, statsY);
+        g2.drawString(expValue, statsX + spacing + 10, statsY);
 
         g2.drawString("Level", statsX, statsY + lineHeight);
-        g2.drawString(String.valueOf(gp.player.level), statsX + spacing + 5, statsY + lineHeight);
+        g2.drawString(String.valueOf(gp.player.level), statsX + spacing + 10, statsY + lineHeight);
 
         frameY = gp.tileSize * 6;
         drawInventory(gp.player, false, true, frameX, frameY, frameWidth, frameHeight, playerSlotCol, playerSlotRow);
@@ -250,7 +251,7 @@ public class UI {
 
                 int textX = dFrameX + 20;
                 int textY = frameY + gp.tileSize;
-                g2.setFont(g2.getFont().deriveFont(24F));
+                g2.setFont(g2.getFont().deriveFont(22F));
                 for (String line : entity.inventory.get(itemIndex).description.split("\n")) {
                     g2.drawString(line, textX, textY);
                     textY += 32;
@@ -261,11 +262,11 @@ public class UI {
                     int price = entity == npc ? entity.inventory.get(itemIndex).price : entity.inventory.get(itemIndex).price / 2;
                     textY += 32;
                     g2.drawString("Price: " + price, textX, textY);
-                    g2.drawImage(coin, textX + gp.tileSize * 2 + 15, textY - 27, 35, 35, null);
+                    g2.drawImage(coin, textX + gp.tileSize * 2 + 15, textY - 27, 36, 36, null);
                     // Player's coin
                     textY += 32;
                     g2.drawString("Your Coin: " + gp.player.coin, textX, textY);
-                    g2.drawImage(coin, textX + gp.tileSize * 3 + 10, textY - 27, 35, 35, null);
+                    g2.drawImage(coin, textX + gp.tileSize * 3 + 10, textY - 27, 36, 36, null);
                 }
             }
         }

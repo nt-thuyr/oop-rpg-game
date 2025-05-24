@@ -122,7 +122,7 @@ public class KeyHandler implements KeyListener {
     }
 
     public void pauseState(int code) {
-        if (code == KeyEvent.VK_ESCAPE) {
+        if (code == KeyEvent.VK_ESCAPE || code == KeyEvent.VK_P) {
             gp.gameState = gp.playState;
         }
     }
@@ -197,6 +197,8 @@ public class KeyHandler implements KeyListener {
             tradeScreenState(code);
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.ui.subState = 0;
+                gp.ui.npc.startDialogue(gp.ui.npc, 1);
+                enterPressed = false;
             }
         }
     }
@@ -281,19 +283,17 @@ public class KeyHandler implements KeyListener {
                     if (gp.ui.npc.inventory.get(itemIndex).price > gp.player.coin) {
                         gp.ui.subState = 0;
                         gp.ui.npc.startDialogue(gp.ui.npc, 2); // Not enough coin
-                        enterPressed = false;
                     } else {
                         if (gp.player.canObtainItem(gp.ui.npc.inventory.get(itemIndex))) {
                             gp.player.coin -= gp.ui.npc.inventory.get(itemIndex).price;
                             gp.ui.subState = 0;
                             gp.ui.npc.startDialogue(gp.ui.npc, 5); // Success purchased
-                            enterPressed = false;
                         } else {
                             gp.ui.subState = 0;
                             gp.ui.npc.startDialogue(gp.ui.npc, 3); // Inventory full
-                            enterPressed = false;
                         }
                     }
+                    enterPressed = false;
                 }
             } else {
                 int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
@@ -302,7 +302,6 @@ public class KeyHandler implements KeyListener {
                             gp.player.inventory.get(itemIndex) == gp.player.currentShield) {
                         gp.ui.subState = 0;
                         gp.ui.npc.startDialogue(gp.ui.npc, 4); // Can't sell equipped item
-                        enterPressed = false;
                     } else {
                         int price = gp.player.inventory.get(itemIndex).price / 2;
                         if (gp.player.inventory.get(itemIndex).amount > 1) {
@@ -313,8 +312,8 @@ public class KeyHandler implements KeyListener {
                         gp.player.coin += price;
                         gp.ui.subState = 0;
                         gp.ui.npc.startDialogue(gp.ui.npc, 6); // Success purchased
-                        enterPressed = false;
                     }
+                    enterPressed = false;
                 }
             }
         }
