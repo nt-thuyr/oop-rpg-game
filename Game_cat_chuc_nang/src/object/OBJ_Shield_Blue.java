@@ -14,7 +14,7 @@ public class OBJ_Shield_Blue extends Entity {
         name = objName;
         down1 = setup("/objects/shield_blue",gp.tileSize,gp.tileSize);
         defenseValue = 2;
-        description = "[" + name + "]\nMột chiếc khiên xanh ánh kim lấp lánh.";
+        description = "[" + name + "]\nMột chiếc khiên xanh\nánh kim lấp lánh.";
         price = 150;
     }
 }
