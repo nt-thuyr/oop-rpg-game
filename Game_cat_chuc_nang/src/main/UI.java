@@ -15,7 +15,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
 
-    public Font maruMonica, purisaB;
+    public Font determinationSans, purisaB;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
 
     ArrayList<String> message = new ArrayList<>();
@@ -38,9 +38,11 @@ public class UI {
 
     public UI(GamePanel gp) {
         this.gp = gp;
-        try {
-            InputStream is = getClass().getResourceAsStream("/font/x12y16pxMaruMonica.ttf");
-            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+        try
+        {
+            InputStream is = getClass().getResourceAsStream("/font/SVN-Determination Sans.ttf");
+            determinationSans = Font.createFont(Font.TRUETYPE_FONT, is);
+
             is = getClass().getResourceAsStream("/font/Purisa Bold.ttf");
             purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
         } catch (FontFormatException | IOException e) {
@@ -73,7 +75,8 @@ public class UI {
 
         drawSubWindow(x, y, width, height);
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25F));
         x += gp.tileSize;
         y += gp.tileSize;
 
@@ -132,13 +135,7 @@ public class UI {
         int statsY = charY + 24;
 
         g2.setColor(Color.white);
-<<<<<<< Updated upstream
-        g2.setFont(g2.getFont().deriveFont(28F));
-        final int lineHeight = 35;
-        final int spacing = 105;
-=======
         g2.setFont(g2.getFont().deriveFont(20F));
->>>>>>> Stashed changes
 
         // NAMES AND VALUES
         final int lineHeight = 32;
@@ -193,117 +190,7 @@ public class UI {
         }
     }
 
-<<<<<<< Updated upstream
-    public void drawPlayerInfo(Entity entity) {
-        int frameX = 0;
-        int frameY = 0;
-        int frameWidth = 0;
-        int frameHeight = 0;
-        int slotCol = 0;
-        int slotRow = 0;
-
-        if (entity == gp.player) {
-            // FRAME FOR INVENTORY SCREEN (CHỈ LÀ VỊ TRÍ TỔNG QUAN)
-            frameX = gp.tileSize * 2;
-            frameY = gp.tileSize * 6; // Dưới characterScreen
-            frameWidth = gp.tileSize * 16;  // Chiều rộng bằng characterScreen
-
-            slotCol = playerSlotCol;
-            slotRow = playerSlotRow;
-        } else {
-            // FRAME FOR NPC INVENTORY
-            frameX = gp.tileSize * 2;
-            frameY = gp.tileSize;
-            frameWidth = gp.tileSize * 6;
-            frameHeight = gp.tileSize * 5;
-            slotCol = npcSlotCol;
-            slotRow = npcSlotRow;
-        }
-
-        // INVENTORY FRAME
-        int invFrameX = frameX;
-        int invFrameY = frameY;
-
-        // SLOT (4 hàng x 5 cột)
-        final int slotXstart = invFrameX + 20;
-        final int slotYstart = invFrameY + 20;
-        int slotX = slotXstart;
-        int slotY = slotYstart;
-        int slotSize = gp.tileSize + 3;
-        int maxCols = 5;
-
-        int invFrameWidth = slotSize * maxCols + 40;
-        int invFrameHeight = slotSize * 4 + 40;
-        drawSubWindow(invFrameX, invFrameY, invFrameWidth, invFrameHeight);
-
-        // DRAW ITEMS
-        for (int i = 0; i < entity.inventory.size(); i++) {
-            // EQUIP CURSOR
-            if (entity.inventory.get(i) == entity.currentWeapon ||
-                    entity.inventory.get(i) == entity.currentShield ||
-                    entity.inventory.get(i) == entity.currentLight) {
-                g2.setColor(new Color(240, 190, 90));
-                g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
-            }
-
-            g2.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
-
-            // DISPLAY AMOUNT
-            if (entity == gp.player && entity.inventory.get(i).amount > 1) {
-                g2.setFont(g2.getFont().deriveFont(32f));
-                int amountX;
-                int amountY;
-
-                String s = "" + entity.inventory.get(i).amount;
-                amountX = getXforAlignToRight(s, slotX + 44);
-                amountY = slotY + gp.tileSize;
-
-                g2.setColor(new Color(60, 60, 60));
-                g2.drawString(s, amountX, amountY);
-                g2.setColor(Color.white);
-                g2.drawString(s, amountX - 3, amountY - 3);
-            }
-
-            slotX += slotSize;
-            if ((i + 1) % maxCols == 0) { // Chuyển dòng sau mỗi 5 cột
-                slotX = slotXstart;
-                slotY += slotSize;
-            }
-        }
-
-        // CURSOR
-        int cursorX = slotXstart + (slotSize * slotCol);
-        int cursorY = slotYstart + (slotSize * slotRow);
-        int cursorWidth = gp.tileSize;
-        int cursorHeight = gp.tileSize;
-
-        g2.setColor(Color.white);
-        g2.setStroke(new BasicStroke(3));
-        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
-
-        // DESCRIPTION FRAME đối xứng với inventory
-        int dFrameWidth = frameWidth - invFrameWidth - gp.tileSize * 2;
-        int dFrameX = invFrameX + frameWidth - dFrameWidth;
-        drawSubWindow(dFrameX, invFrameY, dFrameWidth, invFrameHeight);
-
-        // DRAW DESCRIPTION TEXT
-        int textX = dFrameX + 20;
-        int textY = invFrameY + gp.tileSize;
-        g2.setFont(g2.getFont().deriveFont(28F));
-
-        int itemIndex = getItemIndexOnSlot(slotCol, slotRow);
-        if (itemIndex < entity.inventory.size()) {
-            for (String line : entity.inventory.get(itemIndex).description.split("\n")) {
-                g2.drawString(line, textX, textY);
-                textY += 32;
-            }
-        }
-    }
-
-    public void drawPlayerInfo(Entity entity, boolean cursor, int frameX, int frameY, int frameWidth, int frameHeight, int slotCol, int slotRow) {
-=======
     public void drawInventory(Entity entity, boolean isTrading, boolean cursor, int frameX, int frameY, int frameWidth, int frameHeight, int slotCol, int slotRow) {
->>>>>>> Stashed changes
         // Inventory Frame
         int slotStartX = frameX + 20;
         int slotStartY = frameY + 20;
@@ -314,7 +201,7 @@ public class UI {
         int invFrameWidth = slotSize * 5 + 40;
         int invFrameHeight = slotSize * 4 + 40;
         drawSubWindow(frameX, frameY, invFrameWidth, invFrameHeight);
-
+      
         // Draw Items
         for (int i = 0; i < entity.inventory.size(); i++) {
             if (entity.inventory.get(i) == entity.currentWeapon ||
@@ -490,7 +377,7 @@ public class UI {
         int levelTextX = expBarX + 12;
         int levelTextY = expBarY + 12;
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 14F));
         String text = "Level " + gp.player.level;
         g2.drawString(text, levelTextX, levelTextY);
     }
@@ -539,7 +426,7 @@ public class UI {
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect(x, y, (int) hpBarValue, 20);
 
-                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 22f));
                     g2.setColor(Color.white);
                     g2.drawString(monster.name, x + 4, y - 10);
                 }
@@ -552,6 +439,7 @@ public class UI {
         int messageX = gp.tileSize;
         int messageY = gp.tileSize * 4;
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24F));
+
 
         for (int i = 0; i < message.size(); i++) {
             if (message.get(i) != null) {
@@ -583,7 +471,7 @@ public class UI {
         if (titleScreenState == 0) {
 
             //TITLE NAME
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
             String text = "Blue Boy Adventure\n";
             int x = getXforCenteredText(text);
             int y = gp.tileSize * 3;
@@ -622,7 +510,7 @@ public class UI {
         else if (titleScreenState == 1) {
             //CLASS SELECTION SCREEN
             g2.setColor(Color.white);
-            g2.setFont(g2.getFont().deriveFont(42F));
+            g2.setFont(g2.getFont().deriveFont(40F));
 
             String text = "- You are -";
             int x = getXforCenteredText(text);
@@ -683,7 +571,7 @@ public class UI {
 
     public void drawOptionsScreen() {
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(32F));
+        g2.setFont(g2.getFont().deriveFont(30F));
 
         // SUB WINDOW
 
@@ -955,7 +843,7 @@ public class UI {
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-        g2.setFont(maruMonica);
+        g2.setFont(determinationSans);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
         g2.setColor(Color.white);
 

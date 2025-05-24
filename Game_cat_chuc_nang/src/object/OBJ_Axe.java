@@ -5,7 +5,7 @@ import main.GamePanel;
 
 public class OBJ_Axe extends Entity {
 
-    public static final String objName = "Woodcutter's Axe";
+    public static final String objName = "Rìu đốn củi";
     public OBJ_Axe(GamePanel gp) {
         super(gp);
 
@@ -15,7 +15,7 @@ public class OBJ_Axe extends Entity {
         attackValue = 2;
         attackArea.width = 26;
         attackArea.height= 26;
-        description = "[" + name + "]\nA bit rusty but still \ncan cut some trees.";
+        description = "[" + name + "]\nHơi cũ xí thôi\nvẫn chặt được vài nhát.";
         price = 75;
         knockBackPower = 5;
         motion1_duration = 20;

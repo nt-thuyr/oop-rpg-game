@@ -16,12 +16,12 @@ public class MON_GreenSlime extends Entity {
         this.gp = gp;
 
         type = type_monster;
-        name = "Green Slime";
+        name = "Slime xanh";
         defaultSpeed = 1;
         speed = defaultSpeed;
         maxLife = 4;
         life = maxLife;
-        attack = 2;
+        attack = 1;
         defense = 0;
         exp = 2;
         //projectile = new OBJ_Rock(gp);
