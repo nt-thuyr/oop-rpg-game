@@ -14,7 +14,11 @@ public class OBJ_Shield_Wood extends Entity {
         name = objName;
         down1 = setup("/objects/shield_wood",gp.tileSize,gp.tileSize);
         defenseValue = 1;
+<<<<<<< Updated upstream
         description = "[" + name + "]\nMade by wood.";
+=======
+        description = "[" + name + "]\nLàm bằng... gỗ.";
+>>>>>>> Stashed changes
         price = 30;
     }
 }
