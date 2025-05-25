@@ -113,8 +113,6 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setInteractiveTile();
 
 
-        /*playMusic(0);   // 0 = BlueBoyAdventure.wav
-        stopMusic();*/
         gameState = titleState;
         //FOR FULLSCREEN
         tempScreen = new BufferedImage(screenWidth,screenHeight,BufferedImage.TYPE_INT_ARGB); //blank screen

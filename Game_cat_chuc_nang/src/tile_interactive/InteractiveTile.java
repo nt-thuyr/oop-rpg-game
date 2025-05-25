@@ -14,6 +14,8 @@ public class InteractiveTile extends Entity {
         super(gp);
         this.gp = gp;
     }
+
+    // Check if the entity is holding the correct item to interact with the tile
     public boolean isCorrectItem(Entity entity)
     {
         boolean isCorrectItem = false;
@@ -24,6 +26,8 @@ public class InteractiveTile extends Entity {
     {
 
     }
+
+    // Return the form of the tile after it has been destroyed
     public InteractiveTile getDestroyedForm()
     {
         InteractiveTile tile = null;
