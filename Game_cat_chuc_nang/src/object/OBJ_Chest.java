@@ -7,10 +7,14 @@ public class OBJ_Chest extends Entity {
 
     GamePanel gp;
     public static final String objName = "Chest";
+    public OBJ_Demon_Slayer loot;
+
     public OBJ_Chest(GamePanel gp)
     {
         super(gp);
         this.gp = gp;
+
+        loot = new OBJ_Demon_Slayer(gp);
 
         type = type_obstacle;
         name = objName;
@@ -27,39 +31,25 @@ public class OBJ_Chest extends Entity {
         solidAreaDefaultY = solidArea.y;
 
     }
-    public void setLoot(Entity loot)
-    {
-        this.loot = loot;
 
-        setDialogue();
-    }
     public void setDialogue()
     {
         dialogues[0][0] = "Bạn mở rương kho báu và tìm thấy " + loot.name + "!\n...Nhưng không thể mang thêm nữa!";
         dialogues[1][0] = "Bạn mở rương kho báu và tìm thấy " + loot.name + "!\nBạn đã sở hữu " + loot.name + "!";
         dialogues[2][0] = "Trống trơn hà...";
     }
-    public void interact()
-    {
-        if(opened == false)
-        {
-            gp.playSE(3);
 
-            if(gp.player.canObtainItem(loot) == false)
-            {
-                startDialogue(this,0);
-            }
-            else
-            {
-                startDialogue(this,1);
-                //gp.player.inventory.add(loot); //canObtainItem() already adds item
-                down1 = image2;
-                opened = true;
-            }
-        }
-        else
-        {
-            startDialogue(this,2);
+    @Override
+    public void interact() {
+        if (!opened) {
+            gp.playSE(3); // Phát âm thanh mở rương
+            startDialogue(this, 1); // Hiển thị dialog khi mở rương
+            gp.player.inventory.add(loot); // Thêm vật phẩm vào túi đồ
+            down1 = image2; // Cập nhật hình ảnh rương mở
+            opened = true; // Đánh dấu rương đã mở
+        } else {
+            startDialogue(this, 2); // Hiển thị dialog khi rương đã mở
         }
     }
+
 }
