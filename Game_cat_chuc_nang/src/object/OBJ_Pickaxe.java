@@ -4,7 +4,7 @@ import entity.Entity;
 import main.GamePanel;
 
 public class OBJ_Pickaxe extends Entity {
-    public static final String objName = "Pickaxe";
+    public static final String objName = "Cuốc chim";
 
     public OBJ_Pickaxe(GamePanel gp)
     {
@@ -16,7 +16,7 @@ public class OBJ_Pickaxe extends Entity {
         attackValue = 1;
         attackArea.width = 26;
         attackArea.height= 26;
-        description = "[" + name + "]\nYou will dig it!";
+        description = "[" + name + "]\nBạn sẽ đào được thứ gì đó!";
         price = 75;
         knockBackPower = 1;
         motion1_duration = 10;

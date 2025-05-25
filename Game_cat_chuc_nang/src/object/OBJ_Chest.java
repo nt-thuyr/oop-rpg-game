@@ -34,8 +34,9 @@ public class OBJ_Chest extends Entity {
 
     public void setDialogue()
     {
-        dialogues[0][0] = "You open the chest and find a demon slayer!";
-        dialogues[1][0] = "It's empty.";
+        dialogues[0][0] = "Bạn mở rương kho báu và tìm thấy " + loot.name + "!\n...Nhưng không thể mang thêm nữa!";
+        dialogues[1][0] = "Bạn mở rương kho báu và tìm thấy " + loot.name + "!\nBạn đã sở hữu " + loot.name + "!";
+        dialogues[2][0] = "Trống trơn hà...";
     }
 
     @Override

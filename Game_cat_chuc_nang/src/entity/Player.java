@@ -64,7 +64,7 @@ public class Player extends Entity{
         maxMana = 8;
         mana = maxMana;
         ammo = 10;
-        strength = 1;           // The more strenght he has, the more damage he gives.
+        strength = 1;           // The more strength he has, the more damage he gives.
         dexterity = 1;          // The more dexterity he has, the less damage he receives.
         exp = 0;
         nextLevelExp = 4;
@@ -93,7 +93,7 @@ public class Player extends Entity{
     }
     public void setDialogue()
     {
-        dialogues[0][0] = "You are level " + level + " now!\n" + "You feel stronger!";
+        dialogues[0][0] = "Bạn đã đạt cấp " + level + " rồi!\n" + "Thấy mạnh mẽ hơn chưa!";
     }
     public void restoreStatus()
     {
@@ -222,11 +222,13 @@ public class Player extends Entity{
         {
 
             collisionOn = false;
-            gp.cChecker.checkTile(this);
-            gp.cChecker.checkObject(this,true);
-            gp.cChecker.checkEntity(this, gp.npc);
-            gp.cChecker.checkEntity(this, gp.monster);
-            gp.cChecker.checkEntity(this, gp.iTile);
+            if (isMoving() || keyH.enterPressed) {
+                gp.cChecker.checkTile(this);
+                gp.cChecker.checkObject(this,true);
+                gp.cChecker.checkEntity(this, gp.npc);
+                gp.cChecker.checkEntity(this, gp.monster);
+                gp.cChecker.checkEntity(this, gp.iTile);
+            }
 
             if(collisionOn == true)
             {
@@ -311,7 +313,10 @@ public class Player extends Entity{
             int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
 
             //CHECK EVENT
-            gp.eHandler.checkEvent();
+            if (isMoving() || keyH.enterPressed) {
+                gp.eHandler.checkEvent();
+            }
+
 
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
             if(collisionOn == false && keyH.enterPressed == false)   //Without this, player moves when you press ENTER
@@ -435,6 +440,10 @@ public class Player extends Entity{
         }
     }
 
+    public boolean isMoving() {
+        return keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed;
+    }
+
 
     public void pickUpObject(int i)
     {
@@ -463,11 +472,11 @@ public class Player extends Entity{
                 {
                     //inventory.add(gp.obj[gp.currentMap][i]); //canObtainItem() already adds item
                     gp.playSE(1);
-                    text = "Got a " + gp.obj[gp.currentMap][i].name + "!";
+                    text = "Nhận được " + gp.obj[gp.currentMap][i].name + "!";
                 }
                 else
                 {
-                    text = "You cannot carry any more";
+                    text = "Không thể mang thêm nữa";
                 }
                 gp.ui.addMessage(text);
                 gp.obj[gp.currentMap][i] = null;
@@ -535,7 +544,7 @@ public class Player extends Entity{
                 if(gp.monster[gp.currentMap][i].life <= 0)
                 {
                     gp.monster[gp.currentMap][i].dying = true;
-                    gp.ui.addMessage("Killed the " + gp.monster[gp.currentMap][i].name + "!");
+                    gp.ui.addMessage("Tiêu diệt " + gp.monster[gp.currentMap][i].name + "!");
                     gp.ui.addMessage("Exp +" + gp.monster[gp.currentMap][i].exp + "!");
                     exp += gp.monster[gp.currentMap][i].exp;
                     checkLevelUp();
@@ -591,7 +600,7 @@ public class Player extends Entity{
              defense = getDefense();
              gp.playSE(8); //levelup.wav
 
-             dialogues[0][0] = "You are level " + level + " now!\n" + "You feel stronger!";
+             dialogues[0][0] = "Bạn đã đạt cấp " + level + " rồi!\n" + "Thấy mạnh mẽ hơn chưa!";
              setDialogue();
              startDialogue(this,0);
          }

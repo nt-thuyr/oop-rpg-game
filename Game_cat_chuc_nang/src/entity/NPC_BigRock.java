@@ -47,7 +47,7 @@ public class NPC_BigRock extends Entity{
     }
     public void setDialogue()
     {
-        dialogues[0][0] = "It's a giant rock.";
+        dialogues[0][0] = "Một tảng đá khổng lồ!";
     }
     public void setAction()
     {

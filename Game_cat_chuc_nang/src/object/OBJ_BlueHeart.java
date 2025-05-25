@@ -6,7 +6,7 @@ import main.GamePanel;
 public class OBJ_BlueHeart extends Entity {
 
     GamePanel gp;
-    public static final String objName = "Blue Heart";
+    public static final String objName = "Lam Tinh Thạch";
     public OBJ_BlueHeart(GamePanel gp)
     {
         super(gp);
@@ -20,8 +20,8 @@ public class OBJ_BlueHeart extends Entity {
     }
     public void setDialogues()
     {
-        dialogues[0][0] = "You pick up a beautiful blue gem.";
-        dialogues[0][1] = "You find the Blue Heart, the legendary treasure!";
+        dialogues[0][0] = "Bạn nhặt được một viên ngọc lam tuyệt đẹp.";
+        dialogues[0][1] = "Bạn đã tìm thấy Lam Tinh Thạch - bảo vật huyền thoại!";
     }
     public boolean use(Entity entity) //when pickup this method will be called
     {
