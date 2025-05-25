@@ -64,7 +64,7 @@ public class Player extends Entity{
         maxMana = 8;
         mana = maxMana;
         ammo = 10;
-        strength = 1;           // The more strenght he has, the more damage he gives.
+        strength = 1;           // The more strength he has, the more damage he gives.
         dexterity = 1;          // The more dexterity he has, the less damage he receives.
         exp = 0;
         nextLevelExp = 4;
