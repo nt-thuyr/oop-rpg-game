@@ -43,7 +43,6 @@ public class Entity {
     public boolean guarding = false;
     public boolean transparent = false; //invincible when only gets damage
     public boolean offBalance = false;
-    public Entity loot;
     public boolean opened = false;
     public boolean inRage = false;
     public boolean sleep = false;
@@ -204,10 +203,7 @@ public class Entity {
     {
 
     }
-    public void setLoot(Entity loot)
-    {
 
-    }
     public void setAction()
     {
 
