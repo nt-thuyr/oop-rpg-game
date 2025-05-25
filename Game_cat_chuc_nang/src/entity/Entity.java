@@ -243,6 +243,7 @@ public class Entity {
         gp.gameState = gp.dialogueState;
         gp.ui.npc = entity;
         dialogueSet = setNum;
+        gp.keyH.enterPressed = false;
     }
     public void interact()
     {

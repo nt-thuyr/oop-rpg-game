@@ -458,7 +458,7 @@ public class Player extends Entity{
             //OBSTACLE
             else if(gp.obj[gp.currentMap][i].type == type_obstacle)
             {
-                if(keyH.enterPressed == true)
+                if(keyH.enterPressed)
                 {
                     attackCanceled = true;
                     gp.obj[gp.currentMap][i].interact();
@@ -468,7 +468,7 @@ public class Player extends Entity{
             else
             {
                 String text;
-                if(canObtainItem(gp.obj[gp.currentMap][i]) == true) //if inventory is not full can pick up object
+                if(canObtainItem(gp.obj[gp.currentMap][i])) //if inventory is not full can pick up object
                 {
                     //inventory.add(gp.obj[gp.currentMap][i]); //canObtainItem() already adds item
                     gp.playSE(1);
@@ -487,7 +487,7 @@ public class Player extends Entity{
     {
         if(i != 999)
         {
-            if(gp.keyH.enterPressed == true)
+            if(gp.keyH.enterPressed)
             {
                 attackCanceled = true;
                 gp.npc[gp.currentMap][i].speak();

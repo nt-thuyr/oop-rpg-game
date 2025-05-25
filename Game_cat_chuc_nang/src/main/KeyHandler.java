@@ -198,7 +198,6 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.ui.subState = 0;
                 gp.ui.npc.startDialogue(gp.ui.npc, 1);
-                enterPressed = false;
             }
         }
     }
@@ -209,7 +208,7 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.npcSlotRow != 0) {
                     gp.ui.npcSlotRow--;
                     gp.playSE(9);
-                } else if (gp.ui.npcSlotRow == 0) {
+                } else {
                     gp.ui.isInNPCInventory = false;
                     gp.ui.playerSlotRow = 3;
                     gp.ui.playerSlotCol = gp.ui.npcSlotCol;
@@ -219,7 +218,7 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.playerSlotRow != 0) {
                     gp.ui.playerSlotRow--;
                     gp.playSE(9);
-                } else if (gp.ui.playerSlotRow == 0) {
+                } else {
                     gp.ui.isInNPCInventory = true;
                     gp.ui.npcSlotRow = 3;
                     gp.ui.npcSlotCol = gp.ui.playerSlotCol;
@@ -232,7 +231,7 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.npcSlotRow != 3) {
                     gp.ui.npcSlotRow++;
                     gp.playSE(9);
-                } else if (gp.ui.npcSlotRow == 3) {
+                } else {
                     gp.ui.isInNPCInventory = false;
                     gp.ui.playerSlotRow = 0;
                     gp.ui.playerSlotCol = gp.ui.npcSlotCol;
@@ -242,7 +241,7 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.playerSlotRow != 3) {
                     gp.ui.playerSlotRow++;
                     gp.playSE(9);
-                } else if (gp.ui.playerSlotRow == 3) {
+                } else {
                     gp.ui.isInNPCInventory = true;
                     gp.ui.npcSlotRow = 0;
                     gp.ui.npcSlotCol = gp.ui.playerSlotCol;
@@ -293,7 +292,6 @@ public class KeyHandler implements KeyListener {
                             gp.ui.npc.startDialogue(gp.ui.npc, 3); // Inventory full
                         }
                     }
-                    enterPressed = false;
                 }
             } else {
                 int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
@@ -313,7 +311,6 @@ public class KeyHandler implements KeyListener {
                         gp.ui.subState = 0;
                         gp.ui.npc.startDialogue(gp.ui.npc, 6); // Success purchased
                     }
-                    enterPressed = false;
                 }
             }
         }
