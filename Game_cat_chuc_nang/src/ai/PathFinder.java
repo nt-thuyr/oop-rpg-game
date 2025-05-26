@@ -5,31 +5,31 @@ import main.GamePanel;
 
 import java.util.ArrayList;
 
-public class PathFinder extends PathFindingAlgorithm {
+public class PathFinder {
 
     GamePanel gp;
-    Node[][] node;
-    ArrayList<Node> openList = new ArrayList<>();
-    public ArrayList<Node> pathList = new ArrayList<>();
-    Node startNode, goalNode, currentNode;
-    boolean goalReached = false;
-    int step = 0;
+    private Node[][] node; // Mảng 2 chiều chứa các nút Node đại diện cho bản đồ
+    private ArrayList<Node> openList = new ArrayList<>(); // Danh sách các nút mở
+    private ArrayList<Node> pathList = new ArrayList<>(); // Đường đi được tìm thấy
+    private Node startNode, goalNode, currentNode;
+    private boolean goalReached = false;
+    private int step = 0;
 
     public PathFinder(GamePanel gp)
     {
         this.gp = gp;
         instantiateNodes();
     }
-    public void instantiateNodes()
+    public void instantiateNodes() // Tạo các nút Node cho toàn bộ bản đồ
     {
-        node = new Node[gp.maxWorldCol][gp.maxWorldRow];
+        node = new Node[gp.maxWorldCol][gp.maxWorldRow]; // Khởi tạo mảng Node với kích thước bằng số cột và hàng của bản đồ
 
         int col = 0;
         int row = 0;
 
         while(col < gp.maxWorldCol && row < gp.maxWorldRow)
         {
-            node[col][row] = new Node(col,row);
+            node[col][row] = new Node(col,row); // Tạo một nút Node mới tại vị trí (col, row)
 
             col++;
             if(col == gp.maxWorldCol)
@@ -40,17 +40,17 @@ public class PathFinder extends PathFindingAlgorithm {
         }
     }
 
-    //reset previous pathfinding result
+    // Đặt lại trạng thái của tất cả các nút trước khi thực hiện tìm đường
     public void resetNodes()
     {
         int col = 0;
         int row = 0;
         while(col < gp.maxWorldCol && row < gp.maxWorldRow)
         {
-            //reset open, checked and solid state
-            node[col][row].setOpen(false);
-            node[col][row].setChecked(false);
-            node[col][row].setSolid(false);
+
+            node[col][row].setOpen(false); // Đặt trạng thái nút là không mở
+            node[col][row].setChecked(false); // Đặt trạng thái nút là chưa kiểm tra
+            node[col][row].setSolid(false); // Đặt trạng thái nút là không rắn (có thể đi qua)
 
             col++;
             if(col == gp.maxWorldCol)
@@ -65,6 +65,8 @@ public class PathFinder extends PathFindingAlgorithm {
         goalReached = false;
         step = 0;
     }
+
+    // Thiết lập các nút bắt đầu và kết thúc, cũng như trạng thái của các nút khác
     public void setNodes(int startCol, int startRow, int goalCol, int goalRow, Entity entity)
     {
         resetNodes();
@@ -83,7 +85,7 @@ public class PathFinder extends PathFindingAlgorithm {
             int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
             if(gp.tileM.tile[tileNum].collision == true)
             {
-                node[col][row].setSolid(true) ;
+                node[col][row].setSolid(true);
 
             }
             //CHECK INTERACTIVE TILES
@@ -97,10 +99,10 @@ public class PathFinder extends PathFindingAlgorithm {
                     node[itCol][itRow].setSolid(true);
                 }
             }
-            //SET COST
-            getCost(node[col][row]);
 
-            col++;
+            getCost(node[col][row]); // Tính toán chi phí G, H và F cho nút hiện tại
+
+            col++; // Tăng cột
             if(col == gp.maxWorldCol)
             {
                 col = 0;
@@ -108,6 +110,7 @@ public class PathFinder extends PathFindingAlgorithm {
             }
         }
     }
+    // Tính toán chi phí G, H và F cho một nút
     public void getCost(Node node) {
         // G Cost
         int xDistance = Math.abs(node.getCol() - startNode.getCol());
@@ -122,6 +125,8 @@ public class PathFinder extends PathFindingAlgorithm {
         // F Cost
         node.setfCost(node.getgCost() + node.gethCost());
     }
+
+
     public boolean search() {
         while (!goalReached && step < 500) {
             int col = currentNode.getCol();
@@ -166,6 +171,7 @@ public class PathFinder extends PathFindingAlgorithm {
 
         return goalReached;
     }
+
     public void openNode(Node node) {
         if (!node.isOpen() && !node.isChecked() && !node.isSolid()) {
             node.setOpen(true);
@@ -173,6 +179,7 @@ public class PathFinder extends PathFindingAlgorithm {
             openList.add(node);
         }
     }
+
 
     public void trackThePath() {
         Node current = goalNode;
@@ -183,4 +190,76 @@ public class PathFinder extends PathFindingAlgorithm {
         }
     }
 
+
+    public Node getCurrentNode() {
+        return currentNode;
+    }
+
+    public void setCurrentNode(Node currentNode) {
+        this.currentNode = currentNode;
+    }
+
+    public Node getGoalNode() {
+        return goalNode;
+    }
+
+    public void setGoalNode(Node goalNode) {
+        this.goalNode = goalNode;
+    }
+
+    public boolean isGoalReached() {
+        return goalReached;
+    }
+
+    public void setGoalReached(boolean goalReached) {
+        this.goalReached = goalReached;
+    }
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public Node[][] getNode() {
+        return node;
+    }
+
+    public void setNode(Node[][] node) {
+        this.node = node;
+    }
+
+    public ArrayList<Node> getOpenList() {
+        return openList;
+    }
+
+    public void setOpenList(ArrayList<Node> openList) {
+        this.openList = openList;
+    }
+
+    public ArrayList<Node> getPathList() {
+        return pathList;
+    }
+
+    public void setPathList(ArrayList<Node> pathList) {
+        this.pathList = pathList;
+    }
+
+    public Node getStartNode() {
+        return startNode;
+    }
+
+    public void setStartNode(Node startNode) {
+        this.startNode = startNode;
+    }
+
+    public int getStep() {
+        return step;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
+    }
 }
