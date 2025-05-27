@@ -36,11 +36,11 @@ public class CutsceneManager {
     public void scene_ending() {
         if (scenePhase == 0) {
             gp.stopMusic();
-            gp.ui.npc = new OBJ_BlueHeart(gp);
+            gp.getUi().setNpc(new OBJ_BlueHeart(gp));
             scenePhase++;
         }
         if (scenePhase == 1) {
-            gp.ui.drawDialogueScreen();
+            gp.getUi().drawDialogueScreen();
         }
         if (scenePhase == 2) {
             gp.playSE(4);
@@ -79,7 +79,7 @@ public class CutsceneManager {
 
             alpha = graduallyAlpha(alpha, 0.01f);
 
-            drawString(alpha, 120f, gp.screenHeight / 2, "Blue Boy Adventure", 40);
+            drawString(alpha, 120f, gp.getScreenHeight() / 2, "Blue Boy Adventure", 40);
 
             if (counterReached(480) && alpha == 1f) {
                 scenePhase++;
@@ -91,7 +91,7 @@ public class CutsceneManager {
 
             alpha = graduallyAlpha(alpha, 0.01f);
 
-            y = gp.screenHeight / 2;
+            y = gp.getScreenHeight() / 2;
 
             // Có thể thay bằng credit đơn giản hoặc bỏ hẳn
             drawString(alpha, 38f, y, "Cam on vi da den!", 40);
@@ -108,7 +108,7 @@ public class CutsceneManager {
             if (counterReached(1320)) {
                 sceneNum = NA;
                 scenePhase = 0;
-                gp.gameState = gp.playState;
+                gp.setGameState(gp.getPlayState());
                 gp.resetGame(false);
             }
         }
@@ -126,7 +126,7 @@ public class CutsceneManager {
     public void drawBlackBackground(float alpha) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
         g2.setColor(Color.black);
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
@@ -135,7 +135,7 @@ public class CutsceneManager {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(fontSize));
         for (String line : text.split("\n")) {
-            int x = gp.ui.getXforCenteredText(line);
+            int x = gp.getUi().getXforCenteredText(line);
             g2.drawString(line, x, y);
             y += lineHeight;
         }
@@ -148,5 +148,69 @@ public class CutsceneManager {
             alpha = 1f;
         }
         return alpha;
+    }
+
+    public void setScenePhase(int scenePhase) {
+        this.scenePhase = scenePhase;
+    }
+
+    public int getScenePhase() {
+        return scenePhase;
+    }
+
+    public float getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public int getEnding() {
+        return ending;
+    }
+
+    public Graphics2D getG2() {
+        return g2;
+    }
+
+    public void setG2(Graphics2D g2) {
+        this.g2 = g2;
+    }
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public int getNA() {
+        return NA;
+    }
+
+    public int getSceneNum() {
+        return sceneNum;
+    }
+
+    public void setSceneNum(int sceneNum) {
+        this.sceneNum = sceneNum;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

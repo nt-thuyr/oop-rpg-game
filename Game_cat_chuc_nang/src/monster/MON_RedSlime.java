@@ -10,88 +10,69 @@ import java.util.Random;
 
 public class MON_RedSlime extends Entity {
 
-    GamePanel gp; // cuz of different package
+    private GamePanel gp; // Encapsulated GamePanel
+
     public MON_RedSlime(GamePanel gp) {
         super(gp);
 
         this.gp = gp;
 
-        type = type_monster;
-        name = "Slime đỏ";
-        defaultSpeed = 2;
-        speed = defaultSpeed;
-        maxLife = 8;
-        life = maxLife;
-        attack = 1;
-        defense = 0;
-        exp = 4;
-        projectile = new OBJ_Rock(gp);
+        setType(getType_monster());
+        setName("Slime đỏ");
+        setDefaultSpeed(2);
+        setSpeed(getDefaultSpeed());
+        setMaxLife(8);
+        setLife(getMaxLife());
+        setAttack(1);
+        setDefense(0);
+        setExp(4);
+        setProjectile(new OBJ_Rock(gp));
 
-
-        solidArea.x = 3;
-        solidArea.y = 18;
-        solidArea.width = 42;
-        solidArea.height = 30;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
+        getSolidArea().x = 3;
+        getSolidArea().y = 18;
+        getSolidArea().width = 42;
+        getSolidArea().height = 30;
+        setSolidAreaDefaultX(getSolidArea().x);
+        setSolidAreaDefaultY(getSolidArea().y);
 
         getImage();
     }
 
-    public void getImage()
-    {
-        up1 = setup("/monster/redslime_down_1",gp.tileSize,gp.tileSize);
-        up2 = setup("/monster/redslime_down_2",gp.tileSize,gp.tileSize);
-        down1 = setup("/monster/redslime_down_1",gp.tileSize,gp.tileSize);
-        down2 = setup("/monster/redslime_down_2",gp.tileSize,gp.tileSize);
-        left1 = setup("/monster/redslime_down_1",gp.tileSize,gp.tileSize);
-        left2 = setup("/monster/redslime_down_2",gp.tileSize,gp.tileSize);
-        right1 = setup("/monster/redslime_down_1",gp.tileSize,gp.tileSize);
-        right2 = setup("/monster/redslime_down_2",gp.tileSize,gp.tileSize);
+    public void getImage() {
+        setUp1(setup("/monster/redslime_down_1", gp.getTileSize(), gp.getTileSize()));
+        setUp2(setup("/monster/redslime_down_2", gp.getTileSize(), gp.getTileSize()));
+        setDown1(setup("/monster/redslime_down_1", gp.getTileSize(), gp.getTileSize()));
+        setDown2(setup("/monster/redslime_down_2", gp.getTileSize(), gp.getTileSize()));
+        setLeft1(setup("/monster/redslime_down_1", gp.getTileSize(), gp.getTileSize()));
+        setLeft2(setup("/monster/redslime_down_2", gp.getTileSize(), gp.getTileSize()));
+        setRight1(setup("/monster/redslime_down_1", gp.getTileSize(), gp.getTileSize()));
+        setRight2(setup("/monster/redslime_down_2", gp.getTileSize(), gp.getTileSize()));
     }
-    public void setAction()
-    {
-        if(onPath == true)
-        {
 
-            //Check if it stops chasing
-            checkStopChasingOrNot(gp.player,15,100);
-
-            //Search the direction to go
-            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
-
-            //Check if it shoots a projectile
+    public void setAction() {
+        if (isOnPath()) {
+            checkStopChasingOrNot(gp.getPlayer(), 15, 100);
+            searchPath(getGoalCol(gp.getPlayer()), getGoalRow(gp.getPlayer()));
             checkShootOrNot(200, 30);
-        }
-        else
-        {
-            //Check if it starts chasing
-            checkStartChasingOrNot(gp.player, 5, 100);
-
-            //Get a random direction
+        } else {
+            checkStartChasingOrNot(gp.getPlayer(), 5, 100);
             getRandomDirection(120);
         }
     }
 
     public void damageReaction() {
-        actionLockCounter = 0;
-        //direction = gp.player.direction;
-        onPath = true; // gets aggro
+        setActionLockCounter(0);
+        setOnPath(true); // gets aggro
     }
-    public void checkDrop()
-    {
-        //CAST A DIE
-        int i = new Random().nextInt(100)+1;
 
-        //SET THE MONSTER DROP
-        if(i < 50)
-        {
+    public void checkDrop() {
+        int i = new Random().nextInt(100) + 1;
+
+        if (i < 50) {
             dropItem(new OBJ_Coin_Bronze(gp));
         }
-        if(i >= 50 && i < 100)
-        {
+        if (i >= 50 && i < 100) {
             dropItem(new OBJ_Heart(gp));
         }
-
     }
 }

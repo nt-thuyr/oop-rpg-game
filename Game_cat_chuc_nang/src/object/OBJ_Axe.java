@@ -6,19 +6,20 @@ import main.GamePanel;
 public class OBJ_Axe extends Entity {
 
     public static final String objName = "Rìu đốn củi";
+
     public OBJ_Axe(GamePanel gp) {
         super(gp);
 
-        type = type_axe;
-        name = objName;
-        down1 = setup("/objects/axe",gp.tileSize,gp.tileSize);
-        attackValue = 2;
-        attackArea.width = 26;
-        attackArea.height= 26;
-        description = "[" + name + "]\nHơi cũ xí thôi\nvẫn chặt được vài nhát.";
-        price = 75;
-        knockBackPower = 5;
-        motion1_duration = 20;
-        motion2_duration = 40;
+        setType(getType_axe());
+        setName(objName);
+        setDown1(setup("/objects/axe", gp.getTileSize(), gp.getTileSize()));
+        setAttackValue(2);
+        getAttackArea().width = 26;
+        getAttackArea().height = 26;
+        setDescription("[" + getName() + "]\nHơi cũ xí thôi\nvẫn chặt được vài nhát.");
+        setPrice(75);
+        setKnockBackPower(5);
+        setMotion1_duration(20);
+        setMotion2_duration(40);
     }
 }

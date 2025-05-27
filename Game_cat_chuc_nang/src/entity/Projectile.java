@@ -2,92 +2,89 @@ package entity;
 
 import main.GamePanel;
 
-public class Projectile extends Entity{
+public class Projectile extends Entity {
 
-    Entity user;
+    private Entity user;
 
     public Projectile(GamePanel gp) {
         super(gp);
-
     }
 
-    public void set(int worldX, int worldY, String direction, boolean alive, Entity user)
-    {
-        this.worldX = worldX;
-        this.worldY = worldY;
-        this.direction = direction;
-        this.alive = alive;
+    public void set(int worldX, int worldY, String direction, boolean alive, Entity user) {
+        setWorldX(worldX);
+        setWorldY(worldY);
+        setDirection(direction);
+        setAlive(alive);
         this.user = user;
-        this.life = this.maxLife;  //Reset the life to the max value every time you shoot it.
+        setLife(getMaxLife()); // Reset the life to the max value every time you shoot it.
     }
-    public void update()
-    {
 
-        if(user == gp.player)
-        {
-            int monsterIndex = gp.cChecker.checkEntity(this,gp.monster);
-            if(monsterIndex != 999) //collision with monster
-            {
-                gp.player.damageMonster(monsterIndex, this, attack * (1 + (gp.player.level / 2)), knockBackPower);   //attack : projectile's attack (2) // fireball dmg increases in every 2 levels
-                generateParticle(user.projectile,gp.monster[gp.currentMap][monsterIndex]);
-                alive = false;
+    public void update() {
+        if (user == gp.getPlayer()) {
+            int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
+            if (monsterIndex != 999) { // Collision with monster
+                gp.getPlayer().damageMonster(monsterIndex, this, getAttack() * (1 + (gp.getPlayer().getLevel() / 2)), getKnockBackPower());
+                generateParticle(user.getProjectile(), gp.getMonster()[gp.getCurrentMap()][monsterIndex]);
+                setAlive(false);
             }
         }
-        if(user != gp.player)
-        {
-            boolean contactPlayer = gp.cChecker.checkPlayer(this);
-            if(gp.player.invincible == false && contactPlayer == true)
-            {
-                damagePlayer(attack);
-                if(gp.player.guarding == true)
-                {
-                    generateParticle(user.projectile,user.projectile);
+        if (user != gp.getPlayer()) {
+            boolean contactPlayer = gp.getcChecker().checkPlayer(this);
+            if (!gp.getPlayer().isInvincible() && contactPlayer) {
+                damagePlayer(getAttack());
+                if (gp.getPlayer().isGuarding()) {
+                    generateParticle(user.getProjectile(), user.getProjectile());
+                } else {
+                    generateParticle(user.getProjectile(), gp.getPlayer());
                 }
-                else
-                {
-                    generateParticle(user.projectile,gp.player);
-                }
-
-                alive = false;
+                setAlive(false);
             }
         }
 
-        switch (direction)
-        {
-            case "up": worldY -= speed; break;
-            case "down": worldY += speed; break;
-            case "left": worldX -= speed; break;
-            case "right": worldX += speed; break;
+        switch (getDirection()) {
+            case "up":
+                setWorldY(getWorldY() - getSpeed());
+                break;
+            case "down":
+                setWorldY(getWorldY() + getSpeed());
+                break;
+            case "left":
+                setWorldX(getWorldX() - getSpeed());
+                break;
+            case "right":
+                setWorldX(getWorldX() + getSpeed());
+                break;
         }
 
-        life--;
-        if(life <= 0)
-        {
-            alive = false;  //once you shoot projectile, it lose its life
+        setLife(getLife() - 1);
+        if (getLife() <= 0) {
+            setAlive(false); // Once you shoot projectile, it loses its life
         }
 
-        spriteCounter++;
-        if(spriteCounter > 12)
-        {
-            if(spriteNum == 1)
-            {
-                spriteNum = 2;
+        setSpriteCounter(getSpriteCounter() + 1);
+        if (getSpriteCounter() > 12) {
+            if (getSpriteNum() == 1) {
+                setSpriteNum(2);
+            } else if (getSpriteNum() == 2) {
+                setSpriteNum(1);
             }
-            else if(spriteNum == 2)
-            {
-                spriteNum = 1;
-            }
-            spriteCounter = 0;
+            setSpriteCounter(0);
         }
-
     }
-    public boolean haveResource(Entity user)
-    {
-        boolean haveResource = false;
-        return haveResource;
-    }
-    public void subtractResource(Entity user)
-    {
 
+    public boolean haveResource(Entity user) {
+        return false;
+    }
+
+    public void subtractResource(Entity user) {
+        // No implementation provided
+    }
+
+    public Entity getUser() {
+        return user;
+    }
+
+    public void setUser(Entity user) {
+        this.user = user;
     }
 }

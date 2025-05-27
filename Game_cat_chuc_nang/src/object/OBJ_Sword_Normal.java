@@ -10,16 +10,16 @@ public class OBJ_Sword_Normal extends Entity {
     public OBJ_Sword_Normal(GamePanel gp) {
         super(gp);
 
-        type = type_sword;
-        name = objName;
-        down1 = setup("/objects/sword_normal",gp.tileSize, gp.tileSize);
-        attackValue = 3;
-        attackArea.width = 36;
-        attackArea.height= 36;
-        description = "[" + name + "]\nMột thanh kiếm cũ kĩ.";
-        price = 30;
-        knockBackPower = 3;
-        motion1_duration = 5;
-        motion2_duration = 25;
+        setType(getType_sword());
+        setName(objName);
+        setDown1(setup("/objects/sword_normal", gp.getTileSize(), gp.getTileSize()));
+        setAttackValue(3);
+        getAttackArea().width = 36;
+        getAttackArea().height = 36;
+        setDescription("[" + getName() + "]\nMột thanh kiếm cũ kĩ.");
+        setPrice(30);
+        setKnockBackPower(3);
+        setMotion1_duration(5);
+        setMotion2_duration(25);
     }
 }

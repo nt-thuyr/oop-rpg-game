@@ -5,7 +5,7 @@ import main.GamePanel;
 
 public class OBJ_Potion_Red extends Entity {
 
-    GamePanel gp;
+    private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Huyết dược";
 
     public OBJ_Potion_Red(GamePanel gp) {
@@ -13,24 +13,24 @@ public class OBJ_Potion_Red extends Entity {
 
         this.gp = gp;
 
-        type = type_consumable;
-        name = objName;
-        value = 5;
-        down1 = setup("/objects/potion_red", gp.tileSize, gp.tileSize);
-        description = "[" + name + "]\nHồi phục " + value + " máu.";
-        price = 50;
-        stackable = true;
+        setType(getType_consumable());
+        setName(objName);
+        setValue(5);
+        setDown1(setup("/objects/potion_red", gp.getTileSize(), gp.getTileSize()));
+        setDescription("[" + getName() + "]\nHồi phục " + getValue() + " máu.");
+        setPrice(50);
+        setStackable(true);
 
         setDialogue();
     }
-    public void setDialogue()
-    {
-        dialogues[0][0] = "Bạn đã uống " + name + "!\n" + "Bạn sẽ được hồi phục " + value + " máu.";
+
+    public void setDialogue() {
+        getDialogues()[0][0] = "Bạn đã uống " + getName() + "!\n" + "Bạn sẽ được hồi phục " + getValue() + " máu.";
     }
-    public boolean use(Entity entity)
-    {
-        startDialogue(this,0);
-        entity.life += value;
+
+    public boolean use(Entity entity) {
+        startDialogue(this, 0);
+        entity.setLife(entity.getLife() + getValue());
         gp.playSE(2);
         return true;
     }

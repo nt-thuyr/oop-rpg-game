@@ -5,348 +5,324 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    GamePanel gp;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed, spacePressed;
-    //DEBUG
-    public boolean showDebugText = false;
-    public boolean godModeOn = false;
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    private GamePanel gp;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed, spacePressed;
+    private boolean showDebugText = false;
+    private boolean godModeOn = false;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
 
     @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        //TITLE STATE
-        if (gp.gameState == gp.titleState) {
+        if (gp.getGameState() == gp.getTitleState()) {
             titleState(code);
-        }
-        // PLAY STATE
-        else if (gp.gameState == gp.playState) {
+        } else if (gp.getGameState() == gp.getPlayState()) {
             playState(code);
-        }
-        // PAUSE STATE
-        else if (gp.gameState == gp.pauseState) {
+        } else if (gp.getGameState() == gp.getPauseState()) {
             pauseState(code);
-        }
-        //DIALOGUE STATE
-        else if (gp.gameState == gp.dialogueState || gp.gameState == gp.cutsceneState) {
+        } else if (gp.getGameState() == gp.getDialogueState() || gp.getGameState() == gp.getCutsceneState()) {
             dialogueState(code);
-        }
-        // CHARACTER STATE
-        else if (gp.gameState == gp.characterState) {
+        } else if (gp.getGameState() == gp.getCharacterState()) {
             characterState(code);
-        }
-        // GAMEOVER STATE
-        else if (gp.gameState == gp.gameOverState) {
+        } else if (gp.getGameState() == gp.getGameOverState()) {
             gameOverState(code);
-        }
-        // TRADE STATE
-        else if (gp.gameState == gp.tradeState) {
+        } else if (gp.getGameState() == gp.getTradeState()) {
             tradeState(code);
-        }
-        // MAP STATE
-        else if (gp.gameState == gp.mapState) {
+        } else if (gp.getGameState() == gp.getMapState()) {
             mapState(code);
         }
     }
 
-    public void titleState(int code) {
-        //MAIN MENU
-        if (gp.ui.titleScreenState == 0) {
+    private void titleState(int code) {
+        if (gp.getUi().getTitleScreenState() == 0) {
             if (code == KeyEvent.VK_W) {
-                gp.ui.commandNum--;
-                if (gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 1; // chỉ còn 2 lựa chọn: NEW GAME và QUIT
+                gp.getUi().setCommandNum(gp.getUi().getCommandNum() - 1);
+                if (gp.getUi().getCommandNum() < 0) {
+                    gp.getUi().setCommandNum(1);
                 }
             }
             if (code == KeyEvent.VK_S) {
-                gp.ui.commandNum++;
-                if (gp.ui.commandNum > 1) {
-                    gp.ui.commandNum = 0;
+                gp.getUi().setCommandNum(gp.getUi().getCommandNum() + 1);
+                if (gp.getUi().getCommandNum() > 1) {
+                    gp.getUi().setCommandNum(0);
                 }
             }
             if (code == KeyEvent.VK_ENTER) {
-                if (gp.ui.commandNum == 0) {
-                    // CHUYỂN NGAY SANG MÀN HÌNH CHỌN LỚP nhưng chỉ hiển thị fighter, ko cần chọn nữa
-                    gp.ui.titleScreenState = 1;
-                    gp.ui.commandNum = 0; // luôn highlight Fighter
-                } else if (gp.ui.commandNum == 1) {
+                if (gp.getUi().getCommandNum() == 0) {
+                    gp.getUi().setTitleScreenState(1);
+                    gp.getUi().setCommandNum(0);
+                } else if (gp.getUi().getCommandNum() == 1) {
                     System.exit(0);
                 }
             }
-        } else if (gp.ui.titleScreenState == 1) {
-            // Bỏ qua việc chọn class, nhấn enter là vào game luôn
+        } else if (gp.getUi().getTitleScreenState() == 1) {
             if (code == KeyEvent.VK_ENTER) {
-                // Vào thẳng game luôn
-                gp.gameState = gp.playState;
+                gp.setGameState(gp.getPlayState());
                 gp.playMusic(0);
             }
         }
     }
 
-    public void playState(int code) {
+    private void playState(int code) {
         if (code == KeyEvent.VK_W) {
-            upPressed = true;
+            setUpPressed(true);
         }
         if (code == KeyEvent.VK_S) {
-            downPressed = true;
+            setDownPressed(true);
         }
         if (code == KeyEvent.VK_A) {
-            leftPressed = true;
+            setLeftPressed(true);
         }
         if (code == KeyEvent.VK_D) {
-            rightPressed = true;
+            setRightPressed(true);
         }
         if (code == KeyEvent.VK_P) {
-            gp.gameState = gp.pauseState;
+            gp.setGameState(gp.getPauseState());
         }
         if (code == KeyEvent.VK_C) {
-            gp.gameState = gp.characterState;
+            gp.setGameState(gp.getCharacterState());
         }
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;
+            setEnterPressed(true);
         }
         if (code == KeyEvent.VK_M) {
-            gp.gameState = gp.mapState;
+            gp.setGameState(gp.getMapState());
         }
         if (code == KeyEvent.VK_SPACE) {
-            spacePressed = true;
+            setSpacePressed(true);
         }
     }
 
-    public void pauseState(int code) {
+    private void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE || code == KeyEvent.VK_P) {
-            gp.gameState = gp.playState;
+            gp.setGameState(gp.getPlayState());
         }
     }
 
-    public void dialogueState(int code) {
+    private void dialogueState(int code) {
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;
+            setEnterPressed(true);
         }
     }
 
-    public void characterState(int code) {
+    private void characterState(int code) {
         if (code == KeyEvent.VK_C) {
-            gp.gameState = gp.playState;
+            gp.setGameState(gp.getPlayState());
         }
-
         if (code == KeyEvent.VK_ENTER) {
-            gp.player.selectItem();
+            gp.getPlayer().selectItem();
         }
         playerInventory(code);
     }
 
-    public void gameOverState(int code) {
+    private void gameOverState(int code) {
         if (code == KeyEvent.VK_W) {
-            gp.ui.commandNum--;
-            if (gp.ui.commandNum < 0) {
-                gp.ui.commandNum = 1;
+            gp.getUi().setCommandNum(gp.getUi().getCommandNum() - 1);
+            if (gp.getUi().getCommandNum() < 0) {
+                gp.getUi().setCommandNum(1);
             }
             gp.playSE(9);
         }
         if (code == KeyEvent.VK_S) {
-            gp.ui.commandNum++;
-            if (gp.ui.commandNum > 1) {
-                gp.ui.commandNum = 0;
+            gp.getUi().setCommandNum(gp.getUi().getCommandNum() + 1);
+            if (gp.getUi().getCommandNum() > 1) {
+                gp.getUi().setCommandNum(0);
             }
             gp.playSE(9);
         }
         if (code == KeyEvent.VK_ENTER) {
-            if (gp.ui.commandNum == 0) //RETRY, reset position, life, mana, monsters, npcs...
-            {
-                gp.gameState = gp.playState;
+            if (gp.getUi().getCommandNum() == 0) {
+                gp.setGameState(gp.getPlayState());
                 gp.resetGame(false);
                 gp.playMusic(0);
-            } else if (gp.ui.commandNum == 1) //QUIT, reset everything
-            {
-                gp.ui.titleScreenState = 0;
-                gp.gameState = gp.titleState;
+            } else if (gp.getUi().getCommandNum() == 1) {
+                gp.getUi().setTitleScreenState(0);
+                gp.setGameState(gp.getTitleState());
                 gp.resetGame(true);
             }
         }
     }
 
-    public void tradeState(int code) {
+    private void tradeState(int code) {
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;
+            setEnterPressed(true);
         }
-        if (gp.ui.subState == 0) {
+        if (gp.getUi().getSubState() == 0) {
             if (code == KeyEvent.VK_W) {
-                gp.ui.commandNum--;
-                if (gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 1;
+                gp.getUi().setCommandNum(gp.getUi().getCommandNum() - 1);
+                if (gp.getUi().getCommandNum() < 0) {
+                    gp.getUi().setCommandNum(1);
                 }
                 gp.playSE(9);
             }
             if (code == KeyEvent.VK_S) {
-                gp.ui.commandNum++;
-                if (gp.ui.commandNum > 1) {
-                    gp.ui.commandNum = 0;
+                gp.getUi().setCommandNum(gp.getUi().getCommandNum() + 1);
+                if (gp.getUi().getCommandNum() > 1) {
+                    gp.getUi().setCommandNum(0);
                 }
                 gp.playSE(9);
             }
-        } else if (gp.ui.subState == 1) {
+        } else if (gp.getUi().getSubState() == 1) {
             tradeScreenState(code);
             if (code == KeyEvent.VK_ESCAPE) {
-                gp.ui.subState = 0;
-                gp.ui.npc.startDialogue(gp.ui.npc, 1);
-                enterPressed = false;
+                gp.getUi().setSubState(0);
+                gp.getUi().getNpc().startDialogue(gp.getUi().getNpc(), 1);
+                setEnterPressed(false);
             }
         }
     }
 
     public void tradeScreenState(int code) {
         if (code == KeyEvent.VK_W) {
-            if (gp.ui.isInNPCInventory) {
-                if (gp.ui.npcSlotRow != 0) {
-                    gp.ui.npcSlotRow--;
+            if (gp.getUi().isInNPCInventory()) {
+                if (gp.getUi().getNpcSlotRow() != 0) {
+                    gp.getUi().setNpcSlotRow(gp.getUi().getNpcSlotRow() - 1);
                     gp.playSE(9);
-                } else if (gp.ui.npcSlotRow == 0) {
-                    gp.ui.isInNPCInventory = false;
-                    gp.ui.playerSlotRow = 3;
-                    gp.ui.playerSlotCol = gp.ui.npcSlotCol;
+                } else if (gp.getUi().getNpcSlotRow() == 0) {
+                    gp.getUi().setInNPCInventory(false);
+                    gp.getUi().setPlayerSlotRow(3);
+                    gp.getUi().setPlayerSlotCol(gp.getUi().getNpcSlotCol());
                     gp.playSE(9);
                 }
             } else {
-                if (gp.ui.playerSlotRow != 0) {
-                    gp.ui.playerSlotRow--;
+                if (gp.getUi().getPlayerSlotRow() != 0) {
+                    gp.getUi().setPlayerSlotRow(gp.getUi().getPlayerSlotRow() - 1);
                     gp.playSE(9);
-                } else if (gp.ui.playerSlotRow == 0) {
-                    gp.ui.isInNPCInventory = true;
-                    gp.ui.npcSlotRow = 3;
-                    gp.ui.npcSlotCol = gp.ui.playerSlotCol;
+                } else if (gp.getUi().getPlayerSlotRow() == 0) {
+                    gp.getUi().setInNPCInventory(true);
+                    gp.getUi().setNpcSlotRow(3);
+                    gp.getUi().setNpcSlotCol(gp.getUi().getPlayerSlotCol());
                     gp.playSE(9);
                 }
             }
         }
         if (code == KeyEvent.VK_S) {
-            if (gp.ui.isInNPCInventory) {
-                if (gp.ui.npcSlotRow != 3) {
-                    gp.ui.npcSlotRow++;
+            if (gp.getUi().isInNPCInventory()) {
+                if (gp.getUi().getNpcSlotRow() != 3) {
+                    gp.getUi().setNpcSlotRow(gp.getUi().getNpcSlotRow() + 1);
                     gp.playSE(9);
-                } else if (gp.ui.npcSlotRow == 3) {
-                    gp.ui.isInNPCInventory = false;
-                    gp.ui.playerSlotRow = 0;
-                    gp.ui.playerSlotCol = gp.ui.npcSlotCol;
+                } else if (gp.getUi().getNpcSlotRow() == 3) {
+                    gp.getUi().setInNPCInventory(false);
+                    gp.getUi().setPlayerSlotRow(0);
+                    gp.getUi().setPlayerSlotCol(gp.getUi().getNpcSlotCol());
                     gp.playSE(9);
                 }
             } else {
-                if (gp.ui.playerSlotRow != 3) {
-                    gp.ui.playerSlotRow++;
+                if (gp.getUi().getPlayerSlotRow() != 3) {
+                    gp.getUi().setPlayerSlotRow(gp.getUi().getPlayerSlotRow() + 1);
                     gp.playSE(9);
-                } else if (gp.ui.playerSlotRow == 3) {
-                    gp.ui.isInNPCInventory = true;
-                    gp.ui.npcSlotRow = 0;
-                    gp.ui.npcSlotCol = gp.ui.playerSlotCol;
+                } else if (gp.getUi().getPlayerSlotRow() == 3) {
+                    gp.getUi().setInNPCInventory(true);
+                    gp.getUi().setNpcSlotRow(0);
+                    gp.getUi().setNpcSlotCol(gp.getUi().getPlayerSlotCol());
                     gp.playSE(9);
                 }
             }
         }
         if (code == KeyEvent.VK_A) {
-            if (gp.ui.isInNPCInventory) {
-                if (gp.ui.npcSlotCol != 0) {
-                    gp.ui.npcSlotCol--;
+            if (gp.getUi().isInNPCInventory()) {
+                if (gp.getUi().getNpcSlotCol() != 0) {
+                    gp.getUi().setNpcSlotCol(gp.getUi().getNpcSlotCol() - 1);
                     gp.playSE(9);
                 }
             } else {
-                if (gp.ui.playerSlotCol != 0) {
-                    gp.ui.playerSlotCol--;
+                if (gp.getUi().getPlayerSlotCol() != 0) {
+                    gp.getUi().setPlayerSlotCol(gp.getUi().getPlayerSlotCol() - 1);
                     gp.playSE(9);
                 }
             }
         }
         if (code == KeyEvent.VK_D) {
-            if (gp.ui.isInNPCInventory) {
-                if (gp.ui.npcSlotCol != 4) {
-                    gp.ui.npcSlotCol++;
+            if (gp.getUi().isInNPCInventory()) {
+                if (gp.getUi().getNpcSlotCol() != 4) {
+                    gp.getUi().setNpcSlotCol(gp.getUi().getNpcSlotCol() + 1);
                     gp.playSE(9);
                 }
             } else {
-                if (gp.ui.playerSlotCol != 4) {
-                    gp.ui.playerSlotCol++;
+                if (gp.getUi().getPlayerSlotCol() != 4) {
+                    gp.getUi().setPlayerSlotCol(gp.getUi().getPlayerSlotCol() + 1);
                     gp.playSE(9);
                 }
             }
         }
-        if (code == KeyEvent.VK_ENTER && enterPressed) {
-            if (gp.ui.isInNPCInventory) {
-                int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.npcSlotCol, gp.ui.npcSlotRow);
-                if (itemIndex < gp.ui.npc.inventory.size()) {
-                    if (gp.ui.npc.inventory.get(itemIndex).price > gp.player.coin) {
-                        gp.ui.subState = 0;
-                        gp.ui.npc.startDialogue(gp.ui.npc, 2); // Not enough coin
+        if (code == KeyEvent.VK_ENTER && isEnterPressed()) {
+            if (gp.getUi().isInNPCInventory()) {
+                int itemIndex = gp.getUi().getItemIndexOnSlot(gp.getUi().getNpcSlotCol(), gp.getUi().getNpcSlotRow());
+                if (itemIndex < gp.getUi().getNpc().getInventory().size()) {
+                    if (gp.getUi().getNpc().getInventory().get(itemIndex).getPrice() > gp.getPlayer().getCoin()) {
+                        gp.getUi().setSubState(0);
+                        gp.getUi().getNpc().startDialogue(gp.getUi().getNpc(), 2); // Not enough coin
                     } else {
-                        if (gp.player.canObtainItem(gp.ui.npc.inventory.get(itemIndex))) {
-                            gp.player.coin -= gp.ui.npc.inventory.get(itemIndex).price;
-                            gp.ui.subState = 0;
-                            gp.ui.npc.startDialogue(gp.ui.npc, 5); // Success purchased
+                        if (gp.getPlayer().canObtainItem(gp.getUi().getNpc().getInventory().get(itemIndex))) {
+                            gp.getPlayer().setCoin(gp.getPlayer().getCoin() - gp.getUi().getNpc().getInventory().get(itemIndex).getPrice());
+                            gp.getUi().setSubState(0);
+                            gp.getUi().getNpc().startDialogue(gp.getUi().getNpc(), 5); // Success purchased
                         } else {
-                            gp.ui.subState = 0;
-                            gp.ui.npc.startDialogue(gp.ui.npc, 3); // Inventory full
+                            gp.getUi().setSubState(0);
+                            gp.getUi().getNpc().startDialogue(gp.getUi().getNpc(), 3); // Inventory full
                         }
                     }
-                    enterPressed = false;
+                    setEnterPressed(false);
                 }
             } else {
-                int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
-                if (itemIndex < gp.player.inventory.size()) {
-                    if (gp.player.inventory.get(itemIndex) == gp.player.currentWeapon ||
-                            gp.player.inventory.get(itemIndex) == gp.player.currentShield) {
-                        gp.ui.subState = 0;
-                        gp.ui.npc.startDialogue(gp.ui.npc, 4); // Can't sell equipped item
+                int itemIndex = gp.getUi().getItemIndexOnSlot(gp.getUi().getPlayerSlotCol(), gp.getUi().getPlayerSlotRow());
+                if (itemIndex < gp.getPlayer().getInventory().size()) {
+                    if (gp.getPlayer().getInventory().get(itemIndex) == gp.getPlayer().getCurrentWeapon() ||
+                            gp.getPlayer().getInventory().get(itemIndex) == gp.getPlayer().getCurrentShield()) {
+                        gp.getUi().setSubState(0);
+                        gp.getUi().getNpc().startDialogue(gp.getUi().getNpc(), 4); // Can't sell equipped item
                     } else {
-                        int price = gp.player.inventory.get(itemIndex).price / 2;
-                        if (gp.player.inventory.get(itemIndex).amount > 1) {
-                            gp.player.inventory.get(itemIndex).amount--;
+                        int price = gp.getPlayer().getInventory().get(itemIndex).getPrice() / 2;
+                        if (gp.getPlayer().getInventory().get(itemIndex).getAmount() > 1) {
+                            gp.getPlayer().getInventory().get(itemIndex).setAmount(gp.getPlayer().getInventory().get(itemIndex).getAmount() - 1);
                         } else {
-                            gp.player.inventory.remove(itemIndex);
+                            gp.getPlayer().getInventory().remove(itemIndex);
                         }
-                        gp.player.coin += price;
-                        gp.ui.subState = 0;
-                        gp.ui.npc.startDialogue(gp.ui.npc, 6); // Success purchased
+                        gp.getPlayer().setCoin(gp.getPlayer().getCoin() + price);
+                        gp.getUi().setSubState(0);
+                        gp.getUi().getNpc().startDialogue(gp.getUi().getNpc(), 6); // Success purchased
                     }
-                    enterPressed = false;
+                    setEnterPressed(false);
                 }
             }
         }
     }
-
-    public void mapState(int code) {
+    private void mapState(int code) {
         if (code == KeyEvent.VK_M) {
-            gp.gameState = gp.playState;
+            gp.setGameState(gp.getPlayState());
         }
     }
 
-    public void playerInventory(int code) {
+    private void playerInventory(int code) {
         if (code == KeyEvent.VK_W) {
-            if (gp.ui.playerSlotRow != 0) {
-                gp.ui.playerSlotRow--;
-                gp.playSE(9);   //cursor.wav
+            if (gp.getUi().getPlayerSlotRow() != 0) {
+                gp.getUi().setPlayerSlotRow(gp.getUi().getPlayerSlotRow() - 1);
+                gp.playSE(9);
             }
         }
         if (code == KeyEvent.VK_A) {
-            if (gp.ui.playerSlotCol != 0) {
-                gp.ui.playerSlotCol--;
+            if (gp.getUi().getPlayerSlotCol() != 0) {
+                gp.getUi().setPlayerSlotCol(gp.getUi().getPlayerSlotCol() - 1);
                 gp.playSE(9);
             }
         }
         if (code == KeyEvent.VK_S) {
-            if (gp.ui.playerSlotRow != 3) {
-                gp.ui.playerSlotRow++;
+            if (gp.getUi().getPlayerSlotRow() != 3) {
+                gp.getUi().setPlayerSlotRow(gp.getUi().getPlayerSlotRow() + 1);
                 gp.playSE(9);
             }
         }
         if (code == KeyEvent.VK_D) {
-            if (gp.ui.playerSlotCol != 4) {
-                gp.ui.playerSlotCol++;
+            if (gp.getUi().getPlayerSlotCol() != 4) {
+                gp.getUi().setPlayerSlotCol(gp.getUi().getPlayerSlotCol() + 1);
                 gp.playSE(9);
             }
         }
@@ -354,52 +330,133 @@ public class KeyHandler implements KeyListener {
 
     public void npcInventory(int code) {
         if (code == KeyEvent.VK_W) {
-            if (gp.ui.npcSlotRow != 0) {
-                gp.ui.npcSlotRow--;
+            if (gp.getUi().getNpcSlotRow() != 0) {
+                gp.getUi().setNpcSlotRow(gp.getUi().getNpcSlotRow() - 1);
                 gp.playSE(9);   //cursor.wav
             }
         }
         if (code == KeyEvent.VK_A) {
-            if (gp.ui.npcSlotCol != 0) {
-                gp.ui.npcSlotCol--;
+            if (gp.getUi().getNpcSlotCol() != 0) {
+                gp.getUi().setNpcSlotCol(gp.getUi().getNpcSlotCol() - 1);
                 gp.playSE(9);
             }
         }
         if (code == KeyEvent.VK_S) {
-            if (gp.ui.npcSlotRow != 3) {
-                gp.ui.npcSlotRow++;
+            if (gp.getUi().getNpcSlotRow() != 3) {
+                gp.getUi().setNpcSlotRow(gp.getUi().getNpcSlotRow() + 1);
                 gp.playSE(9);
             }
         }
         if (code == KeyEvent.VK_D) {
-            if (gp.ui.npcSlotCol != 4) {
-                gp.ui.npcSlotCol++;
+            if (gp.getUi().getNpcSlotCol() != 4) {
+                gp.getUi().setNpcSlotCol(gp.getUi().getNpcSlotCol() + 1);
                 gp.playSE(9);
             }
         }
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
 
         if (code == KeyEvent.VK_W) {
-            upPressed = false;
+            setUpPressed(false);
         }
         if (code == KeyEvent.VK_S) {
-            downPressed = false;
+            setDownPressed(false);
         }
         if (code == KeyEvent.VK_A) {
-            leftPressed = false;
+            setLeftPressed(false);
         }
         if (code == KeyEvent.VK_D) {
-            rightPressed = false;
+            setRightPressed(false);
         }
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = false;
+            setEnterPressed(false);
         }
         if (code == KeyEvent.VK_SPACE) {
-            spacePressed = false;
+            setSpacePressed(false);
         }
+    }
+
+    public boolean isUpPressed() {
+        return upPressed;
+    }
+
+    public void setUpPressed(boolean upPressed) {
+        this.upPressed = upPressed;
+    }
+
+    public boolean isDownPressed() {
+        return downPressed;
+    }
+
+    public void setDownPressed(boolean downPressed) {
+        this.downPressed = downPressed;
+    }
+
+    public boolean isLeftPressed() {
+        return leftPressed;
+    }
+
+    public void setLeftPressed(boolean leftPressed) {
+        this.leftPressed = leftPressed;
+    }
+
+    public boolean isRightPressed() {
+        return rightPressed;
+    }
+
+    public void setRightPressed(boolean rightPressed) {
+        this.rightPressed = rightPressed;
+    }
+
+    public boolean isEnterPressed() {
+        return enterPressed;
+    }
+
+    public void setEnterPressed(boolean enterPressed) {
+        this.enterPressed = enterPressed;
+    }
+
+    public boolean isSpacePressed() {
+        return spacePressed;
+    }
+
+    public void setSpacePressed(boolean spacePressed) {
+        this.spacePressed = spacePressed;
+    }
+
+    public boolean isShowDebugText() {
+        return showDebugText;
+    }
+
+    public void setShowDebugText(boolean showDebugText) {
+        this.showDebugText = showDebugText;
+    }
+
+    public boolean isGodModeOn() {
+        return godModeOn;
+    }
+
+    public void setGodModeOn(boolean godModeOn) {
+        this.godModeOn = godModeOn;
+    }
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public boolean isShotKeyPressed() {
+        return shotKeyPressed;
+    }
+
+    public void setShotKeyPressed(boolean shotKeyPressed) {
+        this.shotKeyPressed = shotKeyPressed;
     }
 }

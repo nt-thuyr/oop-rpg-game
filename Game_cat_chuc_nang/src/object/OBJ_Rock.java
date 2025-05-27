@@ -8,66 +8,57 @@ import java.awt.*;
 
 public class OBJ_Rock extends Projectile {
 
-    GamePanel gp;
+    private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Rock";
 
     public OBJ_Rock(GamePanel gp) {
         super(gp);
         this.gp = gp;
 
-        name = objName;
-        speed = 5;
-        maxLife = 60;   //after 80 frames, projectile disappears
-        life = maxLife;
-        attack = 2;
-        useCost = 1; //spend 1 mana
-        alive = false;
+        setName(objName);
+        setSpeed(5);
+        setMaxLife(60); // after 80 frames, projectile disappears
+        setLife(getMaxLife());
+        setAttack(2);
+        setUseCost(1); // spend 1 mana
+        setAlive(false);
         getImage();
-        price = 25;
-        knockBackPower = 1;
+        setPrice(25);
+        setKnockBackPower(1);
     }
-    public void getImage()
-    {
-        up1 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
-        up2 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
-        down1 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
-        down2 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
-        left1 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
-        left2 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
-        right1 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
-        right2 = setup("/projectile/rock_down_1", gp.tileSize,gp.tileSize);
+
+    public void getImage() {
+        setUp1(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
+        setUp2(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
+        setDown1(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
+        setDown2(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
+        setLeft1(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
+        setLeft2(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
+        setRight1(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
+        setRight2(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
     }
-    public boolean haveResource(Entity user)
-    {
-        boolean haveResource = false;
-        if(user.ammo >= useCost)
-        {
-            haveResource = true;
-        }
-        return haveResource;
+
+    public boolean haveResource(Entity user) {
+        return user.getAmmo() >= getUseCost();
     }
-    public void subtractResource(Entity user)
-    {
-        user.ammo -= useCost;
+
+    public void subtractResource(Entity user) {
+        user.setAmmo(user.getAmmo() - getUseCost());
     }
-    public Color getParticleColor()
-    {
-        Color color = new Color(40,50,0);
-        return color;
+
+    public Color getParticleColor() {
+        return new Color(40, 50, 0);
     }
-    public int getParticleSize()
-    {
-        int size = 10; //pixels
-        return size;
+
+    public int getParticleSize() {
+        return 10; // pixels
     }
-    public int getParticleSpeed()
-    {
-        int speed = 1;
-        return speed;
+
+    public int getParticleSpeed() {
+        return 1;
     }
-    public int getParticleMaxLife()
-    {
-        int maxLife = 20;
-        return maxLife;
+
+    public int getParticleMaxLife() {
+        return 20;
     }
 }

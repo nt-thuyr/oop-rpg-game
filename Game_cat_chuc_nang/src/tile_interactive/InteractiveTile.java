@@ -7,51 +7,67 @@ import java.awt.*;
 
 public class InteractiveTile extends Entity {
 
-    GamePanel gp;
-    public boolean destructible = false;
-    public InteractiveTile(GamePanel gp, int col, int row)
-    {
+    private GamePanel gp;
+    private boolean destructible = false;
+
+    public InteractiveTile(GamePanel gp, int col, int row) {
         super(gp);
         this.gp = gp;
     }
-    public boolean isCorrectItem(Entity entity)
-    {
+
+    public boolean isCorrectItem(Entity entity) {
         boolean isCorrectItem = false;
-        //Sub-class specifications
+        // Sub-class specifications
         return isCorrectItem;
     }
-    public void playSE()
-    {
 
+    public void playSE() {
+        // Sub-class specifications
     }
-    public InteractiveTile getDestroyedForm()
-    {
+
+    public InteractiveTile getDestroyedForm() {
         InteractiveTile tile = null;
-        //Sub-class specifications
+        // Sub-class specifications
         return tile;
     }
-    public void update()
-    {
-        if(invincible == true)
-        {
-            invincibleCounter++;
-            if(invincibleCounter > 20)
-            {
-                invincible = false;
-                invincibleCounter = 0;
+
+    public void update() {
+        if (isInvincible()) {
+            setInvincibleCounter(getInvincibleCounter() + 1);
+            if (getInvincibleCounter() > 20) {
+                setInvincible(false);
+                setInvincibleCounter(0);
             }
         }
     }
+
     public void draw(Graphics2D g2) {
+        int screenX = getWorldX() - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+        int screenY = getWorldY() - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
 
-        int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
-
-        if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-                worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-                worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-            g2.drawImage(down1, screenX, screenY, null);
+        if (getWorldX() + gp.getTileSize() > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() &&
+                getWorldX() - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
+                getWorldY() + gp.getTileSize() > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() &&
+                getWorldY() - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) {
+            g2.drawImage(getDown1(), screenX, screenY, null);
         }
+    }
+
+    public boolean isDestructible() {
+        return destructible;
+    }
+
+    public void setDestructible(boolean destructible) {
+        this.destructible = destructible;
+    }
+
+    @Override
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    @Override
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
     }
 }

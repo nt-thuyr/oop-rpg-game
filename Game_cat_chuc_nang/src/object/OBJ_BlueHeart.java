@@ -5,29 +5,28 @@ import main.GamePanel;
 
 public class OBJ_BlueHeart extends Entity {
 
-    GamePanel gp;
+    private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Lam Tinh Thạch";
-    public OBJ_BlueHeart(GamePanel gp)
-    {
+
+    public OBJ_BlueHeart(GamePanel gp) {
         super(gp);
 
         this.gp = gp;
 
-        type = type_pickupOnly;
-        name = objName;
-        down1 = setup("/objects/blueheart", gp.tileSize, gp.tileSize);
+        setType(getType_pickupOnly());
+        setName(objName);
+        setDown1(setup("/objects/blueheart", gp.getTileSize(), gp.getTileSize()));
         setDialogues();
     }
-    public void setDialogues()
-    {
-        dialogues[0][0] = "Bạn nhặt được một viên ngọc lam tuyệt đẹp.";
-        dialogues[0][1] = "Bạn đã tìm thấy Lam Tinh Thạch - bảo vật huyền thoại!";
-    }
-    public boolean use(Entity entity) //when pickup this method will be called
-    {
-        gp.gameState = gp.cutsceneState;
-        gp.csManager.sceneNum = gp.csManager.ending;
-        return true;
+
+    public void setDialogues() {
+        getDialogues()[0][0] = "Bạn nhặt được một viên ngọc lam tuyệt đẹp.";
+        getDialogues()[0][1] = "Bạn đã tìm thấy Lam Tinh Thạch - bảo vật huyền thoại!";
     }
 
+    public boolean use(Entity entity) { // When picked up, this method will be called
+        gp.setGameState(gp.getCutsceneState());
+        gp.getCsManager().setSceneNum(gp.getCsManager().getEnding());
+        return true;
+    }
 }

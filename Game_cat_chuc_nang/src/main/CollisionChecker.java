@@ -5,226 +5,198 @@ import entity.Entity;
 public class CollisionChecker {
     GamePanel gp;
 
-    public CollisionChecker(GamePanel gp)
-    {
+    public CollisionChecker(GamePanel gp) {
         this.gp = gp;
     }
-    public void checkTile(Entity entity)
-    {
-        int entityLeftWorldX = entity.worldX + entity.solidArea.x;                                // solidArea.x = 8
-        int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;      // solidArea.y = 16
-        int entityTopWorldY = entity.worldY + entity.solidArea.y;                                 // solidArea.width = 32
-        int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;    // solidArea.height = 32
 
-        int entityLeftCol = entityLeftWorldX/gp.tileSize;
-        int entityRightCol = entityRightWorldX/gp.tileSize;
-        int entityTopRow = entityTopWorldY/gp.tileSize;
-        int entityBottomRow = entityBottomWorldY/gp.tileSize;
+    public void checkTile(Entity entity) {
+        int entityLeftWorldX = entity.getWorldX() + entity.getSolidArea().x;
+        int entityRightWorldX = entity.getWorldX() + entity.getSolidArea().x + entity.getSolidArea().width;
+        int entityTopWorldY = entity.getWorldY() + entity.getSolidArea().y;
+        int entityBottomWorldY = entity.getWorldY() + entity.getSolidArea().y + entity.getSolidArea().height;
 
-        int tileNum1 , tileNum2;
+        int entityLeftCol = entityLeftWorldX / gp.getTileSize();
+        int entityRightCol = entityRightWorldX / gp.getTileSize();
+        int entityTopRow = entityTopWorldY / gp.getTileSize();
+        int entityBottomRow = entityBottomWorldY / gp.getTileSize();
 
-        //Use a temporal direction when it's being knockbacked
-        String direction = entity.direction;
-        if(entity.knockBack == true)
-        {
-            direction = entity.knockBackDirection;
+        int tileNum1, tileNum2;
+
+        String direction = entity.getDirection();
+        if (entity.isKnockBack()) {
+            direction = entity.getKnockBackDirection();
         }
 
-        switch (direction)
-        {
-            case "up" :
-                entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
-                tileNum1 =  gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];  //Check Left Hand
-                tileNum2 =  gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow]; //Check Right Hand
-                if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true)
-                {
-                    entity.collisionOn = true;
+        switch (direction) {
+            case "up":
+                entityTopRow = (entityTopWorldY - entity.getSpeed()) / gp.getTileSize();
+                tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityTopRow];
+                tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityTopRow];
+                if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
+                    entity.setCollisionOn(true);
                 }
                 break;
 
-            case "down" :
-                entityBottomRow = (entityBottomWorldY + entity.speed)/gp.tileSize;
-                tileNum1 =  gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow];  //Check Left Hand
-                tileNum2 =  gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow]; //Check Right Hand
-                if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true)
-                {
-                    entity.collisionOn = true;
+            case "down":
+                entityBottomRow = (entityBottomWorldY + entity.getSpeed()) / gp.getTileSize();
+                tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityBottomRow];
+                tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityBottomRow];
+                if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
+                    entity.setCollisionOn(true);
                 }
                 break;
 
-            case "left" :
-                entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
-                tileNum1 =  gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];  //Check Left Hand
-                tileNum2 =  gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow]; //Check Right Hand
-                if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true)
-                {
-                    entity.collisionOn = true;
+            case "left":
+                entityLeftCol = (entityLeftWorldX - entity.getSpeed()) / gp.getTileSize();
+                tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityTopRow];
+                tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityBottomRow];
+                if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
+                    entity.setCollisionOn(true);
                 }
                 break;
 
-            case "right" :
-                entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
-                tileNum1 =  gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];  //Check Left Hand
-                tileNum2 =  gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow]; //Check Right Hand
-                if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true)
-                {
-                    entity.collisionOn = true;
+            case "right":
+                entityRightCol = (entityRightWorldX + entity.getSpeed()) / gp.getTileSize();
+                tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityTopRow];
+                tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityBottomRow];
+                if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
+                    entity.setCollisionOn(true);
                 }
                 break;
         }
     }
 
-    public int checkObject(Entity entity, boolean player)
-    {
+    public int checkObject(Entity entity, boolean player) {
         int index = 999;
 
-        //Use a temporal direction when it's being knockbacked
-        String direction = entity.direction;
-        if(entity.knockBack == true)
-        {
-            direction = entity.knockBackDirection;
+        String direction = entity.getDirection();
+        if (entity.isKnockBack()) {
+            direction = entity.getKnockBackDirection();
         }
 
-        for(int i = 0;i < gp.obj[1].length; i++)
-        {
-            if(gp.obj[gp.currentMap][i] != null)
-            {
-                // get entity's solid area position
-                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-                entity.solidArea.y = entity.worldY + entity.solidArea.y;
+        for (int i = 0; i < gp.getObj()[1].length; i++) {
+            if (gp.getObj()[gp.getCurrentMap()][i] != null) {
+                entity.getSolidArea().x = entity.getWorldX() + entity.getSolidArea().x;
+                entity.getSolidArea().y = entity.getWorldY() + entity.getSolidArea().y;
 
-                // get the object's solid area position
-                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;       //entity's solid area and obj's solid area is different.
-                gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;
+                gp.getObj()[gp.getCurrentMap()][i].getSolidArea().x =
+                        gp.getObj()[gp.getCurrentMap()][i].getWorldX() + gp.getObj()[gp.getCurrentMap()][i].getSolidArea().x;
+                gp.getObj()[gp.getCurrentMap()][i].getSolidArea().y =
+                        gp.getObj()[gp.getCurrentMap()][i].getWorldY() + gp.getObj()[gp.getCurrentMap()][i].getSolidArea().y;
 
-                switch (direction)
-                {
-                    case "up" :
-                        entity.solidArea.y -= entity.speed;
+                switch (direction) {
+                    case "up":
+                        entity.getSolidArea().y -= entity.getSpeed();
                         break;
-                    case "down" :
-                        entity.solidArea.y += entity.speed;
+                    case "down":
+                        entity.getSolidArea().y += entity.getSpeed();
                         break;
-                    case "left" :
-                        entity.solidArea.x -= entity.speed;
+                    case "left":
+                        entity.getSolidArea().x -= entity.getSpeed();
                         break;
-                    case "right" :
-                        entity.solidArea.x += entity.speed;
+                    case "right":
+                        entity.getSolidArea().x += entity.getSpeed();
                         break;
                 }
-                if(entity.solidArea.intersects(gp.obj[gp.currentMap][i].solidArea)) //Checking if Entity rectangle and Object rectangle intersects.
-                {
-                    if(gp.obj[gp.currentMap][i].collision == true) //Collision (Player can't enter through a door.)
-                    {
-                        entity.collisionOn = true;
+                if (entity.getSolidArea().intersects(gp.getObj()[gp.getCurrentMap()][i].getSolidArea())) {
+                    if (gp.getObj()[gp.getCurrentMap()][i].isCollision()) {
+                        entity.setCollisionOn(true);
                     }
-                    if(player == true) // Checking this because no one can receive items except the player.
-                    {
-                        index = i;   // Non-player characters cannot pickup objects.
+                    if (player) {
+                        index = i;
                     }
                 }
-                entity.solidArea.x = entity.solidAreaDefaultX; // Reset
-                entity.solidArea.y = entity.solidAreaDefaultY;
+                entity.getSolidArea().x = entity.getSolidAreaDefaultX();
+                entity.getSolidArea().y = entity.getSolidAreaDefaultY();
 
-                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].solidAreaDefaultX;     // Reset
-                gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].solidAreaDefaultY;
-            }
-        }
-         return index;
-    }
-
-    //NPC OR MONSTER
-    public int checkEntity(Entity entity, Entity[][] target)
-    {
-        int index = 999;   // no collision returns 999;
-        //Use a temporal direction when it's being knockbacked
-        String direction = entity.direction;
-        if(entity.knockBack == true)
-        {
-            direction = entity.knockBackDirection;
-        }
-
-        for(int i = 0;i < target[1].length; i++)
-        {
-            if(target[gp.currentMap][i] != null)
-            {
-                // get entity's solid area position
-                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-                entity.solidArea.y = entity.worldY + entity.solidArea.y;
-
-                // get the object's solid area position
-                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].worldX + target[gp.currentMap][i].solidArea.x;       //entity's solid area and obj's solid area is different.
-                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].worldY + target[gp.currentMap][i].solidArea.y;
-
-                switch (direction)
-                {
-                    case "up" :
-                        entity.solidArea.y -= entity.speed;
-                        break;
-                    case "down" :
-                        entity.solidArea.y += entity.speed;
-                        break;
-                    case "left" :
-                        entity.solidArea.x -= entity.speed;
-                        break;
-                    case "right" :
-                        entity.solidArea.x += entity.speed;
-                        break;
-                }
-
-                if(entity.solidArea.intersects(target[gp.currentMap][i].solidArea))
-                {
-                    if(target[gp.currentMap][i] != entity) // avoid entity includes itself as a collision target
-                    {
-                        entity.collisionOn = true;
-                        index = i;   // Non-player characters cannot pickup objects.
-                    }
-                }
-                entity.solidArea.x = entity.solidAreaDefaultX; //Reset
-                entity.solidArea.y = entity.solidAreaDefaultY;
-
-                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].solidAreaDefaultX;     //Reset
-                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].solidAreaDefaultY;
+                gp.getObj()[gp.getCurrentMap()][i].getSolidArea().x = gp.getObj()[gp.getCurrentMap()][i].getSolidAreaDefaultX();
+                gp.getObj()[gp.getCurrentMap()][i].getSolidArea().y = gp.getObj()[gp.getCurrentMap()][i].getSolidAreaDefaultY();
             }
         }
         return index;
     }
-    public boolean checkPlayer(Entity entity)
-    {
+
+    public int checkEntity(Entity entity, Entity[][] target) {
+        int index = 999;
+
+        String direction = entity.getDirection();
+        if (entity.isKnockBack()) {
+            direction = entity.getKnockBackDirection();
+        }
+
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[gp.getCurrentMap()][i] != null) {
+                entity.getSolidArea().x = entity.getWorldX() + entity.getSolidArea().x;
+                entity.getSolidArea().y = entity.getWorldY() + entity.getSolidArea().y;
+
+                target[gp.getCurrentMap()][i].getSolidArea().x =
+                        target[gp.getCurrentMap()][i].getWorldX() + target[gp.getCurrentMap()][i].getSolidArea().x;
+                target[gp.getCurrentMap()][i].getSolidArea().y =
+                        target[gp.getCurrentMap()][i].getWorldY() + target[gp.getCurrentMap()][i].getSolidArea().y;
+
+                switch (direction) {
+                    case "up":
+                        entity.getSolidArea().y -= entity.getSpeed();
+                        break;
+                    case "down":
+                        entity.getSolidArea().y += entity.getSpeed();
+                        break;
+                    case "left":
+                        entity.getSolidArea().x -= entity.getSpeed();
+                        break;
+                    case "right":
+                        entity.getSolidArea().x += entity.getSpeed();
+                        break;
+                }
+
+                if (entity.getSolidArea().intersects(target[gp.getCurrentMap()][i].getSolidArea())) {
+                    if (target[gp.getCurrentMap()][i] != entity) {
+                        entity.setCollisionOn(true);
+                        index = i;
+                    }
+                }
+                entity.getSolidArea().x = entity.getSolidAreaDefaultX();
+                entity.getSolidArea().y = entity.getSolidAreaDefaultY();
+
+                target[gp.getCurrentMap()][i].getSolidArea().x = target[gp.getCurrentMap()][i].getSolidAreaDefaultX();
+                target[gp.getCurrentMap()][i].getSolidArea().y = target[gp.getCurrentMap()][i].getSolidAreaDefaultY();
+            }
+        }
+        return index;
+    }
+
+    public boolean checkPlayer(Entity entity) {
         boolean contactPlayer = false;
-        // get entity's solid area position
-        entity.solidArea.x = entity.worldX + entity.solidArea.x;
-        entity.solidArea.y = entity.worldY + entity.solidArea.y;
 
-        // get the object's solid area position
-        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;       //entity's solid area and obj's solid area is different.
-        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+        entity.getSolidArea().x = entity.getWorldX() + entity.getSolidArea().x;
+        entity.getSolidArea().y = entity.getWorldY() + entity.getSolidArea().y;
 
-        switch (entity.direction)
-        {
-            case "up" :
-                entity.solidArea.y -= entity.speed;
+        gp.getPlayer().getSolidArea().x = gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x;
+        gp.getPlayer().getSolidArea().y = gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y;
+
+        switch (entity.getDirection()) {
+            case "up":
+                entity.getSolidArea().y -= entity.getSpeed();
                 break;
-            case "down" :
-                entity.solidArea.y += entity.speed;
+            case "down":
+                entity.getSolidArea().y += entity.getSpeed();
                 break;
-            case "left" :
-                entity.solidArea.x -= entity.speed;
+            case "left":
+                entity.getSolidArea().x -= entity.getSpeed();
                 break;
-            case "right" :
-                entity.solidArea.x += entity.speed;
+            case "right":
+                entity.getSolidArea().x += entity.getSpeed();
                 break;
         }
-        if(entity.solidArea.intersects(gp.player.solidArea))
-        {
-            entity.collisionOn = true;
+        if (entity.getSolidArea().intersects(gp.getPlayer().getSolidArea())) {
+            entity.setCollisionOn(true);
             contactPlayer = true;
         }
-        entity.solidArea.x = entity.solidAreaDefaultX; ////Reset
-        entity.solidArea.y = entity.solidAreaDefaultY;
+        entity.getSolidArea().x = entity.getSolidAreaDefaultX();
+        entity.getSolidArea().y = entity.getSolidAreaDefaultY();
 
-        gp.player.solidArea.x = gp.player.solidAreaDefaultX;     ////Reset
-        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+        gp.getPlayer().getSolidArea().x = gp.getPlayer().getSolidAreaDefaultX();
+        gp.getPlayer().getSolidArea().y = gp.getPlayer().getSolidAreaDefaultY();
 
         return contactPlayer;
     }

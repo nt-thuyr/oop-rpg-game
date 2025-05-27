@@ -2,6 +2,7 @@ package ai;
 
 import entity.Entity;
 import main.GamePanel;
+import tile_interactive.InteractiveTile;
 
 import java.util.ArrayList;
 
@@ -15,62 +16,52 @@ public class PathFinder {
     private boolean goalReached = false;
     private int step = 0;
 
-    public PathFinder(GamePanel gp)
-    {
+    public PathFinder(GamePanel gp) {
         this.gp = gp;
         instantiateNodes();
     }
-    public void instantiateNodes() // Tạo các nút Node cho toàn bộ bản đồ
-    {
-        node = new Node[gp.maxWorldCol][gp.maxWorldRow]; // Khởi tạo mảng Node với kích thước bằng số cột và hàng của bản đồ
+
+    public void instantiateNodes() {
+        node = new Node[gp.getMaxWorldCol()][gp.getMaxWorldRow()]; // Use getter for maxWorldCol and maxWorldRow
 
         int col = 0;
         int row = 0;
 
-        while(col < gp.maxWorldCol && row < gp.maxWorldRow)
-        {
-            node[col][row] = new Node(col,row); // Tạo một nút Node mới tại vị trí (col, row)
+        while (col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow()) {
+            node[col][row] = new Node(col, row); // Create a new Node at (col, row)
 
             col++;
-            if(col == gp.maxWorldCol)
-            {
+            if (col == gp.getMaxWorldCol()) {
                 col = 0;
                 row++;
             }
         }
     }
 
-    // Đặt lại trạng thái của tất cả các nút trước khi thực hiện tìm đường
-    public void resetNodes()
-    {
+    public void resetNodes() {
         int col = 0;
         int row = 0;
-        while(col < gp.maxWorldCol && row < gp.maxWorldRow)
-        {
-
-            node[col][row].setOpen(false); // Đặt trạng thái nút là không mở
-            node[col][row].setChecked(false); // Đặt trạng thái nút là chưa kiểm tra
-            node[col][row].setSolid(false); // Đặt trạng thái nút là không rắn (có thể đi qua)
+        while (col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow()) {
+            node[col][row].setOpen(false); // Set node as not open
+            node[col][row].setChecked(false); // Set node as unchecked
+            node[col][row].setSolid(false); // Set node as not solid
 
             col++;
-            if(col == gp.maxWorldCol)
-            {
+            if (col == gp.getMaxWorldCol()) {
                 col = 0;
                 row++;
             }
         }
-        //reset other settings
+        // Reset other settings
         openList.clear();
         pathList.clear();
         goalReached = false;
         step = 0;
     }
 
-    // Thiết lập các nút bắt đầu và kết thúc, cũng như trạng thái của các nút khác
-    public void setNodes(int startCol, int startRow, int goalCol, int goalRow, Entity entity)
-    {
+    public void setNodes(int startCol, int startRow, int goalCol, int goalRow, Entity entity) {
         resetNodes();
-        //set Start and Goal node
+        // Set Start and Goal node
         startNode = node[startCol][startRow];
         currentNode = startNode;
         goalNode = node[goalCol][goalRow];
@@ -78,33 +69,29 @@ public class PathFinder {
 
         int col = 0;
         int row = 0;
-        while(col < gp.maxWorldCol && row < gp.maxWorldRow)
-        {
-            //SET SOLID NODE
-            //CHECK TILES
-            int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
-            if(gp.tileM.tile[tileNum].collision == true)
-            {
+        while (col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow()) {
+            // SET SOLID NODE
+            // CHECK TILES
+            int tileNum = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][col][row];
+            if (gp.getTileM().getTile()[tileNum].isCollision()) {
                 node[col][row].setSolid(true);
-
             }
-            //CHECK INTERACTIVE TILES
-            for(int i = 0; i < gp.iTile[1].length; i++)
-            {
-                if(gp.iTile[gp.currentMap][i] != null &&
-                        gp.iTile[gp.currentMap][i].destructible == true)
-                {
-                    int itCol = gp.iTile[gp.currentMap][i].worldX / gp.tileSize;
-                    int itRow = gp.iTile[gp.currentMap][i].worldY / gp.tileSize;
+            // CHECK INTERACTIVE TILES
+            for (int i = 0; i < gp.getiTile()[1].length; i++) {
+                if (gp.getiTile()[gp.getCurrentMap()][i] != null &&
+                        gp.getiTile()[gp.getCurrentMap()][i] instanceof InteractiveTile &&
+                        ((InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i]).isDestructible()) {
+
+                    int itCol = ((InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i]).getWorldX() / gp.getTileSize();
+                    int itRow = ((InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i]).getWorldY() / gp.getTileSize();
                     node[itCol][itRow].setSolid(true);
                 }
             }
 
-            getCost(node[col][row]); // Tính toán chi phí G, H và F cho nút hiện tại
+            getCost(node[col][row]); // Calculate G, H, and F costs for the current node
 
-            col++; // Tăng cột
-            if(col == gp.maxWorldCol)
-            {
+            col++; // Increment column
+            if (col == gp.getMaxWorldCol()) {
                 col = 0;
                 row++;
             }
@@ -139,8 +126,8 @@ public class PathFinder {
             // Open các node lân cận
             if (row - 1 >= 0) openNode(node[col][row - 1]);
             if (col - 1 >= 0) openNode(node[col - 1][row]);
-            if (row + 1 < gp.maxWorldRow) openNode(node[col][row + 1]);
-            if (col + 1 < gp.maxWorldCol) openNode(node[col + 1][row]);
+            if (row + 1 < gp.getMaxWorldRow()) openNode(node[col][row + 1]);
+            if (col + 1 < gp.getMaxWorldCol()) openNode(node[col + 1][row]);
 
             // Tìm node có fCost tốt nhất
             int bestNodeIndex = 0;
