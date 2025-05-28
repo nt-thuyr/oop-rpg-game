@@ -27,8 +27,8 @@ public class GamePanel extends JPanel implements Runnable{
     private final int screenHeight = tileSize * maxScreenRow; // 48*12 = 576 pixels
 
     // WORLD SETTINGS
-    private int maxWorldCol;
-    private int maxWorldRow;
+    private int maxWorldCol = 50;
+    private int maxWorldRow = 50;
     private final int maxMap = 10;
     private int currentMap = 0;
 
@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable{
     private AssetSetter aSetter = new AssetSetter(this);
     private UI ui = new UI(this);
     private PathFinder pFinder = new PathFinder(this);
-    private Map map = new Map(this);
+    Map map = new Map(this);
 
     private EntityGenerator eGenerator = new EntityGenerator(this);
     private CutsceneManager csManager = new CutsceneManager(this);
@@ -102,11 +102,18 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyH);
         this.setFocusable(true);
 
-        this.maxWorldCol = 25;
-        this.maxWorldRow = 25;
+        this.maxWorldCol = 50; // Số cột tối đa của bản đồ
+        this.maxWorldRow = 50; // Số hàng tối đa của bản đồ
+
+        // Khởi tạo Map sau khi các giá trị đã được gán
+        this.map = new Map(this);
+
+
+
     }
+
     public void setupGame() {
-        map.createWorldMap(); // Gọi sau khi các thuộc tính maxWorldCol và maxWorldRow đã được khởi tạo
+//        map.createWorldMap(); // Gọi sau khi các thuộc tính maxWorldCol và maxWorldRow đã được khởi tạo
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();

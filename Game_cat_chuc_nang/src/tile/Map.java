@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 
 public class Map extends TileManager {
 
+    private int width;
+    private int height;
+
     private GamePanel gp;
     private BufferedImage[] worldMap;
     public boolean miniMapOn = false;
@@ -14,6 +17,14 @@ public class Map extends TileManager {
     public Map(GamePanel gp) {
         super(gp);
         this.gp = gp;
+
+
+        this.width = gp.getTileSize() * gp.getMaxWorldCol();
+        this.height = gp.getTileSize() * gp.getMaxWorldRow();
+
+
+        createWorldMap();
+
     }
 
     public void createWorldMap() {
@@ -71,5 +82,47 @@ public class Map extends TileManager {
         g2.setFont(gp.getUi().getDeterminationSans().deriveFont(28f));
         g2.setColor(Color.white);
         g2.drawString("Nhấn M để đóng", 750, 550);
+    }
+
+    @Override
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    @Override
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isMiniMapOn() {
+        return miniMapOn;
+    }
+
+    public void setMiniMapOn(boolean miniMapOn) {
+        this.miniMapOn = miniMapOn;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public BufferedImage[] getWorldMap() {
+        return worldMap;
+    }
+
+    public void setWorldMap(BufferedImage[] worldMap) {
+        this.worldMap = worldMap;
     }
 }
