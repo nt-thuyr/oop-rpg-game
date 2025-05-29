@@ -104,9 +104,6 @@ public class UI {
             if (gp.gameState == gp.dialogueState) {
                 gp.gameState = gp.playState;
             }
-            if (gp.gameState == gp.cutsceneState) {
-                gp.csManager.scenePhase++;
-            }
         }
 
         for (String line : currentDialogue.split("\n"))   // splits dialogue until "\n" as a line

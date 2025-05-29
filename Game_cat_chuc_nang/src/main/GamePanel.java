@@ -56,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable{
     Map map = new Map(this);
 
     public EntityGenerator eGenerator = new EntityGenerator(this);
-    public CutsceneManager csManager = new CutsceneManager(this);
+//    public CutsceneManager csManager = new CutsceneManager(this);
     Thread gameThread;
 
     //ENTITY AND OBJECT
@@ -385,7 +385,7 @@ public class GamePanel extends JPanel implements Runnable{
 
 
             //CUTSCENE
-            csManager.draw(g2);
+//            csManager.draw(g2);
 
             //UI
             ui.draw(g2);
