@@ -23,8 +23,8 @@ public class CollisionChecker {
         int tileNum1, tileNum2;
 
         String direction = entity.getDirection();
-        if (entity.isKnockBack()) {
-            direction = entity.getKnockBackDirection();
+        if (entity.getState().isKnockBack()) {
+            direction = entity.getState().getKnockBackDirection();
         }
 
         switch (direction) {
@@ -33,7 +33,7 @@ public class CollisionChecker {
                 tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityTopRow];
                 tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityTopRow];
                 if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
-                    entity.setCollisionOn(true);
+                    entity.getState().setCollisionOn(true);
                 }
                 break;
 
@@ -42,7 +42,7 @@ public class CollisionChecker {
                 tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityBottomRow];
                 tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityBottomRow];
                 if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
-                    entity.setCollisionOn(true);
+                    entity.getState().setCollisionOn(true);
                 }
                 break;
 
@@ -51,7 +51,7 @@ public class CollisionChecker {
                 tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityTopRow];
                 tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityLeftCol][entityBottomRow];
                 if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
-                    entity.setCollisionOn(true);
+                    entity.getState().setCollisionOn(true);
                 }
                 break;
 
@@ -60,7 +60,7 @@ public class CollisionChecker {
                 tileNum1 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityTopRow];
                 tileNum2 = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][entityRightCol][entityBottomRow];
                 if (gp.getTileM().getTile()[tileNum1].isCollision() || gp.getTileM().getTile()[tileNum2].isCollision()) {
-                    entity.setCollisionOn(true);
+                    entity.getState().setCollisionOn(true);
                 }
                 break;
         }
@@ -70,8 +70,8 @@ public class CollisionChecker {
         int index = 999;
 
         String direction = entity.getDirection();
-        if (entity.isKnockBack()) {
-            direction = entity.getKnockBackDirection();
+        if (entity.getState().isKnockBack()) {
+            direction = entity.getState().getKnockBackDirection();
         }
 
         for (int i = 0; i < gp.getObj()[1].length; i++) {
@@ -100,7 +100,7 @@ public class CollisionChecker {
                 }
                 if (entity.getSolidArea().intersects(gp.getObj()[gp.getCurrentMap()][i].getSolidArea())) {
                     if (gp.getObj()[gp.getCurrentMap()][i].isCollision()) {
-                        entity.setCollisionOn(true);
+                        entity.getState().setCollisionOn(true);
                     }
                     if (player) {
                         index = i;
@@ -120,8 +120,8 @@ public class CollisionChecker {
         int index = 999;
 
         String direction = entity.getDirection();
-        if (entity.isKnockBack()) {
-            direction = entity.getKnockBackDirection();
+        if (entity.getState().isKnockBack()) {
+            direction = entity.getState().getKnockBackDirection();
         }
 
         for (int i = 0; i < target[1].length; i++) {
@@ -151,7 +151,7 @@ public class CollisionChecker {
 
                 if (entity.getSolidArea().intersects(target[gp.getCurrentMap()][i].getSolidArea())) {
                     if (target[gp.getCurrentMap()][i] != entity) {
-                        entity.setCollisionOn(true);
+                        entity.getState().setCollisionOn(true);
                         index = i;
                     }
                 }
@@ -189,7 +189,7 @@ public class CollisionChecker {
                 break;
         }
         if (entity.getSolidArea().intersects(gp.getPlayer().getSolidArea())) {
-            entity.setCollisionOn(true);
+            entity.getState().setCollisionOn(true);
             contactPlayer = true;
         }
         entity.getSolidArea().x = entity.getSolidAreaDefaultX();

@@ -105,7 +105,6 @@ public class GamePanel extends JPanel implements Runnable{
         this.maxWorldCol = 50; // Số cột tối đa của bản đồ
         this.maxWorldRow = 50; // Số hàng tối đa của bản đồ
 
-        // Khởi tạo Map sau khi các giá trị đã được gán
         this.map = new Map(this);
 
 
@@ -113,7 +112,6 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setupGame() {
-//        map.createWorldMap(); // Gọi sau khi các thuộc tính maxWorldCol và maxWorldRow đã được khởi tạo
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
@@ -136,7 +134,7 @@ public class GamePanel extends JPanel implements Runnable{
         player.restoreStatus();
         aSetter.setMonster();
         aSetter.setNPC();
-        player.resetCounter();
+        player.getState().resetCounter();
 
         if(restart == true)
         {
@@ -223,11 +221,11 @@ public class GamePanel extends JPanel implements Runnable{
             {
                 if(monster[currentMap][i] != null)
                 {
-                    if(monster[currentMap][i].isAlive() == true && monster[currentMap][i].isDying() == false)
+                    if(monster[currentMap][i].getState().isAlive() == true && monster[currentMap][i].getState().isDying() == false)
                     {
                         monster[currentMap][i].update();
                     }
-                    if(monster[currentMap][i].isAlive() == false)
+                    if(monster[currentMap][i].getState().isAlive() == false)
                     {
                         monster[currentMap][i].checkDrop(); //when monster dies, i check its drop
                         monster[currentMap][i] = null;
@@ -240,11 +238,11 @@ public class GamePanel extends JPanel implements Runnable{
             {
                 if(projectile[currentMap][i] != null)
                 {
-                    if(projectile[currentMap][i].isAlive() == true)
+                    if(projectile[currentMap][i].getState().isAlive() == true)
                     {
                         projectile[currentMap][i].update();
                     }
-                    if(projectile[currentMap][i].isAlive() == false)
+                    if(projectile[currentMap][i].getState().isAlive() == false)
                     {
                         projectile[currentMap][i] = null;
                     }
@@ -256,11 +254,11 @@ public class GamePanel extends JPanel implements Runnable{
             {
                 if(particleList.get(i)!= null)
                 {
-                    if(particleList.get(i).isAlive() == true)
+                    if(particleList.get(i).getState().isAlive() == true)
                     {
                         particleList.get(i).update();
                     }
-                    if(particleList.get(i).isAlive() == false)
+                    if(particleList.get(i).getState().isAlive() == false)
                     {
                         particleList.remove(i);
                     }

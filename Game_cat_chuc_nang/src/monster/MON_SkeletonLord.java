@@ -29,7 +29,7 @@ public class MON_SkeletonLord extends Entity {
         setDefense(3);
         setExp(40);
         setKnockBackPower(5);
-        setSleep(true);
+        getState().setSleep(true);
 
         int size = gp.getTileSize() * 5;
         getSolidArea().x = 48;
@@ -50,7 +50,7 @@ public class MON_SkeletonLord extends Entity {
 
     public void getImage() {
         int i = 5;
-        if (!isInRage()) {
+        if (!getState().isInRage()) {
             setUp1(setup("/monster/skeletonlord_up_1", gp.getTileSize() * i, gp.getTileSize() * i));
             setUp2(setup("/monster/skeletonlord_up_2", gp.getTileSize() * i, gp.getTileSize() * i));
             setDown1(setup("/monster/skeletonlord_down_1", gp.getTileSize() * i, gp.getTileSize() * i));
@@ -73,7 +73,7 @@ public class MON_SkeletonLord extends Entity {
 
     public void getAttackImage() {
         int i = 5;
-        if (!isInRage()) {
+        if (!getState().isInRage()) {
             setAttackUp1(setup("/monster/skeletonlord_attack_up_1", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
             setAttackUp2(setup("/monster/skeletonlord_attack_up_2", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
             setAttackDown1(setup("/monster/skeletonlord_attack_down_1", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
@@ -101,8 +101,8 @@ public class MON_SkeletonLord extends Entity {
     }
 
     public void setAction() {
-        if (!isInRage() && getLife() < getMaxLife() / 2) {
-            setInRage(true);
+        if (!getState().isInRage() && getLife() < getMaxLife() / 2) {
+            getState().setInRage(true);
             getImage();
             getAttackImage();
             setDefaultSpeed(getDefaultSpeed() + 1);
@@ -115,13 +115,13 @@ public class MON_SkeletonLord extends Entity {
             getRandomDirection(120);
         }
 
-        if (!isAttacking()) {
+        if (!getState().isAttacking()) {
             checkAttackOrNot(60, gp.getTileSize() * 7, gp.getTileSize() * 5);
         }
     }
 
     public void damageReaction() {
-        setActionLockCounter(0);
+        getState().setActionLockCounter(0);
     }
 
     public void checkDrop() {

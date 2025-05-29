@@ -32,11 +32,11 @@ public class InteractiveTile extends Entity {
     }
 
     public void update() {
-        if (isInvincible()) {
-            setInvincibleCounter(getInvincibleCounter() + 1);
-            if (getInvincibleCounter() > 20) {
-                setInvincible(false);
-                setInvincibleCounter(0);
+        if (getState().isInvincible()) {
+            getState().setInvincibleCounter(getState().getInvincibleCounter() + 1);
+            if (getState().getInvincibleCounter() > 20) {
+                getState().setInvincible(false);
+                getState().setInvincibleCounter(0);
             }
         }
     }

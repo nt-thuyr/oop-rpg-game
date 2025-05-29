@@ -387,7 +387,7 @@ public class UI {
             Entity monster = gp.getMonster()[gp.getCurrentMap()][i];
 
             if (monster != null && monster.inCamera()) {
-                if (monster.isHpBarOn() && !monster.isBoss()) {
+                if (monster.getState().isHpBarOn() && !monster.isBoss()) {
                     double oneScale = (double) gp.getTileSize() / monster.getMaxLife();
                     double hpBarValue = oneScale * monster.getLife();
 
@@ -401,10 +401,10 @@ public class UI {
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect(monster.getScreenX(), monster.getScreenY() - 15, (int) hpBarValue, 10);
 
-                    monster.setHpBarCounter(monster.getHpBarCounter() + 1);
-                    if (monster.getHpBarCounter() > 600) {
-                        monster.setHpBarCounter(0);
-                        monster.setHpBarOn(false);
+                    monster.getState().setHpBarCounter(monster.getState().getHpBarCounter() + 1);
+                    if (monster.getState().getHpBarCounter() > 600) {
+                        monster.getState().setHpBarCounter(0);
+                        monster.getState().setHpBarOn(false);
                     }
                 } else if (monster.isBoss()) {
                     double oneScale = (double) gp.getTileSize() * 8 / monster.getMaxLife();

@@ -31,34 +31,36 @@ public class Entity {
     private int spriteNum = 1;
     private int dialogueSet = 0;
     private int dialogueIndex = 0;
-    private boolean collisionOn = false;
-    private boolean invincible = false;
-    private boolean attacking = false;
-    private boolean alive = true;
-    private boolean dying = false;
-    private boolean hpBarOn = false;
-    private boolean onPath = false;
-    private boolean knockBack = false;
-    private String knockBackDirection;
-    private boolean guarding = false;
-    private boolean transparent = false;
-    private boolean offBalance = false;
+//    private boolean collisionOn = false;
+//    private boolean invincible = false;
+//    private boolean attacking = false;
+//    private boolean alive = true;
+//    private boolean dying = false;
+//    private boolean hpBarOn = false;
+//    private boolean onPath = false;
+//    private boolean knockBack = false;
+//    private String knockBackDirection;
+//    private boolean guarding = false;
+//    private boolean transparent = false;
+//    private boolean offBalance = false;
     private Entity loot;
-    private boolean opened = false;
-    private boolean inRage = false;
-    private boolean sleep = false;
-    private boolean drawing = true;
+//    private boolean opened = false;
+//    private boolean inRage = false;
+//    private boolean sleep = false;
+//    private boolean drawing = true;
+    private EntityState state = new EntityState();
+
 
     // COUNTER
-    private int spriteCounter = 0;
-    private int actionLockCounter = 0;
-    private int invincibleCounter = 0;
-    private int shotAvailableCounter = 0;
-    private int dyingCounter = 0;
-    private int hpBarCounter = 0;
-    private int knockBackCounter = 0;
-    private int guardCounter = 0;
-    private int offBalanceCounter = 0;
+//    private int spriteCounter = 0;
+//    private int actionLockCounter = 0;
+//    private int invincibleCounter = 0;
+//    private int shotAvailableCounter = 0;
+//    private int dyingCounter = 0;
+//    private int hpBarCounter = 0;
+//    private int knockBackCounter = 0;
+//    private int guardCounter = 0;
+//    private int offBalanceCounter = 0;
 
     // CHARACTER ATTRIBUTES
     private String name;
@@ -122,8 +124,7 @@ public class Entity {
         this.gp = gp;
 
     }
-    public int getScreenX()
-    {
+    public int getScreenX() {
         int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
         return screenX;
     }
@@ -192,18 +193,18 @@ public class Entity {
         int goalRow = (target.worldY + target.solidArea.y) / gp.getTileSize();
         return goalRow;
     }
-    public void resetCounter()
-    {
-        spriteCounter = 0;
-        actionLockCounter = 0;
-        invincibleCounter = 0;
-        shotAvailableCounter = 0;
-        dyingCounter = 0;
-        hpBarCounter = 0;
-        knockBackCounter = 0;
-        guardCounter = 0;
-        offBalanceCounter = 0;
-    }
+//    public void resetCounter()
+//    {
+//        spriteCounter = 0;
+//        actionLockCounter = 0;
+//        invincibleCounter = 0;
+//        shotAvailableCounter = 0;
+//        dyingCounter = 0;
+//        hpBarCounter = 0;
+//        knockBackCounter = 0;
+//        guardCounter = 0;
+//        offBalanceCounter = 0;
+//    }
     public void setDialogue()
     {
     }
@@ -304,180 +305,143 @@ public class Entity {
 
 
     }
-    public void checkCollision()
-    {
-        collisionOn = false;
+    public void checkCollision() {
+        getState().setCollisionOn(false);
         gp.getcChecker().checkTile(this);
-        gp.getcChecker().checkObject(this,false);
+        gp.getcChecker().checkObject(this, false);
         gp.getcChecker().checkEntity(this, gp.getNpc());
         gp.getcChecker().checkEntity(this, gp.getMonster());
         gp.getcChecker().checkEntity(this, gp.getiTile());
         boolean contactPlayer = gp.getcChecker().checkPlayer(this);
-        if(this.type == type_monster && contactPlayer == true)
-        {
-            damagePlayer(attack);
+        if (getType() == getType_monster() && contactPlayer == true) {
+            damagePlayer(getAttack());
         }
     }
-    public void update()
-    {
-        if(sleep == false)
-        {
-            if(knockBack == true)
-            {
+
+    public void update() {
+        if (!getState().isSleep()) {
+            if (getState().isKnockBack()) {
                 checkCollision();
-                if(collisionOn == true)
-                {
-                    knockBackCounter = 0;
-                    knockBack = false;
-                    speed = defaultSpeed;
-                }
-                else if(collisionOn == false)
-                {
-                    switch (knockBackDirection)
-                    {
-                        case "up" :
-                            worldY -= speed;
+                if (getState().isCollisionOn()) {
+                    getState().setKnockBackCounter(0);
+                    getState().setKnockBack(false);
+                    setSpeed(getDefaultSpeed());
+                } else {
+                    switch (getState().getKnockBackDirection()) {
+                        case "up":
+                            setWorldY(getWorldY() - getSpeed());
                             break;
-
-                        case "down" :
-                            worldY += speed;
+                        case "down":
+                            setWorldY(getWorldY() + getSpeed());
                             break;
-
-                        case "left" :
-                            worldX -= speed;
+                        case "left":
+                            setWorldX(getWorldX() - getSpeed());
                             break;
-
-                        case "right" :
-                            worldX += speed;
+                        case "right":
+                            setWorldX(getWorldX() + getSpeed());
                             break;
                     }
                 }
-                knockBackCounter++;
-                if(knockBackCounter == 10)
-                {
-                    knockBackCounter = 0;
-                    knockBack = false;
-                    speed = defaultSpeed;
+                getState().setKnockBackCounter(getState().getKnockBackCounter() + 1);
+                if (getState().getKnockBackCounter() == 10) {
+                    getState().setKnockBackCounter(0);
+                    getState().setKnockBack(false);
+                    setSpeed(getDefaultSpeed());
                 }
-            }
-            else if(attacking == true)
-            {
+            } else if (getState().isAttacking()) {
                 attacking();
-            }
-            else
-            {
+            } else {
                 setAction();
                 checkCollision();
 
-                if(collisionOn == false)
-                {
-                    switch (direction)
-                    {
-                        case "up" :
-                            worldY -= speed;
+                if (!getState().isCollisionOn()) {
+                    switch (getDirection()) {
+                        case "up":
+                            setWorldY(getWorldY() - getSpeed());
                             break;
-
-                        case "down" :
-                            worldY += speed;
+                        case "down":
+                            setWorldY(getWorldY() + getSpeed());
                             break;
-
-                        case "left" :
-                            worldX -= speed;
+                        case "left":
+                            setWorldX(getWorldX() - getSpeed());
                             break;
-
-                        case "right" :
-                            worldX += speed;
+                        case "right":
+                            setWorldX(getWorldX() + getSpeed());
                             break;
                     }
                 }
-                spriteCounter++;
-                if (spriteCounter > 24) {
-                    if (spriteNum == 1)                  //Every 12 frames sprite num changes.
-                    {
-                        spriteNum = 2;
-                    } else if (spriteNum == 2) {
-                        spriteNum = 1;
+                getState().setSpriteCounter(getState().getSpriteCounter() + 1);
+                if (getState().getSpriteCounter() > 24) {
+                    if (getSpriteNum() == 1) {
+                        setSpriteNum(2);
+                    } else if (getSpriteNum() == 2) {
+                        setSpriteNum(1);
                     }
-                    spriteCounter = 0;                  // spriteCounter reset
+                    getState().setSpriteCounter(0);
                 }
             }
-            //Like player's invincible method
-            if(invincible == true)
-            {
-                invincibleCounter++;
-                if(invincibleCounter > 40)
-                {
-                    invincible = false;
-                    invincibleCounter = 0;
+            if (getState().isInvincible()) {
+                getState().setInvincibleCounter(getState().getInvincibleCounter() + 1);
+                if (getState().getInvincibleCounter() > 40) {
+                    getState().setInvincible(false);
+                    getState().setInvincibleCounter(0);
                 }
             }
-            if(shotAvailableCounter < 30)
-            {
-                shotAvailableCounter++;
+            if (getState().getShotAvailableCounter() < 30) {
+                getState().setShotAvailableCounter(getState().getShotAvailableCounter() + 1);
             }
-            if(offBalance == true)
-            {
-                offBalanceCounter++;
-                if(offBalanceCounter > 60)
-                {
-                    offBalance = false;
-                    offBalanceCounter = 0;
+            if (getState().isOffBalance()) {
+                getState().setOffBalanceCounter(getState().getOffBalanceCounter() + 1);
+                if (getState().getOffBalanceCounter() > 60) {
+                    getState().setOffBalance(false);
+                    getState().setOffBalanceCounter(0);
                 }
             }
         }
     }
-    public void checkAttackOrNot(int rate, int straight, int horizontal)
-    {
-        boolean tartgetInRange = false;
+
+    public void checkAttackOrNot(int rate, int straight, int horizontal) {
+        boolean targetInRange = false;
         int xDis = getXdistance(gp.getPlayer());
         int yDis = getYdistance(gp.getPlayer());
 
-        switch (direction)
-        {
+        switch (getDirection()) {
             case "up":
-                if(gp.getPlayer().getCenterY() < getCenterY()  && yDis < straight && xDis < horizontal)
-                {
-                    tartgetInRange = true;
+                if (gp.getPlayer().getCenterY() < getCenterY() && yDis < straight && xDis < horizontal) {
+                    targetInRange = true;
                 }
                 break;
             case "down":
-                if(gp.getPlayer().getCenterY()  > getCenterY()  && yDis < straight && xDis < horizontal)
-                {
-                    tartgetInRange = true;
+                if (gp.getPlayer().getCenterY() > getCenterY() && yDis < straight && xDis < horizontal) {
+                    targetInRange = true;
                 }
                 break;
             case "left":
-                if(gp.getPlayer().getCenterX()  < getCenterX() && xDis < straight && yDis < horizontal)
-                {
-                    tartgetInRange = true;
+                if (gp.getPlayer().getCenterX() < getCenterX() && xDis < straight && yDis < horizontal) {
+                    targetInRange = true;
                 }
                 break;
             case "right":
-                if(gp.getPlayer().getCenterX() > getCenterX() && xDis < straight && yDis < horizontal)
-                {
-                    tartgetInRange = true;
+                if (gp.getPlayer().getCenterX() > getCenterX() && xDis < straight && yDis < horizontal) {
+                    targetInRange = true;
                 }
                 break;
         }
 
-        if(tartgetInRange == true)
-        {
-            //Check if it initiates an attack
+        if (targetInRange == true) {
             int i = new Random().nextInt(rate);
-            if(i == 0)
-            {
-                attacking = true;
-                spriteNum = 1;
-                spriteCounter = 0;
-                shotAvailableCounter = 0;
+            if (i == 0) {
+                getState().setAttacking(true);
+                setSpriteNum(1);
+                getState().setSpriteCounter(0);
+                getState().setShotAvailableCounter(0);
             }
         }
-
     }
     public void checkShootOrNot(int rate, int shotInterval)
     {
         int i = new Random().nextInt(rate);
-        if (i == 0 && !projectile.isAlive() && shotAvailableCounter == shotInterval)
+        if (i == 0 && !projectile.getState().isAlive() && state.getShotAvailableCounter() == shotInterval)
         {
             projectile.set(worldX,worldY,direction,true,this);
             //gp.projectileList.add(projectile);
@@ -490,7 +454,7 @@ public class Entity {
                     break;
                 }
             }
-            shotAvailableCounter = 0;
+            state.setShotAvailableCounter(0);
         }
     }
     public void checkStartChasingOrNot(Entity target, int distance, int rate)
@@ -500,7 +464,7 @@ public class Entity {
             int i = new Random().nextInt(rate);
             if(i == 0)
             {
-                onPath = true;
+                state.setOnPath(true);
             }
         }
     }
@@ -511,93 +475,117 @@ public class Entity {
             int i = new Random().nextInt(rate);
             if(i == 0)
             {
-                onPath = false;
+                state.setOnPath(false);
             }
         }
     }
-    public void getRandomDirection(int interval)
-    {
-        actionLockCounter++;
+    public void getRandomDirection(int interval) {
+        getState().setActionLockCounter(getState().getActionLockCounter() + 1);
 
-        if(actionLockCounter > interval)
-        {
+        if (getState().getActionLockCounter() > interval) {
             Random random = new Random();
-            int i = random.nextInt(100) + 1;  // pick up  a number from 1 to 100
-            if(i <= 25){direction = "up";}
-            if(i>25 && i <= 50){direction = "down";}
-            if(i>50 && i <= 75){direction = "left";}
-            if(i>75 && i <= 100){direction = "right";}
-            actionLockCounter = 0; // reset
+            int i = random.nextInt(100) + 1;  // pick up a number from 1 to 100
+            if (i <= 25) {
+                setDirection("up");
+            }
+            if (i > 25 && i <= 50) {
+                setDirection("down");
+            }
+            if (i > 50 && i <= 75) {
+                setDirection("left");
+            }
+            if (i > 75 && i <= 100) {
+                setDirection("right");
+            }
+            getState().setActionLockCounter(0); // reset
         }
     }
-    public void moveTowardPlayer(int interval) {
-        actionLockCounter++;
 
-        if (actionLockCounter > interval) {
+    public void moveTowardPlayer(int interval) {
+        getState().setActionLockCounter(getState().getActionLockCounter() + 1);
+
+        if (getState().getActionLockCounter() > interval) {
             if (getXdistance(gp.getPlayer()) > getYdistance(gp.getPlayer())) { // If entity is farther from the player on the X-axis
                 if (gp.getPlayer().getCenterX() < getCenterX()) { // Player is on the left side, entity moves left
-                    direction = "left";
+                    setDirection("left");
                 } else {
-                    direction = "right";
+                    setDirection("right");
                 }
             } else if (getXdistance(gp.getPlayer()) < getYdistance(gp.getPlayer())) { // If entity is farther from the player on the Y-axis
                 if (gp.getPlayer().getCenterY() < getCenterY()) { // Player is above, entity moves up
-                    direction = "up";
+                    setDirection("up");
                 } else {
-                    direction = "down";
+                    setDirection("down");
                 }
             }
-            actionLockCounter = 0;
+            getState().setActionLockCounter(0);
         }
     }
+
     public String getOppositeDirection(String direction) {
         String oppositeDirection = "";
 
         switch (direction) {
-            case "up": oppositeDirection = "down"; break;
-            case "down": oppositeDirection = "up"; break;
-            case "left": oppositeDirection = "right"; break;
-            case "right": oppositeDirection = "left"; break;
+            case "up":
+                oppositeDirection = "down";
+                break;
+            case "down":
+                oppositeDirection = "up";
+                break;
+            case "left":
+                oppositeDirection = "right";
+                break;
+            case "right":
+                oppositeDirection = "left";
+                break;
         }
 
         return oppositeDirection;
     }
 
     public void attacking() {
-        spriteCounter++;
+        getState().setSpriteCounter(getState().getSpriteCounter() + 1);
 
-        if (spriteCounter <= motion1_duration) {
-            spriteNum = 1;
+        if (getState().getSpriteCounter() <= getMotion1_duration()) {
+            setSpriteNum(1);
         }
-        if (spriteCounter > motion1_duration && spriteCounter <= motion2_duration) {
-            spriteNum = 2;
+        if (getState().getSpriteCounter() > getMotion1_duration() && getState().getSpriteCounter() <= getMotion2_duration()) {
+            setSpriteNum(2);
 
             // Save the current worldX, worldY, solidArea
-            int currentWorldX = worldX;
-            int currentWorldY = worldY;
-            int solidAreaWidth = solidArea.width;
-            int solidAreaHeight = solidArea.height;
+            int currentWorldX = getWorldX();
+            int currentWorldY = getWorldY();
+            int solidAreaWidth = getSolidArea().width;
+            int solidAreaHeight = getSolidArea().height;
 
             // Adjust player's worldX/worldY for the attackArea
-            switch (direction) {
-                case "up": worldY -= attackArea.height; break; // attackArea's size
-                case "down": worldY += gp.getTileSize(); break; // gp.tileSize (player's size)
-                case "left": worldX -= attackArea.width; break; // attackArea's size
-                case "right": worldX += gp.getTileSize(); break; // gp.tileSize (player's size)
+            switch (getDirection()) {
+                case "up":
+                    setWorldY(getWorldY() - getAttackArea().height);
+                    break; // attackArea's size
+                case "down":
+                    setWorldY(getWorldY() + gp.getTileSize());
+                    break; // gp.tileSize (player's size)
+                case "left":
+                    setWorldX(getWorldX() - getAttackArea().width);
+                    break; // attackArea's size
+                case "right":
+                    setWorldX(getWorldX() + gp.getTileSize());
+                    break; // gp.tileSize (player's size)
             }
 
             // attackArea becomes solidArea
-            solidArea.width = attackArea.width;
-            solidArea.height = attackArea.height;
+            getSolidArea().width = getAttackArea().width;
+            getSolidArea().height = getAttackArea().height;
 
-            if (type == getType_monster()) {
+            if (getType() == getType_monster()) {
                 if (gp.getcChecker().checkPlayer(this)) { // This means attack is hitting player
-                    damagePlayer(attack);
+                    damagePlayer(getAttack());
                 }
             } else { // Player
                 // Check monster collision with the updated worldX, worldY and solidArea
                 int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
-                gp.getPlayer().damageMonster(monsterIndex, this, attack, currentWeapon.getKnockBackPower());
+                gp.getPlayer().damageMonster(monsterIndex, this, getAttack(), getCurrentWeapon().getKnockBackPower());
 
                 int iTileIndex = gp.getcChecker().checkEntity(this, gp.getiTile());
                 gp.getPlayer().damageInteractiveTile(iTileIndex);
@@ -607,344 +595,354 @@ public class Entity {
             }
 
             // After checking collision, restore the original data
-            worldX = currentWorldX;
-            worldY = currentWorldY;
-            solidArea.width = solidAreaWidth;
-            solidArea.height = solidAreaHeight;
+            setWorldX(currentWorldX);
+            setWorldY(currentWorldY);
+            getSolidArea().width = solidAreaWidth;
+            getSolidArea().height = solidAreaHeight;
         }
-        if (spriteCounter > motion2_duration) {
-            spriteNum = 1;
-            spriteCounter = 0;
-            attacking = false;
+        if (getState().getSpriteCounter() > getMotion2_duration()) {
+            setSpriteNum(1);
+            getState().setSpriteCounter(0);
+            getState().setAttacking(false);
         }
     }
-    public void damagePlayer(int attack)
-    {
-        if(!gp.getPlayer().isInvincible())
-        {
+    public void damagePlayer(int attack) {
+        if (!gp.getPlayer().getState().isInvincible()) {
             int damage = attack - gp.getPlayer().getDefense();
-            //Get an opposite direction of this attacker
-            String canGuardDirection = getOppositeDirection(direction);
+            // Get an opposite direction of this attacker
+            String canGuardDirection = getOppositeDirection(getDirection());
 
-            if(gp.getPlayer().isGuarding() && gp.getPlayer().getDirection().equals(canGuardDirection))
-            {
-                //Parry //If you press guard key less then 10 frames before the attack you receive 0 damage, and you get critical chance
-                if(gp.getPlayer().getGuardCounter() < 10)
-                {
+            if (gp.getPlayer().getState().isGuarding() && gp.getPlayer().getDirection().equals(canGuardDirection)) {
+                // Parry: If you press guard key less than 10 frames before the attack, you receive 0 damage and get a critical chance
+                if (gp.getPlayer().getState().getGuardCounter() < 10) {
                     damage = 0;
                     gp.playSE(16);
-                    setKnockBack(this, gp.getPlayer(), knockBackPower); //Knockback attacker //You can use shield's knockBackPower!
-                    offBalance = true;
-                    spriteCounter =- 60; //Attacker's sprites returns to motion1//like a stun effect
-                }
-                else
-                {
-                    //Normal Guard
+                    setKnockBack(this, gp.getPlayer(), getKnockBackPower()); // Knockback attacker
+                    getState().setOffBalance(true);
+                    getState().setSpriteCounter(getState().getSpriteCounter() - 60); // Attacker's sprites return to motion1 (stun effect)
+                } else {
+                    // Normal Guard
                     damage /= 2;
                     gp.playSE(15);
                 }
-            }
-            else
-            {
-                //Not guarding
-                gp.playSE(6);   //receivedamage.wav
-                if(damage < 1 )
-                {
+            } else {
+                // Not guarding
+                gp.playSE(6); // receivedamage.wav
+                if (damage < 1) {
                     damage = 1;
                 }
             }
-            if(damage != 0)
-            {
-                gp.getPlayer().setTransparent(true);
-                setKnockBack(gp.getPlayer(), this, knockBackPower);
+            if (damage != 0) {
+                gp.getPlayer().getState().setTransparent(true);
+                setKnockBack(gp.getPlayer(), this, getKnockBackPower());
             }
 
-            //We can give damage
-            gp.getPlayer().setLife(gp.getPlayer().getLife() - damage); // sửa ở lớp Player
-            gp.getPlayer().setInvincible(true); // Sửa ở lớp Player
+            // Apply damage
+            gp.getPlayer().setLife(gp.getPlayer().getLife() - damage);
+            gp.getPlayer().getState().setInvincible(true);
         }
     }
-    public void setKnockBack(Entity target, Entity attacker, int knockBackPower)
-    {
+
+    public void setKnockBack(Entity target, Entity attacker, int knockBackPower) {
         this.attacker = attacker;
-        target.knockBackDirection = attacker.direction;
-        target.speed += knockBackPower;
-        target.knockBack = true;
+        target.getState().setKnockBackDirection(attacker.getDirection());
+        target.setSpeed(target.getSpeed() + knockBackPower);
+        target.getState().setKnockBack(true);
     }
-    public boolean inCamera()
-    {
+
+    public boolean inCamera() {
         boolean inCamera = false;
-        if(     worldX + gp.getTileSize() *5 > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && //*5 because skeleton lord disappears when the top left corner isn't on the screen
-                worldX - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
-                worldY + gp.getTileSize() *5 > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() &&
-                worldY - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY())
-        {
+        if (getWorldX() + gp.getTileSize() * 5 > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && //*5 because skeleton lord disappears when the top left corner isn't on the screen
+                getWorldX() - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
+                getWorldY() + gp.getTileSize() * 5 > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() &&
+                getWorldY() - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) {
             inCamera = true;
         }
         return inCamera;
     }
-    public void draw(Graphics2D g2)
-    {
-        BufferedImage image= null;
 
+    public void draw(Graphics2D g2) {
+        BufferedImage image = null;
 
-        if(inCamera() == true)
-        {
+        if (inCamera() == true) {
             int tempScreenX = getScreenX();
             int tempScreenY = getScreenY();
 
-
-            switch (direction)
-            {
-                case "up" :
-                    if(attacking == false) //Normal walking sprites
-                    {
-                        if(spriteNum == 1){image = up1;}
-                        if(spriteNum == 2) {image = up2;}
+            switch (getDirection()) {
+                case "up":
+                    if (!getState().isAttacking()) { // Normal walking sprites
+                        if (getSpriteNum() == 1) {
+                            image = getUp1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getUp2();
+                        }
                     }
-                    if(attacking == true)  //Attacking sprites
-                    {
-                        tempScreenY = getScreenY() - up1.getHeight();    //Adjusted the player's position one tile to up. Explained why I did it at where I call attacking() in update().
-                        if(spriteNum == 1) {image = attackUp1;}
-                        if(spriteNum == 2) {image = attackUp2;}
-                    }
-                    break;
-
-                case "down" :
-                    if(attacking == false) //Normal walking sprites
-                    {
-                        if(spriteNum == 1){image = down1;}
-                        if(spriteNum == 2){image = down2;}
-                    }
-                    if(attacking == true)  //Attacking sprites
-                    {
-                        if(spriteNum == 1){image = attackDown1;}
-                        if(spriteNum == 2){image = attackDown2;}
+                    if (getState().isAttacking()) { // Attacking sprites
+                        tempScreenY = getScreenY() - getUp1().getHeight(); // Adjusted the player's position one tile to up
+                        if (getSpriteNum() == 1) {
+                            image = getAttackUp1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getAttackUp2();
+                        }
                     }
                     break;
 
-                case "left" :
-                    if(attacking == false) //Normal walking sprites
-                    {
-                        if(spriteNum == 1) {image = left1;}
-                        if(spriteNum == 2) {image = left2;}
+                case "down":
+                    if (!getState().isAttacking()) { // Normal walking sprites
+                        if (getSpriteNum() == 1) {
+                            image = getDown1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getDown2();
+                        }
                     }
-                    if(attacking == true)  //Attacking sprites
-                    {
-                        tempScreenX = getScreenX() - up1.getWidth();    //Adjusted the player's position one tile left. Explained why I did it at where I call attacking() in update().
-                        if(spriteNum == 1) {image = attackLeft1;}
-                        if(spriteNum == 2) {image = attackLeft2;}
+                    if (getState().isAttacking()) { // Attacking sprites
+                        if (getSpriteNum() == 1) {
+                            image = getAttackDown1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getAttackDown2();
+                        }
                     }
                     break;
 
-                case "right" :
-                    if(attacking == false) //Normal walking sprites
-                    {
-                        if(spriteNum == 1) {image = right1;}
-                        if(spriteNum == 2) {image = right2;}
+                case "left":
+                    if (!getState().isAttacking()) { // Normal walking sprites
+                        if (getSpriteNum() == 1) {
+                            image = getLeft1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getLeft2();
+                        }
                     }
-                    if(attacking == true)  //Attacking sprites
-                    {
-                        if(spriteNum == 1) {image = attackRight1;}
-                        if(spriteNum == 2) {image = attackRight2;}
+                    if (getState().isAttacking()) { // Attacking sprites
+                        tempScreenX = getScreenX() - getUp1().getWidth(); // Adjusted the player's position one tile left
+                        if (getSpriteNum() == 1) {
+                            image = getAttackLeft1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getAttackLeft2();
+                        }
+                    }
+                    break;
+
+                case "right":
+                    if (!getState().isAttacking()) { // Normal walking sprites
+                        if (getSpriteNum() == 1) {
+                            image = getRight1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getRight2();
+                        }
+                    }
+                    if (getState().isAttacking()) { // Attacking sprites
+                        if (getSpriteNum() == 1) {
+                            image = getAttackRight1();
+                        }
+                        if (getSpriteNum() == 2) {
+                            image = getAttackRight2();
+                        }
                     }
                     break;
             }
 
-            //Make entity half-transparent (%30) when invincible
-            if(invincible == true)
-            {
-                hpBarOn = true;    //when player attacks monster play hpBar
-                hpBarCounter = 0;  //reset monster aggro
-                changeAlpha(g2,0.4F);
+            // Make entity half-transparent (%30) when invincible
+            if (getState().isInvincible()) {
+                getState().setHpBarOn(true); // when player attacks monster play hpBar
+                getState().setHpBarCounter(0); // reset monster aggro
+                changeAlpha(g2, 0.4F);
             }
 
-            if(dying == true)
-            {
+            if (getState().isDying()) {
                 dyingAnimation(g2);
             }
 
             g2.drawImage(image, tempScreenX, tempScreenY, null);
 
-            //Reset graphics opacity / alpha
-            changeAlpha(g2,1F);
+            // Reset graphics opacity / alpha
+            changeAlpha(g2, 1F);
         }
     }
     // Every 5 frames switch alpha between 0 and 1
-    public void dyingAnimation(Graphics2D g2)
-    {
-        dyingCounter++;
-        int i = 5;    //interval
+    public void dyingAnimation(Graphics2D g2) {
+        getState().setDyingCounter(getState().getDyingCounter() + 1);
+        int i = 5; // interval
 
-        if(dyingCounter <= i) {changeAlpha(g2,0f);}                             //If you want add death animation or something like that, you can use your sprites instead of changing alpha inside of if statements
-        if(dyingCounter > i && dyingCounter <= i*2) {changeAlpha(g2,1f);}
-        if(dyingCounter > i*2 && dyingCounter <= i*3) {changeAlpha(g2,0f);}
-        if(dyingCounter > i*3 && dyingCounter <= i*4) {changeAlpha(g2,1f);}
-        if(dyingCounter > i*4 && dyingCounter <= i*5) {changeAlpha(g2,0f);}
-        if(dyingCounter > i*5 && dyingCounter <= i*6) {changeAlpha(g2,1f);}
-        if(dyingCounter > i*6 && dyingCounter <= i*7) {changeAlpha(g2,0f);}
-        if(dyingCounter > i*7 && dyingCounter <= i*8) {changeAlpha(g2,1f);}
-        if(dyingCounter > i*8)
-        {
-            alive = false;
+        if (getState().getDyingCounter() <= i) {
+            changeAlpha(g2, 0f);
+        }
+        if (getState().getDyingCounter() > i && getState().getDyingCounter() <= i * 2) {
+            changeAlpha(g2, 1f);
+        }
+        if (getState().getDyingCounter() > i * 2 && getState().getDyingCounter() <= i * 3) {
+            changeAlpha(g2, 0f);
+        }
+        if (getState().getDyingCounter() > i * 3 && getState().getDyingCounter() <= i * 4) {
+            changeAlpha(g2, 1f);
+        }
+        if (getState().getDyingCounter() > i * 4 && getState().getDyingCounter() <= i * 5) {
+            changeAlpha(g2, 0f);
+        }
+        if (getState().getDyingCounter() > i * 5 && getState().getDyingCounter() <= i * 6) {
+            changeAlpha(g2, 1f);
+        }
+        if (getState().getDyingCounter() > i * 6 && getState().getDyingCounter() <= i * 7) {
+            changeAlpha(g2, 0f);
+        }
+        if (getState().getDyingCounter() > i * 7 && getState().getDyingCounter() <= i * 8) {
+            changeAlpha(g2, 1f);
+        }
+        if (getState().getDyingCounter() > i * 8) {
+            getState().setAlive(false);
         }
     }
-    public void changeAlpha(Graphics2D g2, float alphaValue)
-    {
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alphaValue));
+
+    public void changeAlpha(Graphics2D g2, float alphaValue) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
     }
-    public BufferedImage setup(String imagePath, int width, int height)
-    {
+
+    public BufferedImage setup(String imagePath, int width, int height) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
-        try
-        {
+        try {
             image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-            image = uTool.scaleImage(image,width,height);   //it scales to tilesize , will fix for player attack(16px x 32px) by adding width and height
-        }
-        catch (IOException e)
-        {
+            image = uTool.scaleImage(image, width, height); // it scales to tilesize, will fix for player attack(16px x 32px) by adding width and height
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return image;
     }
-    public void searchPath(int goalCol, int goalRow)
-    {
-        int startCol = (worldX + solidArea.x) / gp.getTileSize();
-        int startRow = (worldY + solidArea.y) / gp.getTileSize();
-        gp.getpFinder().setNodes(startCol,startRow,goalCol,goalRow,this);
-        if(gp.getpFinder().search() == true)
-        {
-            //Next WorldX and WorldY
+
+    public void searchPath(int goalCol, int goalRow) {
+        int startCol = (getWorldX() + getSolidArea().x) / gp.getTileSize();
+        int startRow = (getWorldY() + getSolidArea().y) / gp.getTileSize();
+        gp.getpFinder().setNodes(startCol, startRow, goalCol, goalRow, this);
+        if (gp.getpFinder().search() == true) {
+            // Next WorldX and WorldY
             int nextX = gp.getpFinder().getPathList().get(0).getCol() * gp.getTileSize();
             int nextY = gp.getpFinder().getPathList().get(0).getRow() * gp.getTileSize();
-            //Entity's solidArea position
-            int enLeftX = worldX + solidArea.x;
-            int enRightX = worldX + solidArea.x + solidArea.width;
-            int enTopY = worldY + solidArea.y;
-            int enBottomY = worldY + solidArea.y + solidArea.height;
+            // Entity's solidArea position
+            int enLeftX = getWorldX() + getSolidArea().x;
+            int enRightX = getWorldX() + getSolidArea().x + getSolidArea().width;
+            int enTopY = getWorldY() + getSolidArea().y;
+            int enBottomY = getWorldY() + getSolidArea().y + getSolidArea().height;
 
             // TOP PATH
-            if(enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.getTileSize())
-            {
-                direction = "up";
+            if (enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.getTileSize()) {
+                setDirection("up");
             }
             // BOTTOM PATH
-            else if(enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.getTileSize())
-            {
-                direction = "down";
+            else if (enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.getTileSize()) {
+                setDirection("down");
             }
             // RIGHT - LEFT PATH
-            else if(enTopY >= nextY && enBottomY < nextY + gp.getTileSize())
-            {
-                //either left or right
+            else if (enTopY >= nextY && enBottomY < nextY + gp.getTileSize()) {
+                // either left or right
                 // LEFT PATH
-                if(enLeftX > nextX)
-                {
-                    direction = "left";
+                if (enLeftX > nextX) {
+                    setDirection("left");
                 }
                 // RIGHT PATH
-                if(enLeftX < nextX)
-                {
-                    direction = "right";
+                if (enLeftX < nextX) {
+                    setDirection("right");
                 }
             }
-            //OTHER EXCEPTIONS
-            else if(enTopY > nextY && enLeftX > nextX)
-            {
+            // OTHER EXCEPTIONS
+            else if (enTopY > nextY && enLeftX > nextX) {
                 // up or left
-                direction = "up";
+                setDirection("up");
                 checkCollision();
-                if(collisionOn == true)
-                {
-                    direction = "left";
+                if (getState().isCollisionOn() == true) {
+                    setDirection("left");
                 }
-            }
-            else if(enTopY > nextY && enLeftX < nextX)
-            {
+            } else if (enTopY > nextY && enLeftX < nextX) {
                 // up or right
-                direction = "up";
+                setDirection("up");
                 checkCollision();
-                if(collisionOn == true)
-                {
-                    direction = "right";
+                if (getState().isCollisionOn() == true) {
+                    setDirection("right");
                 }
-            }
-            else if(enTopY < nextY && enLeftX > nextX)
-            {
+            } else if (enTopY < nextY && enLeftX > nextX) {
                 // down or left
-                direction = "down";
+                setDirection("down");
                 checkCollision();
-                if(collisionOn == true)
-                {
-                    direction = "left";
+                if (getState().isCollisionOn() == true) {
+                    setDirection("left");
                 }
-            }
-            else if(enTopY < nextY && enLeftX < nextX)
-            {
+            } else if (enTopY < nextY && enLeftX < nextX) {
                 // down or right
-                direction = "down";
+                setDirection("down");
                 checkCollision();
-                if(collisionOn == true)
-                {
-                    direction = "right";
+                if (getState().isCollisionOn() == true) {
+                    setDirection("right");
                 }
             }
         }
     }
-    public int getDetected(Entity user, Entity target[][], String targetName)
-    {
+
+    public int getDetected(Entity user, Entity target[][], String targetName) {
         int index = 999;
 
-        //Check the surrounding object
+        // Check the surrounding object
         int nextWorldX = user.getLeftX();
         int nextWorldY = user.getTopY();
 
-        switch (user.direction)
-        {
-            case "up" : nextWorldY = user.getTopY() - gp.getPlayer().getSpeed(); break;
-            case "down": nextWorldY = user.getBottomY() + gp.getPlayer().getSpeed(); break;
-            case "left": nextWorldX = user.getLeftX() - gp.getPlayer().getSpeed(); break;
-            case "right": nextWorldX = user.getRightX() + gp.getPlayer().getSpeed(); break;
+        switch (user.getDirection()) {
+            case "up":
+                nextWorldY = user.getTopY() - gp.getPlayer().getSpeed();
+                break;
+            case "down":
+                nextWorldY = user.getBottomY() + gp.getPlayer().getSpeed();
+                break;
+            case "left":
+                nextWorldX = user.getLeftX() - gp.getPlayer().getSpeed();
+                break;
+            case "right":
+                nextWorldX = user.getRightX() + gp.getPlayer().getSpeed();
+                break;
         }
-        int col = nextWorldX/ gp.getTileSize();
-        int row = nextWorldY/ gp.getTileSize();
+        int col = nextWorldX / gp.getTileSize();
+        int row = nextWorldY / gp.getTileSize();
 
-        for(int i = 0; i < target[1].length; i++)
-        {
-            if(target[gp.getCurrentMap()][i] != null)
-            {
-                if (target[gp.getCurrentMap()][i].getCol() == col                                //checking if player 1 tile away from target (key etc.) (must be same direction)
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[gp.getCurrentMap()][i] != null) {
+                if (target[gp.getCurrentMap()][i].getCol() == col // checking if player 1 tile away from target (key etc.) (must be same direction)
                         && target[gp.getCurrentMap()][i].getRow() == row
-                        && target[gp.getCurrentMap()][i].name.equals(targetName))
-                {
+                        && target[gp.getCurrentMap()][i].getName().equals(targetName)) {
                     index = i;
                     break;
                 }
             }
-
         }
-        return  index;
+        return index;
     }
 
-    public int getActionLockCounter() {
-        return actionLockCounter;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
 
     public int getAmmo() {
         return ammo;
+    }
+
+    public void setAmmo(int ammo) {
+        this.ammo = ammo;
     }
 
     public int getAmount() {
         return amount;
     }
 
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
     public int getAttack() {
+        return attack;
+    }
+
+    public int setAttack(int attack) {
+        this.attack = attack;
         return attack;
     }
 
@@ -952,83 +950,152 @@ public class Entity {
         return attackArea;
     }
 
+    public void setAttackArea(Rectangle attackArea) {
+        this.attackArea = attackArea;
+    }
+
     public BufferedImage getAttackDown1() {
         return attackDown1;
+    }
+
+    public void setAttackDown1(BufferedImage attackDown1) {
+        this.attackDown1 = attackDown1;
     }
 
     public BufferedImage getAttackDown2() {
         return attackDown2;
     }
 
+    public void setAttackDown2(BufferedImage attackDown2) {
+        this.attackDown2 = attackDown2;
+    }
+
     public Entity getAttacker() {
         return attacker;
     }
 
-    public boolean isAttacking() {
-        return attacking;
+    public void setAttacker(Entity attacker) {
+        this.attacker = attacker;
     }
 
     public BufferedImage getAttackLeft1() {
         return attackLeft1;
     }
 
+    public void setAttackLeft1(BufferedImage attackLeft1) {
+        this.attackLeft1 = attackLeft1;
+    }
+
     public BufferedImage getAttackLeft2() {
         return attackLeft2;
+    }
+
+    public void setAttackLeft2(BufferedImage attackLeft2) {
+        this.attackLeft2 = attackLeft2;
     }
 
     public BufferedImage getAttackRight1() {
         return attackRight1;
     }
 
+    public void setAttackRight1(BufferedImage attackRight1) {
+        this.attackRight1 = attackRight1;
+    }
+
     public BufferedImage getAttackRight2() {
         return attackRight2;
+    }
+
+    public void setAttackRight2(BufferedImage attackRight2) {
+        this.attackRight2 = attackRight2;
     }
 
     public BufferedImage getAttackUp1() {
         return attackUp1;
     }
 
+    public void setAttackUp1(BufferedImage attackUp1) {
+        this.attackUp1 = attackUp1;
+    }
+
     public BufferedImage getAttackUp2() {
         return attackUp2;
+    }
+
+    public void setAttackUp2(BufferedImage attackUp2) {
+        this.attackUp2 = attackUp2;
     }
 
     public int getAttackValue() {
         return attackValue;
     }
 
+    public void setAttackValue(int attackValue) {
+        this.attackValue = attackValue;
+    }
+
     public boolean isBoss() {
         return boss;
+    }
+
+    public void setBoss(boolean boss) {
+        this.boss = boss;
     }
 
     public int getCoin() {
         return coin;
     }
 
+    public void setCoin(int coin) {
+        this.coin = coin;
+    }
+
     public boolean isCollision() {
         return collision;
     }
 
-    public boolean isCollisionOn() {
-        return collisionOn;
+    public void setCollision(boolean collision) {
+        this.collision = collision;
     }
 
     public Entity getCurrentLight() {
         return currentLight;
     }
 
+    public void setCurrentLight(Entity currentLight) {
+        this.currentLight = currentLight;
+    }
+
     public Entity getCurrentShield() {
         return currentShield;
+    }
+
+    public void setCurrentShield(Entity currentShield) {
+        this.currentShield = currentShield;
     }
 
     public Entity getCurrentWeapon() {
         return currentWeapon;
     }
 
+    public void setCurrentWeapon(Entity currentWeapon) {
+        this.currentWeapon = currentWeapon;
+    }
+
     public int getDefaultSpeed() {
         return defaultSpeed;
     }
 
+    public void setDefaultSpeed(int defaultSpeed) {
+        this.defaultSpeed = defaultSpeed;
+    }
+
     public int getDefense() {
+        return defense;
+    }
+
+    public int setDefense(int defense) {
+        this.defense = defense;
         return defense;
     }
 
@@ -1036,144 +1103,208 @@ public class Entity {
         return defenseValue;
     }
 
+    public void setDefenseValue(int defenseValue) {
+        this.defenseValue = defenseValue;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getDexterity() {
         return dexterity;
     }
 
+    public void setDexterity(int dexterity) {
+        this.dexterity = dexterity;
+    }
+
     public int getDialogueIndex() {
         return dialogueIndex;
+    }
+
+    public void setDialogueIndex(int dialogueIndex) {
+        this.dialogueIndex = dialogueIndex;
     }
 
     public String[][] getDialogues() {
         return dialogues;
     }
 
+    public void setDialogues(String[][] dialogues) {
+        this.dialogues = dialogues;
+    }
+
     public int getDialogueSet() {
         return dialogueSet;
+    }
+
+    public void setDialogueSet(int dialogueSet) {
+        this.dialogueSet = dialogueSet;
     }
 
     public String getDirection() {
         return direction;
     }
 
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
     public BufferedImage getDown1() {
         return down1;
+    }
+
+    public void setDown1(BufferedImage down1) {
+        this.down1 = down1;
     }
 
     public BufferedImage getDown2() {
         return down2;
     }
 
-    public boolean isDrawing() {
-        return drawing;
-    }
-
-    public boolean isDying() {
-        return dying;
-    }
-
-    public int getDyingCounter() {
-        return dyingCounter;
+    public void setDown2(BufferedImage down2) {
+        this.down2 = down2;
     }
 
     public int getExp() {
         return exp;
     }
 
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
+
     public GamePanel getGp() {
         return gp;
     }
 
-    public int getGuardCounter() {
-        return guardCounter;
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
     }
 
     public BufferedImage getGuardDown() {
         return guardDown;
     }
 
-    public boolean isGuarding() {
-        return guarding;
+    public void setGuardDown(BufferedImage guardDown) {
+        this.guardDown = guardDown;
     }
 
     public BufferedImage getGuardLeft() {
         return guardLeft;
     }
 
+    public void setGuardLeft(BufferedImage guardLeft) {
+        this.guardLeft = guardLeft;
+    }
+
     public BufferedImage getGuardRight() {
         return guardRight;
+    }
+
+    public void setGuardRight(BufferedImage guardRight) {
+        this.guardRight = guardRight;
     }
 
     public BufferedImage getGuardUp() {
         return guardUp;
     }
 
-    public int getHpBarCounter() {
-        return hpBarCounter;
+    public void setGuardUp(BufferedImage guardUp) {
+        this.guardUp = guardUp;
     }
 
-    public boolean isHpBarOn() {
-        return hpBarOn;
+    public BufferedImage getImage1() {
+        return image1;
     }
 
-    public boolean isInRage() {
-        return inRage;
+    public void setImage1(BufferedImage image1) {
+        this.image1 = image1;
+    }
+
+    public BufferedImage getImage2() {
+        return image2;
+    }
+
+    public void setImage2(BufferedImage image2) {
+        this.image2 = image2;
+    }
+
+    public BufferedImage getImage3() {
+        return image3;
+    }
+
+    public void setImage3(BufferedImage image3) {
+        this.image3 = image3;
     }
 
     public ArrayList<Entity> getInventory() {
         return inventory;
     }
 
-    public boolean isInvincible() {
-        return invincible;
-    }
-
-    public int getInvincibleCounter() {
-        return invincibleCounter;
-    }
-
-    public boolean isKnockBack() {
-        return knockBack;
-    }
-
-    public int getKnockBackCounter() {
-        return knockBackCounter;
-    }
-
-    public String getKnockBackDirection() {
-        return knockBackDirection;
+    public void setInventory(ArrayList<Entity> inventory) {
+        this.inventory = inventory;
     }
 
     public int getKnockBackPower() {
         return knockBackPower;
     }
 
+    public void setKnockBackPower(int knockBackPower) {
+        this.knockBackPower = knockBackPower;
+    }
+
     public BufferedImage getLeft1() {
         return left1;
+    }
+
+    public void setLeft1(BufferedImage left1) {
+        this.left1 = left1;
     }
 
     public BufferedImage getLeft2() {
         return left2;
     }
 
+    public void setLeft2(BufferedImage left2) {
+        this.left2 = left2;
+    }
+
     public int getLevel() {
         return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public int getLife() {
         return life;
     }
 
+    public void setLife(int life) {
+        this.life = life;
+    }
+
     public int getLightRadius() {
         return lightRadius;
     }
 
+    public void setLightRadius(int lightRadius) {
+        this.lightRadius = lightRadius;
+    }
+
     public Entity getLinkedEntity() {
         return linkedEntity;
+    }
+
+    public void setLinkedEntity(Entity linkedEntity) {
+        this.linkedEntity = linkedEntity;
     }
 
     public Entity getLoot() {
@@ -1184,6 +1315,10 @@ public class Entity {
         return mana;
     }
 
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
     public int getMaxInventorySize() {
         return maxInventorySize;
     }
@@ -1192,108 +1327,160 @@ public class Entity {
         return maxLife;
     }
 
+    public void setMaxLife(int maxLife) {
+        this.maxLife = maxLife;
+    }
+
     public int getMaxMana() {
         return maxMana;
+    }
+
+    public void setMaxMana(int maxMana) {
+        this.maxMana = maxMana;
     }
 
     public int getMotion1_duration() {
         return motion1_duration;
     }
 
+    public void setMotion1_duration(int motion1_duration) {
+        this.motion1_duration = motion1_duration;
+    }
+
     public int getMotion2_duration() {
         return motion2_duration;
+    }
+
+    public void setMotion2_duration(int motion2_duration) {
+        this.motion2_duration = motion2_duration;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getNextLevelExp() {
         return nextLevelExp;
     }
 
-    public boolean isOffBalance() {
-        return offBalance;
-    }
-
-    public int getOffBalanceCounter() {
-        return offBalanceCounter;
-    }
-
-    public boolean isOnPath() {
-        return onPath;
-    }
-
-    public boolean isOpened() {
-        return opened;
+    public void setNextLevelExp(int nextLevelExp) {
+        this.nextLevelExp = nextLevelExp;
     }
 
     public int getPrice() {
         return price;
     }
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public Projectile getProjectile() {
         return projectile;
+    }
+
+    public void setProjectile(Projectile projectile) {
+        this.projectile = projectile;
     }
 
     public BufferedImage getRight1() {
         return right1;
     }
 
+    public void setRight1(BufferedImage right1) {
+        this.right1 = right1;
+    }
+
     public BufferedImage getRight2() {
         return right2;
     }
 
-    public int getShotAvailableCounter() {
-        return shotAvailableCounter;
-    }
-
-    public boolean isSleep() {
-        return sleep;
+    public void setRight2(BufferedImage right2) {
+        this.right2 = right2;
     }
 
     public Rectangle getSolidArea() {
         return solidArea;
     }
 
+    public void setSolidArea(Rectangle solidArea) {
+        this.solidArea = solidArea;
+    }
+
     public int getSolidAreaDefaultX() {
         return solidAreaDefaultX;
+    }
+
+    public void setSolidAreaDefaultX(int solidAreaDefaultX) {
+        this.solidAreaDefaultX = solidAreaDefaultX;
     }
 
     public int getSolidAreaDefaultY() {
         return solidAreaDefaultY;
     }
 
+    public void setSolidAreaDefaultY(int solidAreaDefaultY) {
+        this.solidAreaDefaultY = solidAreaDefaultY;
+    }
+
     public int getSpeed() {
         return speed;
     }
 
-    public int getSpriteCounter() {
-        return spriteCounter;
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public int getSpriteNum() {
         return spriteNum;
     }
 
+    public void setSpriteNum(int spriteNum) {
+        this.spriteNum = spriteNum;
+    }
+
     public boolean isStackable() {
         return stackable;
+    }
+
+    public void setStackable(boolean stackable) {
+        this.stackable = stackable;
+    }
+
+    public EntityState getState() {
+        return state;
+    }
+
+    public void setState(EntityState state) {
+        this.state = state;
     }
 
     public int getStrength() {
         return strength;
     }
 
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
     public boolean isTemp() {
         return temp;
     }
 
-    public boolean isTransparent() {
-        return transparent;
+    public void setTemp(boolean temp) {
+        this.temp = temp;
     }
 
     public int getType() {
         return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getType_axe() {
@@ -1344,429 +1531,48 @@ public class Entity {
         return up1;
     }
 
-    public BufferedImage getUp2() {
-        return up2;
-    }
-
-    public int getUseCost() {
-        return useCost;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public int getWorldX() {
-        return worldX;
-    }
-
-    public int getWorldY() {
-        return worldY;
-    }
-
-    public void setTransparent(boolean transparent) {
-        this.transparent = transparent;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void setSolidArea(Rectangle solidArea) {
-        this.solidArea = solidArea;
-    }
-
-    public void setSolidAreaDefaultX(int solidAreaDefaultX) {
-        this.solidAreaDefaultX = solidAreaDefaultX;
-    }
-
-    public void setSolidAreaDefaultY(int solidAreaDefaultY) {
-        this.solidAreaDefaultY = solidAreaDefaultY;
-    }
-
-    public void setDialogueSet(int dialogueSet) {
-        this.dialogueSet = dialogueSet;
-    }
-
-    public void setWorldX(int worldX) {
-        this.worldX = worldX;
-    }
-    public void setWorldY(int worldY) {
-        this.worldY = worldY;
-    }
-
     public void setUp1(BufferedImage up1) {
         this.up1 = up1;
+    }
+
+    public BufferedImage getUp2() {
+        return up2;
     }
 
     public void setUp2(BufferedImage up2) {
         this.up2 = up2;
     }
 
-    public void setDown1(BufferedImage down1) {
-        this.down1 = down1;
-    }
-
-    public void setDown2(BufferedImage down2) {
-        this.down2 = down2;
-    }
-    public void setLeft1(BufferedImage left1) {
-        this.left1 = left1;
-    }
-    public void setLeft2(BufferedImage left2) {
-        this.left2 = left2;
-    }
-    public void setRight1(BufferedImage right1) {
-        this.right1 = right1;
-    }
-    public void setRight2(BufferedImage right2) {
-        this.right2 = right2;
-    }
-
-    public void setActionLockCounter(int actionLockCounter) {
-        this.actionLockCounter = actionLockCounter;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public void setAmmo(int ammo) {
-        this.ammo = ammo;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int setAttack(int attack) {
-        this.attack = attack;
-        return attack;
-    }
-
-    public void setAttackArea(Rectangle attackArea) {
-        this.attackArea = attackArea;
-    }
-
-    public void setAttackDown1(BufferedImage attackDown1) {
-        this.attackDown1 = attackDown1;
-    }
-
-    public void setAttackDown2(BufferedImage attackDown2) {
-        this.attackDown2 = attackDown2;
-    }
-
-    public void setAttacker(Entity attacker) {
-        this.attacker = attacker;
-    }
-
-    public void setAttacking(boolean attacking) {
-        this.attacking = attacking;
-    }
-
-    public void setAttackLeft1(BufferedImage attackLeft1) {
-        this.attackLeft1 = attackLeft1;
-    }
-
-    public void setAttackLeft2(BufferedImage attackLeft2) {
-        this.attackLeft2 = attackLeft2;
-    }
-
-    public void setAttackRight1(BufferedImage attackRight1) {
-        this.attackRight1 = attackRight1;
-    }
-
-    public void setAttackRight2(BufferedImage attackRight2) {
-        this.attackRight2 = attackRight2;
-    }
-
-    public void setAttackUp1(BufferedImage attackUp1) {
-        this.attackUp1 = attackUp1;
-    }
-
-    public void setAttackUp2(BufferedImage attackUp2) {
-        this.attackUp2 = attackUp2;
-    }
-
-    public void setAttackValue(int attackValue) {
-        this.attackValue = attackValue;
-    }
-
-    public void setBoss(boolean boss) {
-        this.boss = boss;
-    }
-
-    public void setCoin(int coin) {
-        this.coin = coin;
-    }
-
-    public void setCollision(boolean collision) {
-        this.collision = collision;
-    }
-
-    public void setCollisionOn(boolean collisionOn) {
-        this.collisionOn = collisionOn;
-    }
-
-    public void setCurrentLight(Entity currentLight) {
-        this.currentLight = currentLight;
-    }
-
-    public void setCurrentShield(Entity currentShield) {
-        this.currentShield = currentShield;
-    }
-
-    public void setCurrentWeapon(Entity currentWeapon) {
-        this.currentWeapon = currentWeapon;
-    }
-
-    public void setDefaultSpeed(int defaultSpeed) {
-        this.defaultSpeed = defaultSpeed;
-    }
-
-    public int setDefense(int defense) {
-        this.defense = defense;
-        return defense;
-    }
-
-    public void setDefenseValue(int defenseValue) {
-        this.defenseValue = defenseValue;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setDexterity(int dexterity) {
-        this.dexterity = dexterity;
-    }
-
-    public void setDialogueIndex(int dialogueIndex) {
-        this.dialogueIndex = dialogueIndex;
-    }
-
-    public void setDialogues(String[][] dialogues) {
-        this.dialogues = dialogues;
-    }
-
-    public void setDrawing(boolean drawing) {
-        this.drawing = drawing;
-    }
-
-    public void setDying(boolean dying) {
-        this.dying = dying;
-    }
-
-    public void setDyingCounter(int dyingCounter) {
-        this.dyingCounter = dyingCounter;
-    }
-
-    public void setExp(int exp) {
-        this.exp = exp;
-    }
-
-    public void setGp(GamePanel gp) {
-        this.gp = gp;
-    }
-
-    public void setGuardCounter(int guardCounter) {
-        this.guardCounter = guardCounter;
-    }
-
-    public void setGuardDown(BufferedImage guardDown) {
-        this.guardDown = guardDown;
-    }
-
-    public void setGuarding(boolean guarding) {
-        this.guarding = guarding;
-    }
-
-    public void setGuardLeft(BufferedImage guardLeft) {
-        this.guardLeft = guardLeft;
-    }
-
-    public void setGuardRight(BufferedImage guardRight) {
-        this.guardRight = guardRight;
-    }
-
-    public void setGuardUp(BufferedImage guardUp) {
-        this.guardUp = guardUp;
-    }
-
-    public void setHpBarCounter(int hpBarCounter) {
-        this.hpBarCounter = hpBarCounter;
-    }
-
-    public void setHpBarOn(boolean hpBarOn) {
-        this.hpBarOn = hpBarOn;
-    }
-
-    public void setInRage(boolean inRage) {
-        this.inRage = inRage;
-    }
-
-    public void setInventory(ArrayList<Entity> inventory) {
-        this.inventory = inventory;
-    }
-
-    public void setInvincible(boolean invincible) {
-        this.invincible = invincible;
-    }
-
-    public void setInvincibleCounter(int invincibleCounter) {
-        this.invincibleCounter = invincibleCounter;
-    }
-
-    public void setKnockBack(boolean knockBack) {
-        this.knockBack = knockBack;
-    }
-
-    public void setKnockBackCounter(int knockBackCounter) {
-        this.knockBackCounter = knockBackCounter;
-    }
-
-    public void setKnockBackDirection(String knockBackDirection) {
-        this.knockBackDirection = knockBackDirection;
-    }
-
-    public void setKnockBackPower(int knockBackPower) {
-        this.knockBackPower = knockBackPower;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public void setLife(int life) {
-        this.life = life;
-    }
-
-    public void setLightRadius(int lightRadius) {
-        this.lightRadius = lightRadius;
-    }
-
-    public void setLinkedEntity(Entity linkedEntity) {
-        this.linkedEntity = linkedEntity;
-    }
-
-    public void setMana(int mana) {
-        this.mana = mana;
-    }
-
-    public void setMaxLife(int maxLife) {
-        this.maxLife = maxLife;
-    }
-
-    public void setMaxMana(int maxMana) {
-        this.maxMana = maxMana;
-    }
-
-    public void setMotion1_duration(int motion1_duration) {
-        this.motion1_duration = motion1_duration;
-    }
-
-    public void setMotion2_duration(int motion2_duration) {
-        this.motion2_duration = motion2_duration;
-    }
-
-    public void setNextLevelExp(int nextLevelExp) {
-        this.nextLevelExp = nextLevelExp;
-    }
-
-    public void setOffBalance(boolean offBalance) {
-        this.offBalance = offBalance;
-    }
-
-    public void setOffBalanceCounter(int offBalanceCounter) {
-        this.offBalanceCounter = offBalanceCounter;
-    }
-
-    public void setOnPath(boolean onPath) {
-        this.onPath = onPath;
-    }
-
-    public void setOpened(boolean opened) {
-        this.opened = opened;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setProjectile(Projectile projectile) {
-        this.projectile = projectile;
-    }
-
-    public void setShotAvailableCounter(int shotAvailableCounter) {
-        this.shotAvailableCounter = shotAvailableCounter;
-    }
-
-    public void setSleep(boolean sleep) {
-        this.sleep = sleep;
-    }
-
-    public void setSpriteCounter(int spriteCounter) {
-        this.spriteCounter = spriteCounter;
-    }
-
-    public void setSpriteNum(int spriteNum) {
-        this.spriteNum = spriteNum;
-    }
-
-    public void setStackable(boolean stackable) {
-        this.stackable = stackable;
-    }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
-
-    public void setTemp(boolean temp) {
-        this.temp = temp;
-    }
-
-    public void setType(int type) {
-        this.type = type;
+    public int getUseCost() {
+        return useCost;
     }
 
     public void setUseCost(int useCost) {
         this.useCost = useCost;
     }
 
+    public int getValue() {
+        return value;
+    }
+
     public void setValue(int value) {
         this.value = value;
     }
 
-    public BufferedImage getImage2() {
-        return image2;
+    public int getWorldX() {
+        return worldX;
     }
 
-    public void setImage2(BufferedImage image2) {
-        this.image2 = image2;
+    public void setWorldX(int worldX) {
+        this.worldX = worldX;
     }
 
-    public BufferedImage getImage3() {
-        return image3;
+    public int getWorldY() {
+        return worldY;
     }
 
-    public void setImage3(BufferedImage image3) {
-        this.image3 = image3;
-    }
-
-    public BufferedImage getImage1() {
-        return image1;
-    }
-
-    public void setImage1(BufferedImage image1) {
-        this.image1 = image1;
+    public void setWorldY(int worldY) {
+        this.worldY = worldY;
     }
 
     public void setLoot(Entity loot) {

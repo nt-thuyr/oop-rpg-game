@@ -48,7 +48,7 @@ public class MON_Bat extends Entity {
     }
 
     public void setAction() {
-        if (isOnPath()) {
+        if (getState().isOnPath()) {
             // Logic remains commented as per the original code
         } else {
             getRandomDirection(10);
@@ -56,7 +56,7 @@ public class MON_Bat extends Entity {
     }
 
     public void damageReaction() {
-        setActionLockCounter(0);
+        getState().setActionLockCounter(0);
     }
 
     public void checkDrop() {

@@ -14,7 +14,7 @@ public class Projectile extends Entity {
         setWorldX(worldX);
         setWorldY(worldY);
         setDirection(direction);
-        setAlive(alive);
+        getState().setAlive(alive);
         this.user = user;
         setLife(getMaxLife()); // Reset the life to the max value every time you shoot it.
     }
@@ -25,19 +25,19 @@ public class Projectile extends Entity {
             if (monsterIndex != 999) { // Collision with monster
                 gp.getPlayer().damageMonster(monsterIndex, this, getAttack() * (1 + (gp.getPlayer().getLevel() / 2)), getKnockBackPower());
                 generateParticle(user.getProjectile(), gp.getMonster()[gp.getCurrentMap()][monsterIndex]);
-                setAlive(false);
+                getState().setAlive(false);
             }
         }
         if (user != gp.getPlayer()) {
             boolean contactPlayer = gp.getcChecker().checkPlayer(this);
-            if (!gp.getPlayer().isInvincible() && contactPlayer) {
+            if (!gp.getPlayer().getState().isInvincible() && contactPlayer) {
                 damagePlayer(getAttack());
-                if (gp.getPlayer().isGuarding()) {
+                if (gp.getPlayer().getState().isGuarding()) {
                     generateParticle(user.getProjectile(), user.getProjectile());
                 } else {
                     generateParticle(user.getProjectile(), gp.getPlayer());
                 }
-                setAlive(false);
+                getState().setAlive(false);
             }
         }
 
@@ -58,17 +58,17 @@ public class Projectile extends Entity {
 
         setLife(getLife() - 1);
         if (getLife() <= 0) {
-            setAlive(false); // Once you shoot projectile, it loses its life
+            getState().setAlive(false); // Once you shoot projectile, it loses its life
         }
 
-        setSpriteCounter(getSpriteCounter() + 1);
-        if (getSpriteCounter() > 12) {
+        getState().setSpriteCounter(getState().getSpriteCounter() + 1);
+        if (getState().getSpriteCounter() > 12) {
             if (getSpriteNum() == 1) {
                 setSpriteNum(2);
             } else if (getSpriteNum() == 2) {
                 setSpriteNum(1);
             }
-            setSpriteCounter(0);
+            getState().setSpriteCounter(0);
         }
     }
 

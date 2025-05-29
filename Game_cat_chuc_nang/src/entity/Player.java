@@ -55,7 +55,7 @@ public class Player extends Entity{
         setExp(0);
         setNextLevelExp(4);
         setCoin(40);
-        setInvincible(false);
+        getState().setInvincible(false);
         setCurrentWeapon(new OBJ_Sword_Normal(gp));
         setCurrentShield(new OBJ_Shield_Wood(gp));
         setCurrentLight(null);
@@ -86,11 +86,11 @@ public class Player extends Entity{
         setLife(getMaxLife());
         setMana(getMaxMana());
         setSpeed(getDefaultSpeed());
-        setInvincible(false);
-        setTransparent(false);
-        setAttacking(false);
-        setGuarding(false);
-        setKnockBack(false);
+        getState().setInvincible(false);
+        getState().setTransparent(false);
+        getState().setAttacking(false);
+        getState().setGuarding(false);
+        getState().setKnockBack(false);
         lightUpdated = true;
     }
 
@@ -192,9 +192,9 @@ public class Player extends Entity{
 
     public void update() // Runs 60 times every second.
     {
-        if (isKnockBack()) {
+        if (getState().isKnockBack()) {
 
-            setCollisionOn(false);
+            getState().setCollisionOn(false);
             if (isMoving() || keyH.isEnterPressed()) {
                 gp.getcChecker().checkTile(this);
                 gp.getcChecker().checkObject(this, true);
@@ -203,12 +203,12 @@ public class Player extends Entity{
                 gp.getcChecker().checkEntity(this, gp.getiTile());
             }
 
-            if (isCollisionOn()) {
-                setKnockBackCounter(0);
-                setKnockBack(false);
+            if (getState().isCollisionOn()) {
+                getState().resetKnockBackCounter();
+                getState().setKnockBack(false);
                 setSpeed(getDefaultSpeed());
             } else {
-                switch (getKnockBackDirection()) {
+                switch (getState().getKnockBackDirection()) {
                     case "up":
                         setWorldY(getWorldY() - getSpeed());
                         break;
@@ -223,17 +223,17 @@ public class Player extends Entity{
                         break;
                 }
             }
-            setKnockBackCounter(getKnockBackCounter() + 1);
-            if (getKnockBackCounter() == 10) {
-                setKnockBackCounter(0);
-                setKnockBack(false);
+            getState().incrementKnockBackCounter();
+            if (getState().getKnockBackCounter() == 10) {
+                getState().resetKnockBackCounter();
+                getState().setKnockBack(false);
                 setSpeed(getDefaultSpeed());
             }
-        } else if (isAttacking()) {
+        } else if (getState().isAttacking()) {
             attacking();
         } else if (keyH.isSpacePressed()) {
-            setGuarding(true);
-            setGuardCounter(getGuardCounter() + 1);
+            getState().setGuarding(true);
+            getState().incrementGuardCounter();
         } else if (keyH.isUpPressed() || keyH.isDownPressed() || keyH.isLeftPressed() || keyH.isRightPressed() || keyH.isEnterPressed()) {
             if (keyH.isUpPressed()) {
                 setDirection("up");
@@ -245,7 +245,7 @@ public class Player extends Entity{
                 setDirection("right");
             }
 
-            setCollisionOn(false);
+            getState().setCollisionOn(false);
             gp.getcChecker().checkTile(this);
 
             int objIndex = gp.getcChecker().checkObject(this, true);
@@ -263,7 +263,7 @@ public class Player extends Entity{
                 gp.geteHandler().checkEvent();
             }
 
-            if (!isCollisionOn() && !keyH.isEnterPressed()) {
+            if (!getState().isCollisionOn() && !keyH.isEnterPressed()) {
                 switch (getDirection()) {
                     case "up":
                         setWorldY(getWorldY() - getSpeed());
@@ -282,23 +282,23 @@ public class Player extends Entity{
 
             if (keyH.isEnterPressed() && !isAttackCanceled()) {
                 gp.playSE(7);
-                setAttacking(true);
-                setSpriteCounter(0);
+                getState().setAttacking(true);
+                getState().resetSpriteCounter();
             }
 
             setAttackCanceled(false);
             keyH.setEnterPressed(false);
-            setGuarding(false);
-            setGuardCounter(0);
+            getState().setGuarding(false);
+            getState().resetGuardCounter();
 
-            setSpriteCounter(getSpriteCounter() + 1);
-            if (getSpriteCounter() > 12) {
+            getState().setSpriteCounter(getState().getSpriteCounter() + 1);
+            if (getState().getSpriteCounter() > 12) {
                 if (getSpriteNum() == 1) {
                     setSpriteNum(2);
                 } else if (getSpriteNum() == 2) {
                     setSpriteNum(1);
                 }
-                setSpriteCounter(0);
+                getState().resetSpriteCounter();
             }
         } else {
             setStandCounter(getStandCounter() + 1);
@@ -306,11 +306,11 @@ public class Player extends Entity{
                 setSpriteNum(1);
                 setStandCounter(0);
             }
-            setGuarding(false);
-            setGuardCounter(0);
+            getState().setGuarding(false);
+            getState().setGuardCounter(0);
         }
 
-        if (gp.getKeyH().isShotKeyPressed() && !getProjectile().isAlive() && getShotAvailableCounter() == 30 && getProjectile().haveResource(this)) {
+        if (gp.getKeyH().isShotKeyPressed() && !getProjectile().getState().isAlive() && getState().getShotAvailableCounter() == 30 && getProjectile().haveResource(this)) {
             getProjectile().set(getWorldX(), getWorldY(), getDirection(), true, this);
             getProjectile().subtractResource(this);
 
@@ -321,21 +321,21 @@ public class Player extends Entity{
                 }
             }
 
-            setShotAvailableCounter(0);
+            getState().resetShotAvailableCounter();
             gp.playSE(10);
         }
 
-        if (isInvincible()) {
-            setInvincibleCounter(getInvincibleCounter() + 1);
-            if (getInvincibleCounter() > 60) {
-                setInvincible(false);
-                setTransparent(false);
-                setInvincibleCounter(0);
+        if (getState().isInvincible()) {
+            getState().incrementInvincibleCounter();
+            if (getState().getInvincibleCounter() > 60) {
+                getState().setInvincible(false);
+                getState().setTransparent(false);
+                getState().resetInvincibleCounter();
             }
         }
 
-        if (getShotAvailableCounter() < 30) {
-            setShotAvailableCounter(getShotAvailableCounter() + 1);
+        if (getState().getShotAvailableCounter() < 30) {
+            getState().incrementShotAvailableCounter();
         }
         if (getLife() > getMaxLife()) {
             setLife(getMaxLife());
@@ -403,7 +403,7 @@ public class Player extends Entity{
     public void contactMonster(int i) // CollisionChecker Method Implement //checkPlayer() : Checks who touches to player //checkEntity() : Checks if player touches to an entity;
     {
         if (i != 999) {
-            if (!isInvincible() && !gp.getMonster()[gp.getCurrentMap()][i].isDying()) {
+            if (!getState().isInvincible() && !gp.getMonster()[gp.getCurrentMap()][i].getState().isDying()) {
                 gp.playSE(6);  //
 
                 int damage = gp.getMonster()[gp.getCurrentMap()][i].getAttack() - getDefense();
@@ -411,21 +411,21 @@ public class Player extends Entity{
                     damage = 1;
                 }
                 setLife(getLife() - damage);
-                setInvincible(true);
-                setTransparent(true);
+                getState().setInvincible(true);
+                getState().setTransparent(true);
             }
         }
     }
     public void damageMonster(int i, Entity attacker, int attack, int knockBackPower) {
         if (i != 999) {
             Entity monster = gp.getMonster()[gp.getCurrentMap()][i];
-            if (!monster.isInvincible()) {
+            if (!monster.getState().isInvincible()) {
                 gp.playSE(5); // hitmonster.wav
 
                 if (knockBackPower > 0) {
                     setKnockBack(monster, attacker, knockBackPower);
                 }
-                if (monster.isOffBalance()) {
+                if (monster.getState().isOffBalance()) {
                     attack *= 2;
                 }
                 int damage = attack - monster.getDefense();
@@ -434,11 +434,11 @@ public class Player extends Entity{
                 }
                 monster.setLife(monster.getLife() - damage);
                 gp.getUi().addMessage(damage + " damage!");
-                monster.setInvincible(true);
+                monster.getState().setInvincible(true);
                 monster.damageReaction(); // run away from player
 
                 if (monster.getLife() <= 0) {
-                    monster.setDying(true);
+                    monster.getState().setDying(true);
                     gp.getUi().addMessage("Tiêu diệt " + monster.getName() + "!");
                     gp.getUi().addMessage("Exp +" + monster.getExp() + "!");
                     setExp(getExp() + monster.getExp());
@@ -447,14 +447,15 @@ public class Player extends Entity{
             }
         }
     }
+
     public void damageInteractiveTile(int i) {
         if (i != 999 && gp.getiTile()[gp.getCurrentMap()][i] instanceof InteractiveTile) {
             InteractiveTile tile = (InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i];
 
-            if (tile.isDestructible() && tile.isCorrectItem(this) && !tile.isInvincible()) {
+            if (tile.isDestructible() && tile.isCorrectItem(this) && !tile.getState().isInvincible()) {
                 tile.playSE();
                 tile.setLife(tile.getLife() - 1);
-                tile.setInvincible(true);
+                tile.getState().setInvincible(true);
 
                 // Generate Particle
                 generateParticle(tile, tile);
@@ -465,13 +466,12 @@ public class Player extends Entity{
             }
         }
     }
-    public void damageProjectile(int i)
-    {
-        if(i != 999)
-        {
+
+    public void damageProjectile(int i) {
+        if (i != 999) {
             Entity projectile = gp.getProjectile()[gp.getCurrentMap()][i];
-            projectile.setAlive(false);
-            generateParticle(projectile,projectile);
+            projectile.getState().setAlive(false);
+            generateParticle(projectile, projectile);
         }
     }
     public void checkLevelUp() {
@@ -581,57 +581,57 @@ public class Player extends Entity{
 
         switch (getDirection()) {
             case "up":
-                if (!isAttacking()) { // Normal walking sprites
+                if (!getState().isAttacking()) { // Normal walking sprites
                     image = (getSpriteNum() == 1) ? getUp1() : getUp2();
                 } else { // Attacking sprites
                     tempScreenY -= gp.getTileSize(); // Adjusted position
                     image = (getSpriteNum() == 1) ? getAttackUp1() : getAttackUp2();
                 }
-                if (isGuarding()) {
+                if (getState().isGuarding()) {
                     image = getGuardUp();
                 }
                 break;
 
             case "down":
-                if (!isAttacking()) { // Normal walking sprites
+                if (!getState().isAttacking()) { // Normal walking sprites
                     image = (getSpriteNum() == 1) ? getDown1() : getDown2();
                 } else { // Attacking sprites
                     image = (getSpriteNum() == 1) ? getAttackDown1() : getAttackDown2();
                 }
-                if (isGuarding()) {
+                if (getState().isGuarding()) {
                     image = getGuardDown();
                 }
                 break;
 
             case "left":
-                if (!isAttacking()) { // Normal walking sprites
+                if (!getState().isAttacking()) { // Normal walking sprites
                     image = (getSpriteNum() == 1) ? getLeft1() : getLeft2();
                 } else { // Attacking sprites
                     tempScreenX -= gp.getTileSize(); // Adjusted position
                     image = (getSpriteNum() == 1) ? getAttackLeft1() : getAttackLeft2();
                 }
-                if (isGuarding()) {
+                if (getState().isGuarding()) {
                     image = getGuardLeft();
                 }
                 break;
 
             case "right":
-                if (!isAttacking()) { // Normal walking sprites
+                if (!getState().isAttacking()) { // Normal walking sprites
                     image = (getSpriteNum() == 1) ? getRight1() : getRight2();
                 } else { // Attacking sprites
                     image = (getSpriteNum() == 1) ? getAttackRight1() : getAttackRight2();
                 }
-                if (isGuarding()) {
+                if (getState().isGuarding()) {
                     image = getGuardRight();
                 }
                 break;
         }
 
         // Make player half-transparent (40%) when invincible
-        if (isTransparent()) {
+        if (getState().isTransparent()) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         }
-        if (isDrawing()) { // For boss cutscene making player invisible to move camera
+        if (getState().isDrawing()) { // For boss cutscene making player invisible to move camera
             g2.drawImage(image, tempScreenX, tempScreenY, null);
         }
 

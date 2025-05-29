@@ -21,7 +21,7 @@ public class OBJ_Rock extends Projectile {
         setLife(getMaxLife());
         setAttack(2);
         setUseCost(1); // spend 1 mana
-        setAlive(false);
+        getState().setAlive(false);
         getImage();
         setPrice(25);
         setKnockBackPower(1);

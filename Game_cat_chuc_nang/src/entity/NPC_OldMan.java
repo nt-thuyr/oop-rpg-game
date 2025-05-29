@@ -49,14 +49,13 @@ public class NPC_OldMan extends Entity {
     }
 
     public void setAction() {
-        if (isOnPath()) {
+        if (getState().isOnPath()) {
             int goalCol = (gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x) / gp.getTileSize();
             int goalRow = (gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y) / gp.getTileSize();
             searchPath(goalCol, goalRow);
         } else {
-            setActionLockCounter(getActionLockCounter() + 1);
-
-            if (getActionLockCounter() == 120) {
+            getState().setActionLockCounter(getState().getActionLockCounter() + 1);
+            if (getState().getActionLockCounter() == 120) {
                 Random random = new Random();
                 int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
                 if (i <= 25) {
@@ -68,7 +67,7 @@ public class NPC_OldMan extends Entity {
                 } else if (i > 75 && i <= 100) {
                     setDirection("right");
                 }
-                setActionLockCounter(0); // reset
+                getState().setActionLockCounter(0); // reset
             }
         }
     }

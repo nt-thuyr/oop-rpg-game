@@ -67,7 +67,7 @@ public class NPC_BigRock extends Entity {
 
         checkCollision();
 
-        if (!isCollisionOn()) {
+        if (!getState().isCollisionOn()) {
             switch (getDirection()) {
                 case "up":
                     setWorldY(getWorldY() - getSpeed());

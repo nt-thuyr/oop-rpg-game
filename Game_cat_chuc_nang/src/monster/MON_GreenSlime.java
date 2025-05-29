@@ -48,7 +48,7 @@ public class MON_GreenSlime extends Entity {
     }
 
     public void setAction() {
-        if (isOnPath()) {
+        if (getState().isOnPath()) {
             checkStopChasingOrNot(gp.getPlayer(), 15, 100);
             searchPath(getGoalCol(gp.getPlayer()), getGoalRow(gp.getPlayer()));
         } else {
@@ -58,8 +58,8 @@ public class MON_GreenSlime extends Entity {
     }
 
     public void damageReaction() {
-        setActionLockCounter(0);
-        setOnPath(true); // gets aggro
+        getState().setActionLockCounter(0);
+        getState().setOnPath(true); // gets aggro
     }
 
     public void checkDrop() {
