@@ -69,17 +69,11 @@ public class AssetSetter {
         gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 27);
         gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 15);
         i++;
-        gp.getObj()[mapNum][i] = new OBJ_Door_Iron(gp);
-        gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 18);
-        gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 23);
+
         i++;
 
-        mapNum = 3;
-        i = 0;
-        gp.getObj()[mapNum][i] = new OBJ_Door_Iron(gp);
-        gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 25);
-        gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 15);
-        i++;
+
+
 
 //        gp.getObj()[mapNum][i] = new OBJ_BlueHeart(gp);
 //        gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 25);
