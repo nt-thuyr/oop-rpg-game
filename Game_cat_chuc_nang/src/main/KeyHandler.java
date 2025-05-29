@@ -23,7 +23,7 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        //TITLE STATE
+        // TITLE STATE
         if (gp.gameState == gp.titleState) {
             titleState(code);
         }
@@ -35,8 +35,8 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.pauseState) {
             pauseState(code);
         }
-        //DIALOGUE STATE
-        else if (gp.gameState == gp.dialogueState || gp.gameState == gp.cutsceneState) {
+        // DIALOGUE STATE
+        else if (gp.gameState == gp.dialogueState) {  // khi nhặt được Lam Tinh Thạch, màn hình kết thúc sẽ hiển thị và bạn có thể nhấn Enter để trở về menu chính.
             dialogueState(code);
         }
         // CHARACTER STATE
@@ -54,6 +54,10 @@ public class KeyHandler implements KeyListener {
         // MAP STATE
         else if (gp.gameState == gp.mapState) {
             mapState(code);
+        }
+        // END GAME STATE
+        else if (gp.gameState == gp.endGameState) {
+            dialogueState(code);
         }
     }
 

@@ -93,7 +93,7 @@ public class UI {
             if (gp.keyH.enterPressed) {
                 charIndex = 0;
                 combinedText = "";
-                if (gp.gameState == gp.dialogueState || gp.gameState == gp.cutsceneState) {
+                if (gp.gameState == gp.dialogueState) {
                     npc.dialogueIndex++;
                     gp.keyH.enterPressed = false;
                 }
@@ -103,9 +103,6 @@ public class UI {
             npc.dialogueIndex = 0;
             if (gp.gameState == gp.dialogueState) {
                 gp.gameState = gp.playState;
-            }
-            if (gp.gameState == gp.cutsceneState) {
-                gp.csManager.scenePhase++;
             }
         }
 
@@ -569,6 +566,34 @@ public class UI {
 
     }
 
+    public void drawEndGame() {
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        // Draw ending text
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(50F));
+        String text = "Chúc mừng!";
+        int x = getXforCenteredText(text);
+        int y = gp.screenHeight/3;
+        g2.drawString(text, x, y);
+
+        text = "Bạn đã hoàn thành game!";
+        x = getXforCenteredText(text);
+        y += 70;
+        g2.drawString(text, x, y);
+
+        // Draw return to menu button
+        text = "Trở về menu chính";
+        g2.setFont(g2.getFont().deriveFont(40F));
+        x = getXforCenteredText(text);
+        y += 140;
+        g2.drawString(text, x, y);
+        if(commandNum == 0) {
+            g2.drawString(">", x-40, y);
+        }
+    }
+
     public void drawOptionsScreen() {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(30F));
@@ -844,7 +869,7 @@ public class UI {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
         g2.setFont(determinationSans);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.setColor(Color.white);
 
         //TITLE STATE
@@ -887,6 +912,10 @@ public class UI {
             //TRADE STATE
             if (gp.gameState == gp.tradeState) {
                 drawTradeScreen();
+            }
+            //END GAME STATE
+            if (gp.gameState == gp.endGameState) {
+                drawEndGame();
             }
         }
     }

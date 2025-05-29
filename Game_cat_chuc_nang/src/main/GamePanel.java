@@ -56,7 +56,6 @@ public class GamePanel extends JPanel implements Runnable{
     Map map = new Map(this);
 
     public EntityGenerator eGenerator = new EntityGenerator(this);
-    public CutsceneManager csManager = new CutsceneManager(this);
     Thread gameThread;
 
     //ENTITY AND OBJECT
@@ -84,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int tradeState = 8;
     public final int sleepState = 9;
     public final int mapState = 10;
-    public final int cutsceneState = 11;
+    public final int endGameState = 11;  // Thay thế cutsceneState bằng endGameState
 
     //OTHERS
     public boolean bossBattleOn = false;
@@ -381,11 +380,6 @@ public class GamePanel extends JPanel implements Runnable{
 
             //EMPTY ENTITY LIST
             entityList.clear();
-
-
-
-            //CUTSCENE
-            csManager.draw(g2);
 
             //UI
             ui.draw(g2);

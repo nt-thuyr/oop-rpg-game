@@ -24,9 +24,9 @@ public class MON_SkeletonLord extends Entity {
         speed = defaultSpeed;
         maxLife = 40;
         life = maxLife;
-        attack = 16;
+        attack = 5;
         defense = 3;
-        exp = 40;
+        exp = 30;
         knockBackPower = 5;
 
         // Thêm pathfinding và AI
@@ -34,7 +34,7 @@ public class MON_SkeletonLord extends Entity {
 
         // Điều chỉnh collision area để không bị kẹt tường
         int size = gp.tileSize * 5;  // Kích thước tổng thể của sprite
-        int collisionSize = (int)(size * 0.4);  // Collision area chỉ bằng 40% kích thước sprite
+        int collisionSize = (int)(size * 0.8);  // Tăng collision area lên 80% kích thước sprite (trước là 0.4)
 
         solidArea.x = (size - collisionSize)/2;  // Căn giữa collision area
         solidArea.y = (size - collisionSize)/2;
@@ -160,35 +160,36 @@ public class MON_SkeletonLord extends Entity {
             speed = defaultSpeed;
         }
     }
-    public void checkDrop()
-    {
+    public void checkDrop() {
+        // Reset boss battle status
         gp.bossBattleOn = false;
-
-        //Restore the previous music
         gp.stopMusic();
-        gp.playMusic(19);
 
         // Remove the iron doors
-        for(int i = 0; i < gp.obj[1].length; i++)
-        {
-            if(gp.obj[gp.currentMap][i] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName))
-            {
+        for(int i = 0; i < gp.obj[1].length; i++) {
+            if(gp.obj[gp.currentMap][i] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)) {
                 gp.playSE(21);
                 gp.obj[gp.currentMap][i] = null;
             }
         }
 
-        //CAST A DIE
+        // Drop items
         int i = new Random().nextInt(100)+1;
-
-        //SET THE MONSTER DROP
-        if(i < 50)
-        {
+        if(i < 50) {
             dropItem(new OBJ_Coin_Bronze(gp));
         }
-        if(i >= 50 && i < 100)
-        {
+        if(i >= 50 && i < 100) {
             dropItem(new OBJ_Heart(gp));
         }
+
+        // End game when boss is defeated
+        gp.gameState = gp.endGameState;
+    }
+
+    public void setDying() {
+        dying = true;
+        gp.playSE(4);
     }
 }
+
+
