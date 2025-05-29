@@ -32,10 +32,10 @@ public class IT_DryTree extends InteractiveTile {
         gp.playSE(11);
     }
 
-    @Override
-    public InteractiveTile getDestroyedForm() {
-        return new IT_Trunk(gp, getWorldX() / gp.getTileSize(), getWorldY() / gp.getTileSize());
-    }
+//    @Override
+//    public InteractiveTile getDestroyedForm() {
+//        return new IT_Trunk(gp, getWorldX() / gp.getTileSize(), getWorldY() / gp.getTileSize());
+//    }
 
     @Override
     public Color getParticleColor() {

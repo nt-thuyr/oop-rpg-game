@@ -16,7 +16,7 @@ public class CharacterState {
     private boolean transparent = false;
     private boolean offBalance = false;
     private boolean opened = false;
-    private boolean inRage = false;
+    private boolean inRange = false;
     private boolean sleep = false;
     private boolean drawing = true;
     private boolean temp = false;
@@ -216,12 +216,12 @@ public class CharacterState {
         this.hpBarOn = hpBarOn;
     }
 
-    public boolean isInRage() {
-        return inRage;
+    public boolean isInRange() {
+        return inRange;
     }
 
-    public void setInRage(boolean inRage) {
-        this.inRage = inRage;
+    public void setInRage(boolean inRange) {
+        this.inRange = inRange;
     }
 
     public boolean isInvincible() {

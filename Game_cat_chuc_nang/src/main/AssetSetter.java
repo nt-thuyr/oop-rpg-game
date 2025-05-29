@@ -252,20 +252,20 @@ public class AssetSetter {
         mapNum = 2;
         i = 0;
 
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 18, 30);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 17, 31);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 17, 32);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 17, 34);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 18, 34);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 10, 33);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 10, 22);
-        i++;
+//        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 18, 30);
+//        i++;
+//        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 17, 31);
+//        i++;
+//        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 17, 32);
+//        i++;
+//        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 17, 34);
+//        i++;
+//        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 18, 34);
+//        i++;
+//        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 10, 33);
+//        i++;
+//        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 10, 22);
+//        i++;
 
         if(!Progress.skeletonLordDefeated)
         {

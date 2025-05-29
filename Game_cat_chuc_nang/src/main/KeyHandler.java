@@ -38,11 +38,11 @@ public class KeyHandler implements KeyListener {
             tradeState(code);
         } else if (gp.getGameState() == gp.getMapState()) {
             mapState(code);
-        } else if (gp.getGameState() == gp.endGameState) {
+        } else if (gp.getGameState() == gp.getEndGameState()) {
             if (code == KeyEvent.VK_ENTER) {
                 enterPressed = false;
                 gp.setGameState(gp.getTitleState());
-                gp.getUi().getTitleScreenState() = 0;
+                gp.getUi().setTitleScreenState(0);
                 gp.resetGame(true);
                 gp.stopMusic();
             }

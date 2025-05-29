@@ -498,9 +498,9 @@ public class GamePanel extends JPanel implements Runnable {
         return currentMap;
     }
 
-    public int getCutsceneState() {
-        return cutsceneState;
-    }
+//    public int getCutsceneState() {
+//        return cutsceneState;
+//    }
 
     public int getDialogueState() {
         return dialogueState;
@@ -692,6 +692,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int getTransitionState() {
         return transitionState;
+    }
+
+    public int getEndGameState() {
+        return endGameState;
     }
 
     public UI getUi() {
