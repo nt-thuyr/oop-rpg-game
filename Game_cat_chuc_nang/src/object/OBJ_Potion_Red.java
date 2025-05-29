@@ -25,7 +25,7 @@ public class OBJ_Potion_Red extends Item {
     }
 
     public void setDialogue() {
-        getDialogues()[0][0] = "Bạn đã uống " + getName() + "!\n" + "Bạn sẽ được hồi phục " + getValue() + " máu.";
+        dialogues[0][0] = "Bạn đã uống " + getName() + "!\n" + "Bạn sẽ được hồi phục " + getValue() + " máu.";
     }
 
     public boolean use(Character character) {

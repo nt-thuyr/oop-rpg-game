@@ -19,12 +19,11 @@ public class OBJ_Door extends Item {
         setImage(setup("/objects/door", gp.getTileSize(), gp.getTileSize()));
         setCollision(true);
 
-        getSolidArea().x = 0;
-        getSolidArea().y = 16;
-        setSolidArea(new Rectangle(48, 32));
+        setSolidArea(new Rectangle(0,16,48, 32));
         setSolidAreaDefaultX(getSolidArea().x);
         setSolidAreaDefaultY(getSolidArea().y);
         setPrice(35);
+
         setDialogue();
     }
 

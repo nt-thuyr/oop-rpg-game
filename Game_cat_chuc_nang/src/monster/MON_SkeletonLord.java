@@ -4,7 +4,6 @@ import entity.Character;
 import entity.Entity;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
-import object.OBJ_Door_Iron;
 import object.OBJ_Heart;
 
 import java.awt.*;

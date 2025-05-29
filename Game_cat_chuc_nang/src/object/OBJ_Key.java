@@ -23,8 +23,8 @@ public class OBJ_Key extends Item {
     }
 
     public void setDialogue() {
-        getDialogues()[0][0] = "Bạn đã dùng " + getName() + " để mở cánh cửa này.";
-        getDialogues()[1][0] = "Làm cái gì zậy?";
+        dialogues[0][0] = "Bạn đã dùng " + getName() + " để mở cánh cửa này.";
+        dialogues[1][0] = "Làm cái gì zậy?";
     }
 
     public boolean use(Character entity) {

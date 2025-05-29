@@ -3,6 +3,8 @@ package object;
 import entity.Character;
 import main.GamePanel;
 
+import java.awt.*;
+
 public class OBJ_Pickaxe extends Item {
 
     public static final String objName = "Cuốc chim";
@@ -14,8 +16,7 @@ public class OBJ_Pickaxe extends Item {
         setName(objName);
         setImage(setup("/objects/pickaxe", gp.getTileSize(), gp.getTileSize()));
         setAttackValue(1);
-        getAttackArea().width = 26;
-        getAttackArea().height = 26;
+        setAttackArea(new Rectangle(26, 26));
         setDescription("[" + getName() + "]\nBạn sẽ đào được thứ gì đó!");
         setPrice(75);
         setKnockBackPower(1);

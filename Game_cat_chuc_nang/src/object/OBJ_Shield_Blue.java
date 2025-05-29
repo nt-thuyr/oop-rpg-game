@@ -13,7 +13,7 @@ public class OBJ_Shield_Blue extends Item {
         setType(getType_shield());
         setName(objName);
         setImage(setup("/objects/shield_blue", gp.getTileSize(), gp.getTileSize()));
-        setDefenseValue(2);
+        setDefenseValue(3);
         setDescription("[" + getName() + "]\nMột chiếc khiên xanh\nánh kim lấp lánh.");
         setPrice(150);
     }
