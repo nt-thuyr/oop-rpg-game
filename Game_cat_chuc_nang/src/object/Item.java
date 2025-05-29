@@ -4,6 +4,7 @@ import entity.Character;
 import entity.Entity;
 import main.GamePanel;
 import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 
 public abstract class Item extends Entity {
     private BufferedImage image;
@@ -14,6 +15,7 @@ public abstract class Item extends Entity {
     private Item loot;
     private int amount; // For stackable items, like potions
     private int value; // Value for pickup items, like hearts
+    private boolean temp = false;
 
     private int attackValue; // For weapons
     private int knockBackPower; // For weapons
@@ -201,5 +203,35 @@ public abstract class Item extends Entity {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public void draw(Graphics2D g2) {
+        if (inCamera()) {
+            int tempScreenX = getWorldX() - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+            int tempScreenY = getWorldY() - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
+            g2.drawImage(getImage(), tempScreenX, tempScreenY, null);
+        }
+    }
+
+    // If you want items to manage their own stacking, you can add:
+    public void addToInventory(java.util.List<Item> inventory) {
+        if (isStackable()) {
+            for (Item invItem : inventory) {
+                if (invItem.getName().equals(getName())) {
+                    invItem.setAmount(invItem.getAmount() + getAmount());
+                    return;
+                }
+            }
+        }
+        inventory.add(this);
+    }
+
+    public boolean isTemp() {
+        return temp;
+    }
+
+    public void setTemp(boolean temp) {
+        this.temp = temp;
     }
 }

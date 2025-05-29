@@ -15,7 +15,6 @@ public abstract class Character extends Entity {
 
     private Character attacker;
     private Character linkedCharacter;
-    private boolean temp = false;
 
     // STATE
     private String direction = "down";
@@ -605,97 +604,50 @@ public abstract class Character extends Entity {
         return inCamera;
     }
 
+    @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
-        if (inCamera() == true) {
+        if (inCamera()) {
             int tempScreenX = getScreenX();
             int tempScreenY = getScreenY();
 
             switch (getDirection()) {
                 case "up":
-                    if (!getState().isAttacking()) { // Normal walking sprites
-                        if (getSpriteNum() == 1) {
-                            image = getUp1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getUp2();
-                        }
-                    }
-                    if (getState().isAttacking()) { // Attacking sprites
-                        tempScreenY = getScreenY() - getUp1().getHeight(); // Adjusted the player's position one tile to up
-                        if (getSpriteNum() == 1) {
-                            image = getAttackUp1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getAttackUp2();
-                        }
+                    if (!getState().isAttacking()) {
+                        image = getSpriteNum() == 1 ? getUp1() : getUp2();
+                    } else {
+                        tempScreenY = getScreenY() - getUp1().getHeight();
+                        image = getSpriteNum() == 1 ? getAttackUp1() : getAttackUp2();
                     }
                     break;
-
                 case "down":
-                    if (!getState().isAttacking()) { // Normal walking sprites
-                        if (getSpriteNum() == 1) {
-                            image = getDown1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getDown2();
-                        }
-                    }
-                    if (getState().isAttacking()) { // Attacking sprites
-                        if (getSpriteNum() == 1) {
-                            image = getAttackDown1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getAttackDown2();
-                        }
+                    if (!getState().isAttacking()) {
+                        image = getSpriteNum() == 1 ? getDown1() : getDown2();
+                    } else {
+                        image = getSpriteNum() == 1 ? getAttackDown1() : getAttackDown2();
                     }
                     break;
-
                 case "left":
-                    if (!getState().isAttacking()) { // Normal walking sprites
-                        if (getSpriteNum() == 1) {
-                            image = getLeft1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getLeft2();
-                        }
-                    }
-                    if (getState().isAttacking()) { // Attacking sprites
-                        tempScreenX = getScreenX() - getUp1().getWidth(); // Adjusted the player's position one tile left
-                        if (getSpriteNum() == 1) {
-                            image = getAttackLeft1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getAttackLeft2();
-                        }
+                    if (!getState().isAttacking()) {
+                        image = getSpriteNum() == 1 ? getLeft1() : getLeft2();
+                    } else {
+                        tempScreenX = getScreenX() - getUp1().getWidth();
+                        image = getSpriteNum() == 1 ? getAttackLeft1() : getAttackLeft2();
                     }
                     break;
-
                 case "right":
-                    if (!getState().isAttacking()) { // Normal walking sprites
-                        if (getSpriteNum() == 1) {
-                            image = getRight1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getRight2();
-                        }
-                    }
-                    if (getState().isAttacking()) { // Attacking sprites
-                        if (getSpriteNum() == 1) {
-                            image = getAttackRight1();
-                        }
-                        if (getSpriteNum() == 2) {
-                            image = getAttackRight2();
-                        }
+                    if (!getState().isAttacking()) {
+                        image = getSpriteNum() == 1 ? getRight1() : getRight2();
+                    } else {
+                        image = getSpriteNum() == 1 ? getAttackRight1() : getAttackRight2();
                     }
                     break;
             }
 
-            // Make entity half-transparent (%30) when invincible
             if (getState().isInvincible()) {
-                getState().setHpBarOn(true); // when player attacks monster play hpBar
-                getState().setHpBarCounter(0); // reset monster aggro
+                getState().setHpBarOn(true);
+                getState().setHpBarCounter(0);
                 changeAlpha(g2, 0.4F);
             }
 
@@ -704,8 +656,6 @@ public abstract class Character extends Entity {
             }
 
             g2.drawImage(image, tempScreenX, tempScreenY, null);
-
-            // Reset graphics opacity / alpha
             changeAlpha(g2, 1F);
         }
     }
@@ -1271,14 +1221,6 @@ public void addToInventory(Item item) {
 
     public void setStrength(int strength) {
         this.strength = strength;
-    }
-
-    public boolean isTemp() {
-        return temp;
-    }
-
-    public void setTemp(boolean temp) {
-        this.temp = temp;
     }
 
     public int getType() {

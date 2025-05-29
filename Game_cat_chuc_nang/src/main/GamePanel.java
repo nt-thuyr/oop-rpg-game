@@ -66,7 +66,7 @@ public class GamePanel extends JPanel implements Runnable{
     private Character monster[][] = new Character[maxMap][20];
     private InteractiveTile iTile[][] = new InteractiveTile[maxMap][50];
     private Character[][] projectile = new Character[maxMap][20];
-    private ArrayList<Entity> particleList = new ArrayList<>();
+    private ArrayList<Character> particleList = new ArrayList<>();
     private ArrayList<Entity> entityList = new ArrayList<>();
 
     // GAME STATE
@@ -467,7 +467,7 @@ public class GamePanel extends JPanel implements Runnable{
         {
             for(int i = 0; i < obj[1].length; i++)
             {
-                if(obj[mapNum][i] != null && obj[mapNum][i].isTemp() == true)
+                if(obj[mapNum][i] != null && obj[mapNum][i].isTemp())
                 {
                     obj[mapNum][i] = null;
                 }
@@ -619,7 +619,7 @@ public class GamePanel extends JPanel implements Runnable{
         return outside;
     }
 
-    public ArrayList<Entity> getParticleList() {
+    public ArrayList<Character> getParticleList() {
         return particleList;
     }
 
@@ -791,7 +791,7 @@ public class GamePanel extends JPanel implements Runnable{
 //        this.obj = obj;
 //    }
 
-    public void setParticleList(ArrayList<Entity> particleList) {
+    public void setParticleList(ArrayList<Character> particleList) {
         this.particleList = particleList;
     }
 
