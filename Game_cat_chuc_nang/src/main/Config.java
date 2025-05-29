@@ -17,22 +17,22 @@ public class Config {
             BufferedWriter bw = new BufferedWriter(new FileWriter("config.txt"));
 
             // Full Screen
-            if(gp.fullScreenOn == true)
+            if(gp.isFullScreenOn() == true)
             {
                 bw.write("On");
             }
-            if(gp.fullScreenOn == false)
+            if(gp.isFullScreenOn() == false)
             {
                 bw.write("Off");
             }
             bw.newLine();
 
             //Music Volume
-            bw.write(String.valueOf(gp.music.volumeScale));
+            bw.write(String.valueOf(gp.getMusic().getVolumeScale()));
             bw.newLine();
 
             //SE Volume
-            bw.write(String.valueOf(gp.se.volumeScale));
+            bw.write(String.valueOf(gp.getSe().getVolumeScale()));
             bw.newLine();
 
             bw.close();
@@ -52,20 +52,20 @@ public class Config {
             //Full Screen
             if(s.equals("On"))
             {
-                gp.fullScreenOn = true;
+                gp.setFullScreenOn(true);
             }
             if(s.equals("Off"))
             {
-                gp.fullScreenOn = false;
+                gp.setFullScreenOn(false);
             }
 
             //Music Volume
             s = br.readLine();
-            gp.music.volumeScale = Integer.parseInt(s);
+            gp.getMusic().setVolumeScale(Integer.parseInt(s));
 
             //SE Volume
             s = br.readLine();
-            gp.se.volumeScale = Integer.parseInt(s);
+            gp.getSe().setVolumeScale(Integer.parseInt(s));
 
             br.close();
 

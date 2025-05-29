@@ -1,17 +1,17 @@
 package object;
 
+import entity.Character;
 import entity.Entity;
 import main.GamePanel;
 import java.awt.image.BufferedImage;
 
-public abstract class Object {
-    GamePanel gp;
+public abstract class Item extends Entity {
     private BufferedImage image;
     private String name;
     private String description;
     private int price;
     private boolean stackable;
-
+    private Item loot;
     //TYPE
     private int type;
     private final int type_sword = 0;
@@ -22,24 +22,16 @@ public abstract class Object {
     private final int type_pickupOnly = 5;
     private final int type_obstacle = 6;
 
-    public Object(GamePanel gp) {
-        this.gp = gp;
-        this.image = null;
-        this.name = "";
-        this.description = "";
-        this.price = 0;
-        this.stackable = false;
-        this.type = -1; // Default type
+    public Item(GamePanel gp) {
+        super(gp);
     }
-
-    public abstract void setDialogue();
 
     public boolean interact() {
         // Default interaction logic, can be overridden by subclasses
         return false;
     }
 
-    public int getDetected(Entity user, Entity[][] target, String targetName)
+    public int getDetected(Character user, Character[][] target, String targetName)
     {
         int index = 999;
 
@@ -47,7 +39,7 @@ public abstract class Object {
         int nextWorldX = user.getLeftX();
         int nextWorldY = user.getTopY();
 
-        switch (user.direction)
+        switch (user.getDirection())
         {
             case "up" : nextWorldY = user.getTopY() - gp.player.speed; break;
             case "down": nextWorldY = user.getBottomY() + gp.player.speed; break;
@@ -72,5 +64,62 @@ public abstract class Object {
 
         }
         return  index;
+    }
+
+    public void setLoot(Item loot) {
+        this.loot = loot; // Gán giá trị loot cho thuộc tính loot
+        setDialogue(); // Thiết lập hội thoại
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public boolean isStackable() {
+        return stackable;
+    }
+
+    public void setStackable(boolean stackable) {
+        this.stackable = stackable;
+    }
+
+    public Item getLoot() {
+        return loot;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

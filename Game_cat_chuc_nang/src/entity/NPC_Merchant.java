@@ -5,39 +5,34 @@ import object.*;
 
 import java.awt.*;
 
-public class NPC_Merchant extends Entity{
-    public NPC_Merchant(GamePanel gp)
-    {
+public class NPC_Merchant extends Character {
+    public NPC_Merchant(GamePanel gp) {
         super(gp);
-        direction = "down";
-        speed = 1;
+        setDirection("down");
+        setSpeed(1);
 
         getImage();
         setDialogue();
         setItems();
 
-        solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 16;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        setSolidArea(new Rectangle(8, 16, 32, 32));
+        setSolidAreaDefaultX(8);
+        setSolidAreaDefaultY(16);
+    }
 
-        solidAreaDefaultX = 8;
-        solidAreaDefaultY = 16;
+    public void getImage() {
+        setUp1(setup("/npc/merchant_down_1", gp.getTileSize(), gp.getTileSize()));
+        setUp2(setup("/npc/merchant_down_2", gp.getTileSize(), gp.getTileSize()));
+        setDown1(setup("/npc/merchant_down_1", gp.getTileSize(), gp.getTileSize()));
+        setDown2(setup("/npc/merchant_down_2", gp.getTileSize(), gp.getTileSize()));
+        setLeft1(setup("/npc/merchant_down_1", gp.getTileSize(), gp.getTileSize()));
+        setLeft2(setup("/npc/merchant_down_2", gp.getTileSize(), gp.getTileSize()));
+        setRight1(setup("/npc/merchant_down_1", gp.getTileSize(), gp.getTileSize()));
+        setRight2(setup("/npc/merchant_down_2", gp.getTileSize(), gp.getTileSize()));
     }
-    public void getImage()
-    {
-        up1 = setup("/npc/merchant_down_1",gp.tileSize,gp.tileSize);
-        up2 = setup("/npc/merchant_down_2",gp.tileSize,gp.tileSize);
-        down1 = setup("/npc/merchant_down_1",gp.tileSize,gp.tileSize);
-        down2 = setup("/npc/merchant_down_2",gp.tileSize,gp.tileSize);
-        left1 = setup("/npc/merchant_down_1",gp.tileSize,gp.tileSize);
-        left2 = setup("/npc/merchant_down_2",gp.tileSize,gp.tileSize);
-        right1 = setup("/npc/merchant_down_1",gp.tileSize,gp.tileSize);
-        right2 = setup("/npc/merchant_down_2",gp.tileSize,gp.tileSize);
-    }
-    public void setDialogue()
-    {
+
+    public void setDialogue() {
+        String[][] dialogues = getDialogues();
         dialogues[0][0] = "Hê hê, cuối cùng cũng gặp nhau!\nĐồ xịn xò đây.\nTrao đổi không cưng?";
         dialogues[1][0] = "Lần sau lại ghé nhe, hi hi hi!";
         dialogues[2][0] = "Thêm mấy đồng nữa ta mới bán nhe!";
@@ -45,18 +40,17 @@ public class NPC_Merchant extends Entity{
         dialogues[4][0] = "Đồ đang dùng sao mà bán hả cưng!?";
         dialogues[5][0] = "He he cưng cũng biết chọn phết đấy!";
         dialogues[6][0] = "Hề hề cưng có đồ ngon quá nhể!";
+    }
 
+    public void setItems() {
+        getInventory().add(new OBJ_Potion_Red(gp));
+        getInventory().add(new OBJ_Axe(gp));
+        getInventory().add(new OBJ_Shield_Blue(gp));
     }
-    public void setItems()
-    {
-        inventory.add(new OBJ_Potion_Red(gp));
-        inventory.add(new OBJ_Axe(gp));
-        inventory.add(new OBJ_Shield_Blue(gp));
-    }
-    public void speak()
-    {
+
+    public void speak() {
         facePlayer();
-        gp.gameState = gp.tradeState;
-        gp.ui.npc = this;
+        gp.setGameState(gp.getTradeState());
+        gp.getUi().setNpc(this);
     }
 }

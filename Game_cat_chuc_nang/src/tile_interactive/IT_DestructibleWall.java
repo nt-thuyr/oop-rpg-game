@@ -5,40 +5,40 @@ import main.GamePanel;
 
 import java.awt.*;
 
-public class IT_DryTree extends InteractiveTile {
+public class IT_DestructibleWall extends InteractiveTile {
 
     private GamePanel gp;
 
-    public IT_DryTree(GamePanel gp, int col, int row) {
+    public IT_DestructibleWall(GamePanel gp, int col, int row) {
         super(gp, col, row);
         this.gp = gp;
 
         setWorldX(gp.getTileSize() * col);
         setWorldY(gp.getTileSize() * row);
 
-        setDown1(setup("/tiles_interactive/drytree", gp.getTileSize(), gp.getTileSize()));
+        setDown1(setup("/tiles_interactive/destructiblewall", gp.getTileSize(), gp.getTileSize()));
         setDestructible(true);
-        setLife(2);
+        setLife(3);
     }
 
     @Override
     public boolean isCorrectItem(Character entity) {
-        return entity.getCurrentWeapon().getType() == getType_axe();
+        return entity.getCurrentWeapon().getType() == getType_pickaxe();
     }
 
     @Override
     public void playSE() {
-        gp.playSE(11);
+        gp.playSE(20);
     }
 
     @Override
     public InteractiveTile getDestroyedForm() {
-        return new IT_Trunk(gp, getWorldX() / gp.getTileSize(), getWorldY() / gp.getTileSize());
+        return null; // Sub-class specifications
     }
 
     @Override
     public Color getParticleColor() {
-        return new Color(65, 50, 30);
+        return new Color(65, 65, 65);
     }
 
     @Override

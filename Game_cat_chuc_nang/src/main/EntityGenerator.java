@@ -1,6 +1,6 @@
 package main;
 
-import entity.Entity;
+import entity.Character;
 import object.*;
 
 public class EntityGenerator {
@@ -12,9 +12,9 @@ public class EntityGenerator {
         this.gp = gp;
     }
 
-    public Entity getObject(String itemName)
+    public Character getObject(String itemName)
     {
-        Entity obj = null;
+        Character obj = null;
 
         switch (itemName)
         {

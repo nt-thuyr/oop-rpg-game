@@ -1,9 +1,9 @@
 package object;
 
-import entity.Entity;
+import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Demon_Slayer extends Entity {
+public class OBJ_Demon_Slayer extends Character {
 
     public static final String objName = "Demon Slayer";
 

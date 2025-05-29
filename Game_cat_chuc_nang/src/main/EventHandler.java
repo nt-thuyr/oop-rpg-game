@@ -1,12 +1,12 @@
 package main;
 
 
-import entity.Entity;
+import entity.Character;
 
 public class EventHandler{
     GamePanel gp;
     EventRect eventRect[][][];
-    Entity eventMaster;
+    Character eventMaster;
 
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
@@ -18,30 +18,30 @@ public class EventHandler{
         //Set event's interact 2x2 pixels
         this.gp = gp;
 
-        eventMaster = new Entity(gp);
+        eventMaster = new Character(gp);
 
-        eventRect = new EventRect[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
+        eventRect = new EventRect[gp.getMaxMap()][gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 
         int map = 0;
         int col = 0;
         int row = 0;
-        while(map < gp.maxMap && col < gp.maxWorldCol && row < gp.maxWorldRow)
+        while(map < gp.getMaxMap() && col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow())
         {
             eventRect[map][col][row] = new EventRect();
             eventRect[map][col][row].x = 23;
             eventRect[map][col][row].y = 23;
             eventRect[map][col][row].width = 2;
             eventRect[map][col][row].height = 2;
-            eventRect[map][col][row].eventRectDefaultX = eventRect[map][col][row].x;
-            eventRect[map][col][row].eventRectDefaultY = eventRect[map][col][row].y;
+            eventRect[map][col][row].setEventRectDefaultX(eventRect[map][col][row].x);
+            eventRect[map][col][row].setEventRectDefaultY(eventRect[map][col][row].y);
 
             col++;
-            if(col == gp.maxWorldCol)
+            if(col == gp.getMaxWorldCol())
             {
                 col = 0;
                 row++;
 
-                if(row == gp.maxWorldRow)
+                if(row == gp.getMaxWorldRow())
                 {
                     row = 0;
                     map++; // create eventRectangles for each map
@@ -52,33 +52,33 @@ public class EventHandler{
     }
     public void setDialogue()
     {
-        eventMaster.dialogues[0][0] = "Bạn vừa ngã xuống hố!";
+        eventMaster.getDialogues()[0][0] = "Bạn vừa ngã xuống hố!";
 
-        eventMaster.dialogues[1][0] = "Bạn vừa uông nước.\nNăng lượng và sức mạnh của bạn sẽ được phục hồi.\n"+ "(Tiến trình đã được lưu)";
-        eventMaster.dialogues[1][1] = "Khà, nước được phết đấy.";
+        eventMaster.getDialogues()[1][0] = "Bạn vừa uông nước.\nNăng lượng và sức mạnh của bạn sẽ được phục hồi.\n"+ "(Tiến trình đã được lưu)";
+        eventMaster.getDialogues()[1][1] = "Khà, nước được phết đấy.";
     }
     public void checkEvent()
     {
         //Check if the player character is more than 1 tile away from the last event
-        int xDistance = Math.abs(gp.player.worldX - previousEventX);  //pure distance
-        int yDistance = Math.abs(gp.player.worldY - previousEventY);
+        int xDistance = Math.abs(gp.getPlayer().getWorldX() - previousEventX);  //pure distance
+        int yDistance = Math.abs(gp.getPlayer().getWorldY() - previousEventY);
         int distance = Math.max(xDistance, yDistance);                //returns greater value
-        if(distance > gp.tileSize)
+        if(distance > gp.getTileSize())
         {
             canTouchEvent = true;
         }
 
         if(canTouchEvent == true)
         {
-            if(hit(0,27,16, "right") == true) {damagePit(gp.dialogueState);}
-            else if(hit(0,10,39, "any") == true) {teleport(1,12,13,gp.indoor);} //to merchant's house
-            else if(hit(1,12,13, "any") == true) {teleport(0,10,39,gp.outside);} //to outside
-            else if(hit(1,12,9, "up") == true) {speak(gp.npc[1][0]);} //merchant
+            if(hit(0,27,16, "right") == true) {damagePit(gp.getDialogueState());}
+            else if(hit(0,10,39, "any") == true) {teleport(1,12,13, gp.getIndoor());} //to merchant's house
+            else if(hit(1,12,13, "any") == true) {teleport(0,10,39, gp.getOutside());} //to outside
+            else if(hit(1,12,9, "up") == true) {speak(gp.getNpc()[1][0]);} //merchant
 
-            else if(hit(0,12,9, "any") == true) {teleport(2,9,41,gp.dungeon);} //to the dungeon
-            else if(hit(2,9,41, "any") == true) {teleport(0,12,9,gp.outside);} //to outside
-            else if(hit(2,8,7, "any") == true) {teleport(3,26,41,gp.dungeon);} //to B2
-            else if(hit(3,26,41, "any") == true) {teleport(2,8,7,gp.dungeon);} //to B1
+            else if(hit(0,12,9, "any") == true) {teleport(2,9,41, gp.getDungeon());} //to the dungeon
+            else if(hit(2,9,41, "any") == true) {teleport(0,12,9, gp.getOutside());} //to outside
+            else if(hit(2,8,7, "any") == true) {teleport(3,26,41, gp.getDungeon());} //to B2
+            else if(hit(3,26,41, "any") == true) {teleport(2,8,7, gp.getDungeon());} //to B1
 
 
         }
@@ -87,38 +87,38 @@ public class EventHandler{
     public boolean hit(int map, int col, int row, String reqDirection)
     {
         boolean hit = false;
-        if(map == gp.currentMap)
+        if(map == gp.getCurrentMap())
         {
             //Getting player's current solidArea positions
-            gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
-            gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+            gp.getPlayer().getSolidArea().x = gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x;
+            gp.getPlayer().getSolidArea().y = gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y;
             //Getting eventRect's current solidArea positions
-            eventRect[map][col][row].x = col * gp.tileSize + eventRect[map][col][row].x;
-            eventRect[map][col][row].y = row * gp.tileSize + eventRect[map][col][row].y;
+            eventRect[map][col][row].x = col * gp.getTileSize() + eventRect[map][col][row].x;
+            eventRect[map][col][row].y = row * gp.getTileSize() + eventRect[map][col][row].y;
             //Checking if player's solidArea is colliding with eventRect's solidArea
-            if(gp.player.solidArea.intersects(eventRect[map][col][row]) && !eventRect[map][col][row].eventDone)
+            if(gp.getPlayer().getSolidArea().intersects(eventRect[map][col][row]) && !eventRect[map][col][row].isEventDone())
             {
-                if(gp.player.direction.contentEquals(reqDirection) || reqDirection.equals("any"))
+                if(gp.getPlayer().getDirection().contentEquals(reqDirection) || reqDirection.equals("any"))
                 {
                     hit = true;
 
-                    previousEventX = gp.player.worldX;
-                    previousEventY = gp.player.worldY;
+                    previousEventX = gp.getPlayer().getWorldX();
+                    previousEventY = gp.getPlayer().getWorldY();
                 }
             }
             //RESET
-            gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-            gp.player.solidArea.y = gp.player.solidAreaDefaultY;
-            eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
-            eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
+            gp.getPlayer().getSolidArea().x = gp.getPlayer().getSolidAreaDefaultX();
+            gp.getPlayer().getSolidArea().y = gp.getPlayer().getSolidAreaDefaultY();
+            eventRect[map][col][row].x = eventRect[map][col][row].getEventRectDefaultX();
+            eventRect[map][col][row].y = eventRect[map][col][row].getEventRectDefaultY();
 
         }
         return hit;
     }
     public void teleport(int map, int col, int row, int area)
     {
-        gp.gameState = gp.transitionState;
-        gp.nextArea = area;
+        gp.setGameState(gp.getTransitionState());
+        gp.setNextArea(area);
         tempMap = map;
         tempCol = col;
         tempRow = row;
@@ -128,22 +128,92 @@ public class EventHandler{
     }
     public void damagePit(int gameState)
     {
-        gp.gameState = gameState;
+        gp.setGameState(gameState);
         gp.playSE(6);
         eventMaster.startDialogue(eventMaster, 0);
-        gp.player.life -= 2;
+        gp.getPlayer().setLife(gp.getPlayer().getLife() - 2);
         canTouchEvent = false;
-        //eventRect[col][row].eventDone = true;
     }
 
-    public void speak(Entity entity)
+    public void speak(Character character)
     {
-        if(gp.keyH.enterPressed)
+        if(gp.getKeyH().isEnterPressed())
         {
-            gp.gameState = gp.dialogueState;
-            gp.player.attackCanceled = true;
-            entity.speak();
+            gp.setGameState(gp.getDialogueState());
+            gp.getPlayer().setAttackCanceled(true);
+            character.speak();
         }
     }
 
+    public boolean isCanTouchEvent() {
+        return canTouchEvent;
+    }
+
+    public void setCanTouchEvent(boolean canTouchEvent) {
+        this.canTouchEvent = canTouchEvent;
+    }
+
+    public Character getEventMaster() {
+        return eventMaster;
+    }
+
+    public void setEventMaster(Character eventMaster) {
+        this.eventMaster = eventMaster;
+    }
+
+//    public EventRect getEventRect() {
+//        return eventRect;
+//    }
+//
+//    public void setEventRect(EventRect eventRect) {
+//        this.eventRect = eventRect;
+//    }
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public int getPreviousEventX() {
+        return previousEventX;
+    }
+
+    public void setPreviousEventX(int previousEventX) {
+        this.previousEventX = previousEventX;
+    }
+
+    public int getPreviousEventY() {
+        return previousEventY;
+    }
+
+    public void setPreviousEventY(int previousEventY) {
+        this.previousEventY = previousEventY;
+    }
+
+    public int getTempCol() {
+        return tempCol;
+    }
+
+    public void setTempCol(int tempCol) {
+        this.tempCol = tempCol;
+    }
+
+    public int getTempMap() {
+        return tempMap;
+    }
+
+    public void setTempMap(int tempMap) {
+        this.tempMap = tempMap;
+    }
+
+    public int getTempRow() {
+        return tempRow;
+    }
+
+    public void setTempRow(int tempRow) {
+        this.tempRow = tempRow;
+    }
 }
