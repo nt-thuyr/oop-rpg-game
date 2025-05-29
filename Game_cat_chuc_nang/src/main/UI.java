@@ -96,7 +96,7 @@ public class UI {
             if (gp.getKeyH().isEnterPressed()) {
                 charIndex = 0;
                 combinedText = "";
-                if (gp.getGameState() == gp.getDialogueState() || gp.getGameState() == gp.getCutsceneState()) {
+                if (gp.getGameState() == gp.getDialogueState()) {
                     dialogueEntity.setDialogueIndex(dialogueEntity.getDialogueIndex() + 1);
                     gp.getKeyH().setEnterPressed(false);
                 }
@@ -464,7 +464,7 @@ public class UI {
         if (getTitleScreenState() == 0) {
             // TITLE NAME
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
-            String text = "Blue Boy Adventure\n";
+            String text = "Final Fantasy\n";
             int x = getXforCenteredText(text);
             int y = gp.getTileSize() * 3;
             // SHADOW
@@ -555,6 +555,35 @@ public class UI {
         g2.drawString(text, x, y);
         if (getCommandNum() == 1) {
             g2.drawString(">", x - 40, y);
+        }
+
+    }
+
+    public void drawEndGame() {
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+
+        // Draw ending text
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(50F));
+        String text = "Chúc mừng!";
+        int x = getXforCenteredText(text);
+        int y = gp.getScreenHeight() /3;
+        g2.drawString(text, x, y);
+
+        text = "Bạn đã hoàn thành game!";
+        x = getXforCenteredText(text);
+        y += 70;
+        g2.drawString(text, x, y);
+
+        // Draw return to menu button
+        text = "Trở về menu chính";
+        g2.setFont(g2.getFont().deriveFont(40F));
+        x = getXforCenteredText(text);
+        y += 140;
+        g2.drawString(text, x, y);
+        if(commandNum == 0) {
+            g2.drawString(">", x-40, y);
         }
     }
 
@@ -828,7 +857,7 @@ public class UI {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
         g2.setFont(getDeterminationSans());
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.setColor(Color.white);
 
         // TITLE STATE
@@ -871,6 +900,10 @@ public class UI {
             // TRADE STATE
             if (gp.getGameState() == gp.getTradeState()) {
                 drawTradeScreen();
+            }
+            //END GAME STATE
+            if (gp.getGameState() == gp.getEndGameState()) {
+                drawEndGame();
             }
         }
     }

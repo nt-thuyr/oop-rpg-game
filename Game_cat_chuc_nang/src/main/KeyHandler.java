@@ -28,7 +28,7 @@ public class KeyHandler implements KeyListener {
             playState(code);
         } else if (gp.getGameState() == gp.getPauseState()) {
             pauseState(code);
-        } else if (gp.getGameState() == gp.getDialogueState() || gp.getGameState() == gp.getCutsceneState()) {
+        }  else if (gp.getGameState() == gp.getDialogueState()) {
             dialogueState(code);
         } else if (gp.getGameState() == gp.getCharacterState()) {
             characterState(code);
@@ -38,6 +38,14 @@ public class KeyHandler implements KeyListener {
             tradeState(code);
         } else if (gp.getGameState() == gp.getMapState()) {
             mapState(code);
+        } else if (gp.getGameState() == gp.endGameState) {
+            if (code == KeyEvent.VK_ENTER) {
+                enterPressed = false;
+                gp.setGameState(gp.getTitleState());
+                gp.getUi().getTitleScreenState() = 0;
+                gp.resetGame(true);
+                gp.stopMusic();
+            }
         }
     }
 

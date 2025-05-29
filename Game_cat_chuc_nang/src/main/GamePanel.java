@@ -82,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int tradeState = 8;
     private final int sleepState = 9;
     private final int mapState = 10;
-    private final int cutsceneState = 11;
+    private final int endGameState = 11;
 
     // OTHERS
     private boolean bossBattleOn = false;
@@ -385,8 +385,7 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(g2);
 
             //DEBUG
-
-            if(keyH.isShowDebugText() == true)
+            if (keyH.isShowDebugText() == true)
             {
                 long drawEnd = System.nanoTime();
                 long passed = drawEnd - drawStart;

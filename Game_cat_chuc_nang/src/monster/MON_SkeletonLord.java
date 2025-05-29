@@ -1,6 +1,7 @@
 package monster;
 
-import entity.Character;
+
+import entity.Entity;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Door_Iron;
@@ -9,10 +10,8 @@ import object.OBJ_Heart;
 import java.util.Random;
 
 public class MON_SkeletonLord extends Character {
-
     private GamePanel gp; // Encapsulated GamePanel
     public static final String monName = "Hài cốt vương";
-
     public MON_SkeletonLord(GamePanel gp) {
         super(gp);
 
@@ -29,17 +28,18 @@ public class MON_SkeletonLord extends Character {
         setDefense(3);
         setExp(40);
         setKnockBackPower(5);
-        getState().setSleep(true);
+
+        setOnPath(false);
 
         int size = gp.getTileSize() * 5;
-        getSolidArea().x = 48;
-        getSolidArea().y = 48;
-        getSolidArea().width = size - 48 * 2;
-        getSolidArea().height = size - 48;
+        collisionSize = (int)(size * 0.8);
+
+        setSolidArea((size - collisionSize)/2, (size - collisionSize)/2,
+                collisionSize, collisionSize);
         setSolidAreaDefaultX(getSolidArea().x);
         setSolidAreaDefaultY(getSolidArea().y);
-        getAttackArea().width = 170;
-        getAttackArea().height = 170;
+
+        setAttackArea(new Rectangle(170, 170))
         setMotion1_duration(25);
         setMotion2_duration(50);
 
@@ -95,11 +95,12 @@ public class MON_SkeletonLord extends Character {
     }
 
     public void setDialogue() {
-        getDialogues()[0][0] = "Không ai có thể đánh cắp kho báu của ta!";
-        getDialogues()[0][1] = "Mi sẽ bỏ mạng thôi!";
-        getDialogues()[0][2] = "HÃY ĐÓN NHẬN CÁI CHẾT CỦA NGƯƠI ĐI!";
+        dialogues[0][0] = "Không ai có thể đánh cắp kho báu của ta!";
+        dialogues[0][1] = "Mi sẽ bỏ mạng thôi!";
+        dialogues[0][2] = "HÃY ĐÓN NHẬN CÁI CHẾT CỦA NGƯƠI ĐI!";
     }
 
+    }
     public void setAction() {
         if (!getState().isInRage() && getLife() < getMaxLife() / 2) {
             getState().setInRage(true);
@@ -109,27 +110,47 @@ public class MON_SkeletonLord extends Character {
             setSpeed(getDefaultSpeed());
             setAttack(getAttack() * 2);
         }
-        if (getTileDistance(gp.getPlayer()) < 10) {
-            moveTowardPlayer(60);
-        } else {
-            getRandomDirection(120);
-        }
 
-        if (!getState().isAttacking()) {
-            checkAttackOrNot(60, gp.getTileSize() * 7, gp.getTileSize() * 5);
+        // Kiểm tra khoảng cách đến player
+        int xDistance = Math.abs(worldX - gp.player.worldX);
+        int yDistance = Math.abs(worldY - gp.player.worldY);
+        int tileDistance = (xDistance + yDistance)/gp.tileSize;
+
+        if(tileDistance < 8) {
+            // Khi player trong tầm 8 tiles, bật chế độ đuổi theo
+            onPath = true;
+
+            // Tìm đường đi đến player
+            int goalCol = getGoalCol(gp.player);
+            int goalRow = getGoalRow(gp.player);
+            searchPath(goalCol, goalRow);
+
+            // Tấn công khi ở gần
+            if(attacking == false) {
+                int attackRate = inRage ? 30 : 60;
+                checkAttackOrNot(attackRate, gp.tileSize*4, gp.tileSize*4);
+            }
+        } else {
+            // Ngoài tầm 8 tiles thì di chuyển ngẫu nhiên
+            onPath = false;
+            getRandomDirection(120);
         }
     }
 
     public void damageReaction() {
         getState().setActionLockCounter(0);
+        setOnPath(false); // Luôn kích hoạt chế độ đuổi theo khi bị đánh
+        if(inRage && life < maxLife/4) { // Tăng tốc độ khi HP dưới 25% trong rage mode
+            defaultSpeed++;
+            speed = defaultSpeed;
+        }
     }
-
     public void checkDrop() {
+        // Reset boss battle status
         gp.setBossBattleOn(false);
-
         gp.stopMusic();
-        gp.playMusic(19);
 
+        // Remove the iron doors
         for (int i = 0; i < gp.getObj()[1].length; i++) {
             if (gp.getObj()[gp.getCurrentMap()][i] != null && gp.getObj()[gp.getCurrentMap()][i].getName().equals(OBJ_Door_Iron.objName)) {
                 gp.playSE(21);
@@ -137,13 +158,21 @@ public class MON_SkeletonLord extends Character {
             }
         }
 
-        int i = new Random().nextInt(100) + 1;
-
-        if (i < 50) {
+        // Drop items
+        int i = new Random().nextInt(100)+1;
+        if(i < 50) {
             dropItem(new OBJ_Coin_Bronze(gp));
         }
-        if (i >= 50 && i < 100) {
+        if(i >= 50 && i < 100) {
             dropItem(new OBJ_Heart(gp));
         }
+
+        // End game when boss is defeated
+        gp.setGameState(gp.getEndGameState);
+    }
+
+    public void setDying() {
+        dying = true;
+        gp.playSE(4);
     }
 }

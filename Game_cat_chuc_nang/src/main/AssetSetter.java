@@ -1,13 +1,11 @@
 package main;
 
-//import entity.NPC_BigRock;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.*;
 import object.*;
-import tile_interactive.IT_DestructibleWall;
 import tile_interactive.IT_DryTree;
-import tile_interactive.IT_MetalPlate;
+
 
 public class AssetSetter {
 
@@ -83,11 +81,6 @@ public class AssetSetter {
         gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 25);
         gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 15);
         i++;
-
-//        gp.getObj()[mapNum][i] = new OBJ_BlueHeart(gp);
-//        gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 25);
-//        gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 8);
-//        i++;
     }
 
     public void setNPC() {
@@ -273,30 +266,13 @@ public class AssetSetter {
         i++;
         gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 10, 22);
         i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 38, 24);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 38, 18);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 38, 19);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 38, 21);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 18, 13);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 18, 14);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 22, 28);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 30, 28);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_DestructibleWall(gp, 32, 28);
-        i++;
 
-        gp.getiTile()[mapNum][i] = new IT_MetalPlate(gp, 20, 22);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_MetalPlate(gp, 8, 17);
-        i++;
-        gp.getiTile()[mapNum][i] = new IT_MetalPlate(gp, 39, 31);
-        i++;
+        if(!Progress.skeletonLordDefeated)
+        {
+            gp.getMonster()[mapNum][i] = new MON_SkeletonLord(gp);
+            gp.getMonster()[mapNum][i].setWorldX(gp.getTileSize() * 14);
+            gp.getMonster()[mapNum][i].setWorldY(gp.getTileSize() * 8);
+            i++;
+        }
     }
 }
