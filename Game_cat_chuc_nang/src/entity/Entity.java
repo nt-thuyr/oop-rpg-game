@@ -840,8 +840,8 @@ public class Entity {
         if(gp.pFinder.search() == true)
         {
             //Next WorldX and WorldY
-            int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
-            int nextY = gp.pFinder.pathList.get(0).row * gp.tileSize;
+            int nextX = gp.pFinder.pathList.get(0).getCol() * gp.tileSize;
+            int nextY = gp.pFinder.pathList.get(0).getRow() * gp.tileSize;
 
             //Entity's solidArea position
             int enLeftX = worldX + solidArea.x;
