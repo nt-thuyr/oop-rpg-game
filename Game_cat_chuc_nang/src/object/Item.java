@@ -23,13 +23,13 @@ public abstract class Item extends Entity {
 
     //TYPE
     private int type;
-    private final int type_shield = 1;
-    private final int type_sword = 0;
-    private final int type_axe = 2;
-    private final int type_pickaxe = 3;
-    private final int type_pickupOnly = 5;
-    private final int type_obstacle = 6;
-    private final int type_consumable = 4;
+    private static final int type_shield = 1;
+    private static final int type_sword = 0;
+    private static final int type_axe = 2;
+    private static final int type_pickaxe = 3;
+    private static final int type_pickupOnly = 5;
+    private static final int type_obstacle = 6;
+    private static final int type_consumable = 4;
 
     public Item(GamePanel gp) {
         super(gp);
@@ -169,31 +169,31 @@ public abstract class Item extends Entity {
         this.defenseValue = defenseValue;
     }
 
-    public int getType_shield() {
+    public static int getType_shield() {
         return type_shield;
     }
 
-    public int getType_sword() {
+    public static int getType_sword() {
         return type_sword;
     }
 
-    public int getType_axe() {
+    public static int getType_axe() {
         return type_axe;
     }
 
-    public int getType_pickaxe() {
+    public static int getType_pickaxe() {
         return type_pickaxe;
     }
 
-    public int getType_pickupOnly() {
+    public static int getType_pickupOnly() {
         return type_pickupOnly;
     }
 
-    public int getType_obstacle() {
+    public static int getType_obstacle() {
         return type_obstacle;
     }
 
-    public int getType_consumable() {
+    public static int getType_consumable() {
         return type_consumable;
     }
 

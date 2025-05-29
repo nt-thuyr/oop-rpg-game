@@ -150,7 +150,7 @@ public class Player extends Character {
         setRight2(image);
     }
     public void getAttackImage() {
-        if (getCurrentWeapon().getType() == getType_sword()) {
+        if (getCurrentWeapon().getType() == Item.getType_sword()) {
             setAttackUp1(setup("/player/boy_attack_up_1", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
             setAttackUp2(setup("/player/boy_attack_up_2", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
             setAttackDown1(setup("/player/boy_attack_down_1", gp.getTileSize(), gp.getTileSize() * 2));     // 16x32 px
@@ -159,7 +159,7 @@ public class Player extends Character {
             setAttackLeft2(setup("/player/boy_attack_left_2", gp.getTileSize() * 2, gp.getTileSize()));      // 32x16 px
             setAttackRight1(setup("/player/boy_attack_right_1", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
             setAttackRight2(setup("/player/boy_attack_right_2", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
-        } else if (getCurrentWeapon().getType() == getType_axe()) {
+        } else if (getCurrentWeapon().getType() == Item.getType_axe()) {
             setAttackUp1(setup("/player/boy_axe_up_1", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
             setAttackUp2(setup("/player/boy_axe_up_2", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
             setAttackDown1(setup("/player/boy_axe_down_1", gp.getTileSize(), gp.getTileSize() * 2));     // 16x32 px
@@ -168,7 +168,7 @@ public class Player extends Character {
             setAttackLeft2(setup("/player/boy_axe_left_2", gp.getTileSize() * 2, gp.getTileSize()));      // 32x16 px
             setAttackRight1(setup("/player/boy_axe_right_1", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
             setAttackRight2(setup("/player/boy_axe_right_2", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
-        } else if (getCurrentWeapon().getType() == getType_pickaxe()) {
+        } else if (getCurrentWeapon().getType() == Item.getType_pickaxe()) {
             setAttackUp1(setup("/player/boy_pick_up_1", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
             setAttackUp2(setup("/player/boy_pick_up_2", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
             setAttackDown1(setup("/player/boy_pick_down_1", gp.getTileSize(), gp.getTileSize() * 2));     // 16x32 px
@@ -363,7 +363,7 @@ public class Player extends Character {
                 gp.getObj()[gp.getCurrentMap()][i] = null;
             }
             // OBSTACLE
-            else if (gp.getObj()[gp.getCurrentMap()][i].getType() == getType_obstacle()) {
+            else if (gp.getObj()[gp.getCurrentMap()][i].getType() == Item.getType_obstacle()) {
                 if (keyH.isEnterPressed()) {
                     setAttackCanceled(true);
                     gp.getObj()[gp.getCurrentMap()][i].interact();
@@ -497,20 +497,20 @@ public class Player extends Character {
     public void selectItem() {
         int itemIndex = gp.getUi().getItemIndexOnSlot(gp.getUi().getPlayerSlotCol(), gp.getUi().getPlayerSlotRow());
         if (itemIndex < getInventory().size()) {
-            Character selectedItem = getInventory().get(itemIndex);
+            Item selectedItem = getInventory().get(itemIndex);
 
-            if (selectedItem.getType() == getType_sword() ||
-                    selectedItem.getType() == getType_axe() ||
-                    selectedItem.getType() == getType_pickaxe()) {
+            if (selectedItem.getType() == Item.getType_sword() ||
+                    selectedItem.getType() == Item.getType_axe() ||
+                    selectedItem.getType() == Item.getType_pickaxe()) {
                 setCurrentWeapon(selectedItem);
                 setAttack(getAttack()); // Update player attack
                 getAttackImage(); // Update player attack image (sword/axe)
             }
-            if (selectedItem.getType() == getType_shield()) {
+            if (selectedItem.getType() == Item.getType_shield()) {
                 setCurrentShield(selectedItem);
                 setDefense(getDefense()); // Update player defense
             }
-            if (selectedItem.getType() == getType_consumable()) {
+            if (selectedItem.getType() == Item.getType_consumable()) {
                 if (selectedItem.use(this)) {
                     if (selectedItem.getAmount() > 1) {
                         selectedItem.setAmount(selectedItem.getAmount() - 1);
@@ -640,14 +640,6 @@ public class Player extends Character {
 
     public void setKeyH(KeyHandler keyH) {
         this.keyH = keyH;
-    }
-
-    public boolean isLightUpdated() {
-        return lightUpdated;
-    }
-
-    public void setLightUpdated(boolean lightUpdated) {
-        this.lightUpdated = lightUpdated;
     }
 
     @Override

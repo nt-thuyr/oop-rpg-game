@@ -2,6 +2,7 @@ package tile_interactive;
 
 import entity.Character;
 import main.GamePanel;
+import object.Item;
 
 import java.awt.*;
 
@@ -23,7 +24,7 @@ public class IT_DestructibleWall extends InteractiveTile {
 
     @Override
     public boolean isCorrectItem(Character entity) {
-        return entity.getCurrentWeapon().getType() == getType_pickaxe();
+        return entity.getCurrentWeapon().getType() == Item.getType_pickaxe();
     }
 
     @Override

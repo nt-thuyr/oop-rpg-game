@@ -33,7 +33,8 @@ public class UI {
 
     private int subState = 0;
     private int counter = 0;
-    private Entity npc;
+    private Entity dialogueEntity; // Can be Character or Item
+    private Character npc;
     private int charIndex = 0;
     private String combinedText = "";
     private boolean isInNPCInventory = true;
@@ -81,8 +82,8 @@ public class UI {
         x += gp.getTileSize();
         y += gp.getTileSize();
 
-        if (npc.getDialogues()[npc.getDialogueSet()][npc.getDialogueIndex()] != null) {
-            char[] characters = npc.getDialogues()[npc.getDialogueSet()][npc.getDialogueIndex()].toCharArray();
+        if (dialogueEntity != null && dialogueEntity.getDialogues()[dialogueEntity.getDialogueSet()][dialogueEntity.getDialogueIndex()] != null) {
+            char[] characters = dialogueEntity.getDialogues()[dialogueEntity.getDialogueSet()][dialogueEntity.getDialogueIndex()].toCharArray();
 
             if (charIndex < characters.length) {
                 gp.playSE(17); // Speak sound
@@ -96,12 +97,14 @@ public class UI {
                 charIndex = 0;
                 combinedText = "";
                 if (gp.getGameState() == gp.getDialogueState() || gp.getGameState() == gp.getCutsceneState()) {
-                    npc.setDialogueIndex(npc.getDialogueIndex() + 1);
+                    dialogueEntity.setDialogueIndex(dialogueEntity.getDialogueIndex() + 1);
                     gp.getKeyH().setEnterPressed(false);
                 }
             }
         } else { // If no text is in the array
-            npc.setDialogueIndex(0);
+            if (dialogueEntity != null) {
+                dialogueEntity.setDialogueIndex(0);
+            }
             if (gp.getGameState() == gp.getDialogueState()) {
                 gp.setGameState(gp.getPlayState());
             }
@@ -206,7 +209,7 @@ public class UI {
                 g2.fillRoundRect(slotX, slotY, gp.getTileSize(), gp.getTileSize(), 10, 10);
             }
 
-            g2.drawImage(character.getInventory().get(i).getDown1(), slotX, slotY, null);
+            g2.drawImage(character.getInventory().get(i).getImage(), slotX, slotY, null);
 
             if (character == gp.getPlayer() && character.getInventory().get(i).getAmount() > 1) {
                 g2.setFont(g2.getFont().deriveFont(32f));
@@ -253,7 +256,7 @@ public class UI {
 
                 if (isTrading) {
                     // Price
-                    int price = character == getNpc() ? character.getInventory().get(itemIndex).getPrice() : character.getInventory().get(itemIndex).getPrice() / 2;
+                    int price = character == getDialogueEntity() ? character.getInventory().get(itemIndex).getPrice() : character.getInventory().get(itemIndex).getPrice() / 2;
                     textY += 32;
                     g2.drawString("Price: " + price, textX, textY);
                     g2.drawImage(getCoin(), textX + gp.getTileSize() * 2 + 15, textY - 27, 36, 36, null);
@@ -279,7 +282,7 @@ public class UI {
     }
 
     public void trade_select() {
-        getNpc().setDialogueSet(0);
+        getDialogueEntity().setDialogueSet(0);
         drawDialogueScreen();
 
         int x = gp.getTileSize() * 15;
@@ -303,7 +306,7 @@ public class UI {
             g2.drawString(">", x - 24, y);
             if (gp.getKeyH().isEnterPressed()) {
                 setCommandNum(0);
-                getNpc().startDialogue(getNpc(), 1);
+                getDialogueEntity().startDialogue(getDialogueEntity(), 1);
             }
         }
     }
@@ -314,7 +317,7 @@ public class UI {
         int frameY = gp.getTileSize();
         int frameWidth = gp.getTileSize() * 6;
         int frameHeight = gp.getTileSize() * 5;
-        drawInventory(getNpc(), true, isInNPCInventory(), frameX, frameY, frameWidth, frameHeight, getNpcSlotCol(), getNpcSlotRow());
+        drawInventory((Character) getNpc(), true, isInNPCInventory(), frameX, frameY, frameWidth, frameHeight, getNpcSlotCol(), getNpcSlotRow());
 
         // Player Inventory (Bottom Half)
         frameY = gp.getTileSize() * 6 + 10;
@@ -971,7 +974,7 @@ public class UI {
         return titleScreenState;
     }
 
-    public void setNpc(Entity npc) {
+    public void setNpc(Character npc) {
         this.npc = npc;
     }
 
@@ -1069,5 +1072,13 @@ public class UI {
 
     public void setTitleScreenState(int titleScreenState) {
         this.titleScreenState = titleScreenState;
+    }
+
+    public void setDialogueEntity(Entity entity) {
+        this.dialogueEntity = entity;
+    }
+
+    public Entity getDialogueEntity() {
+        return dialogueEntity;
     }
 }

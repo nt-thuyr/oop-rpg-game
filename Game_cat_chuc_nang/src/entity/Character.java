@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class Character extends Entity {
+public class Character extends Entity {
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     private BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     private BufferedImage guardUp, guardDown, guardLeft, guardRight;
@@ -591,17 +591,6 @@ public abstract class Character extends Entity {
         target.getState().setKnockBackDirection(attacker.getDirection());
         target.setSpeed(target.getSpeed() + knockBackPower);
         target.getState().setKnockBack(true);
-    }
-
-    public boolean inCamera() {
-        boolean inCamera = false;
-        if (getWorldX() + gp.getTileSize() * 5 > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && //*5 because skeleton lord disappears when the top left corner isn't on the screen
-                getWorldX() - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
-                getWorldY() + gp.getTileSize() * 5 > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() &&
-                getWorldY() - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) {
-            inCamera = true;
-        }
-        return inCamera;
     }
 
     @Override

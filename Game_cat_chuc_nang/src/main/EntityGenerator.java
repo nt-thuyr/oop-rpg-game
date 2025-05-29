@@ -1,6 +1,7 @@
 package main;
 
 import entity.Character;
+import entity.Entity;
 import object.*;
 
 public class EntityGenerator {
@@ -12,9 +13,9 @@ public class EntityGenerator {
         this.gp = gp;
     }
 
-    public Character getObject(String itemName)
+    public Item getObject(String itemName)
     {
-        Character obj = null;
+        Item obj = null;
 
         switch (itemName)
         {
@@ -27,7 +28,7 @@ public class EntityGenerator {
             case OBJ_Key.objName: obj = new OBJ_Key(gp);break;
             case OBJ_Pickaxe.objName: obj = new OBJ_Pickaxe(gp);break;
             case OBJ_Potion_Red.objName: obj = new OBJ_Potion_Red(gp);break;
-            case OBJ_Rock.objName: obj = new OBJ_Rock(gp);break;
+            // case OBJ_Rock.objName: obj = new OBJ_Rock(gp);break;
             case OBJ_Shield_Blue.objName: obj = new OBJ_Shield_Blue(gp);break;
             case OBJ_Shield_Wood.objName: obj = new OBJ_Shield_Wood(gp);break;
             case OBJ_Sword_Normal.objName: obj = new OBJ_Sword_Normal(gp);break;

@@ -33,12 +33,22 @@ public abstract class Entity {
     public void setDialogue() {
         // Default implementation, can be overridden by subclasses
         dialogues[0][0] = "No dialogue set.";
-    };
+    }
 
-    public void startDialogue(Entity entity, int setNum)
-    {
+    public boolean inCamera() {
+        boolean inCamera = false;
+        if (getWorldX() + gp.getTileSize() * 5 > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && //*5 because skeleton lord disappears when the top left corner isn't on the screen
+                getWorldX() - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
+                getWorldY() + gp.getTileSize() * 5 > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() &&
+                getWorldY() - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) {
+            inCamera = true;
+        }
+        return inCamera;
+    }
+
+    public void startDialogue(Entity entity, int setNum) {
         gp.setGameState(gp.getDialogueState());
-        gp.getUi().setNpc(entity);
+        gp.getUi().setDialogueEntity(entity); // Always set the dialogue entity
         setDialogueSet(setNum);
     }
 
