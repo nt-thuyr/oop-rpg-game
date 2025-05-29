@@ -3,15 +3,13 @@ package monster;
 import entity.Character;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
-import object.OBJ_Door_Iron;
 import object.OBJ_Heart;
 
 import java.util.Random;
 
 public class MON_SkeletonLord extends Character {
 
-    private GamePanel gp; // Encapsulated GamePanel
-    public static final String monName = "Hài cốt vương";
+    private GamePanel gp;
 
     public MON_SkeletonLord(GamePanel gp) {
         super(gp);
@@ -19,130 +17,91 @@ public class MON_SkeletonLord extends Character {
         this.gp = gp;
 
         setType(getType_monster());
-        setBoss(true);
-        setName(monName);
+        setName("Skeleton Lord");
         setDefaultSpeed(1);
         setSpeed(getDefaultSpeed());
-        setMaxLife(40);
+        setMaxLife(20);
         setLife(getMaxLife());
-        setAttack(16);
+        setAttack(8);
         setDefense(3);
-        setExp(40);
+        setExp(10);
         setKnockBackPower(5);
-        getState().setSleep(true);
 
-        int size = gp.getTileSize() * 5;
-        getSolidArea().x = 48;
-        getSolidArea().y = 48;
-        getSolidArea().width = size - 48 * 2;
-        getSolidArea().height = size - 48;
+        // Điều chỉnh vùng va chạm gấp 3 lần
+        getSolidArea().x = 12; // 4 * 3
+        getSolidArea().y = 12; // 4 * 3
+        getSolidArea().width = 120; // 40 * 3
+        getSolidArea().height = 132; // 44 * 3
         setSolidAreaDefaultX(getSolidArea().x);
         setSolidAreaDefaultY(getSolidArea().y);
-        getAttackArea().width = 170;
-        getAttackArea().height = 170;
-        setMotion1_duration(25);
-        setMotion2_duration(50);
+
+        // Điều chỉnh vùng tấn công gấp 3 lần
+        getAttackArea().width = 144; // 48 * 3
+        getAttackArea().height = 144; // 48 * 3
+        setMotion1_duration(40);
+        setMotion2_duration(85);
 
         getImage();
         getAttackImage();
-        setDialogue();
     }
 
     public void getImage() {
-        int i = 5;
-        if (!getState().isInRage()) {
-            setUp1(setup("/monster/skeletonlord_up_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setUp2(setup("/monster/skeletonlord_up_2", gp.getTileSize() * i, gp.getTileSize() * i));
-            setDown1(setup("/monster/skeletonlord_down_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setDown2(setup("/monster/skeletonlord_down_2", gp.getTileSize() * i, gp.getTileSize() * i));
-            setLeft1(setup("/monster/skeletonlord_left_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setLeft2(setup("/monster/skeletonlord_left_2", gp.getTileSize() * i, gp.getTileSize() * i));
-            setRight1(setup("/monster/skeletonlord_right_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setRight2(setup("/monster/skeletonlord_right_2", gp.getTileSize() * i, gp.getTileSize() * i));
-        } else {
-            setUp1(setup("/monster/skeletonlord_phase2_up_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setUp2(setup("/monster/skeletonlord_phase2_up_2", gp.getTileSize() * i, gp.getTileSize() * i));
-            setDown1(setup("/monster/skeletonlord_phase2_down_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setDown2(setup("/monster/skeletonlord_phase2_down_2", gp.getTileSize() * i, gp.getTileSize() * i));
-            setLeft1(setup("/monster/skeletonlord_phase2_left_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setLeft2(setup("/monster/skeletonlord_phase2_left_2", gp.getTileSize() * i, gp.getTileSize() * i));
-            setRight1(setup("/monster/skeletonlord_phase2_right_1", gp.getTileSize() * i, gp.getTileSize() * i));
-            setRight2(setup("/monster/skeletonlord_phase2_right_2", gp.getTileSize() * i, gp.getTileSize() * i));
-        }
+        // Phóng to gấp 3 lần kích thước gốc
+        int newSize = gp.getTileSize() * 3;
+        setUp1(setup("/monster/skeletonlord_down_1", newSize, newSize));
+        setUp2(setup("/monster/skeletonlord_down_2", newSize, newSize));
+        setDown1(setup("/monster/skeletonlord_down_1", newSize, newSize));
+        setDown2(setup("/monster/skeletonlord_down_2", newSize, newSize));
+        setLeft1(setup("/monster/skeletonlord_left_1", newSize, newSize));
+        setLeft2(setup("/monster/skeletonlord_left_2", newSize, newSize));
+        setRight1(setup("/monster/skeletonlord_right_1", newSize, newSize));
+        setRight2(setup("/monster/skeletonlord_right_2", newSize, newSize));
     }
 
     public void getAttackImage() {
-        int i = 5;
-        if (!getState().isInRage()) {
-            setAttackUp1(setup("/monster/skeletonlord_attack_up_1", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackUp2(setup("/monster/skeletonlord_attack_up_2", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackDown1(setup("/monster/skeletonlord_attack_down_1", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackDown2(setup("/monster/skeletonlord_attack_down_2", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackLeft1(setup("/monster/skeletonlord_attack_left_1", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-            setAttackLeft2(setup("/monster/skeletonlord_attack_left_2", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-            setAttackRight1(setup("/monster/skeletonlord_attack_right_1", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-            setAttackRight2(setup("/monster/skeletonlord_attack_right_2", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-        } else {
-            setAttackUp1(setup("/monster/skeletonlord_phase2_attack_up_1", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackUp2(setup("/monster/skeletonlord_phase2_attack_up_2", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackDown1(setup("/monster/skeletonlord_phase2_attack_down_1", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackDown2(setup("/monster/skeletonlord_phase2_attack_down_2", gp.getTileSize() * i, gp.getTileSize() * 2 * i));
-            setAttackLeft1(setup("/monster/skeletonlord_phase2_attack_left_1", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-            setAttackLeft2(setup("/monster/skeletonlord_phase2_attack_left_2", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-            setAttackRight1(setup("/monster/skeletonlord_phase2_attack_right_1", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-            setAttackRight2(setup("/monster/skeletonlord_phase2_attack_right_2", gp.getTileSize() * 2 * i, gp.getTileSize() * i));
-        }
-    }
-
-    public void setDialogue() {
-        getDialogues()[0][0] = "Không ai có thể đánh cắp kho báu của ta!";
-        getDialogues()[0][1] = "Mi sẽ bỏ mạng thôi!";
-        getDialogues()[0][2] = "HÃY ĐÓN NHẬN CÁI CHẾT CỦA NGƯƠI ĐI!";
+        // Phóng to gấp 3 lần kích thước gốc cho cả chiều rộng và chiều cao
+        int newSize = gp.getTileSize() * 3;
+        setAttackUp1(setup("/monster/skeletonlord_attack_up_1", newSize, newSize * 2));
+        setAttackUp2(setup("/monster/skeletonlord_attack_up_2", newSize, newSize * 2));
+        setAttackDown1(setup("/monster/skeletonlord_attack_down_1", newSize, newSize * 2));
+        setAttackDown2(setup("/monster/skeletonlord_attack_down_2", newSize, newSize * 2));
+        setAttackLeft1(setup("/monster/skeletonlord_attack_left_1", newSize * 2, newSize));
+        setAttackLeft2(setup("/monster/skeletonlord_attack_left_2", newSize * 2, newSize));
+        setAttackRight1(setup("/monster/skeletonlord_attack_right_1", newSize * 2, newSize));
+        setAttackRight2(setup("/monster/skeletonlord_attack_right_2", newSize * 2, newSize));
     }
 
     public void setAction() {
-        if (!getState().isInRage() && getLife() < getMaxLife() / 2) {
-            getState().setInRage(true);
-            getImage();
-            getAttackImage();
-            setDefaultSpeed(getDefaultSpeed() + 1);
-            setSpeed(getDefaultSpeed());
-            setAttack(getAttack() * 2);
-        }
-        if (getTileDistance(gp.getPlayer()) < 10) {
-            moveTowardPlayer(60);
+        if (getState().isOnPath()) {
+            // Dừng đuổi theo player nếu quá xa
+            checkStopChasingOrNot(gp.getPlayer(), 15, 100);
+            // Tìm đường đến player
+            searchPath(getGoalCol(gp.getPlayer()), getGoalRow(gp.getPlayer()));
         } else {
+            // Bắt đầu đuổi theo nếu player đến gần
+            checkStartChasingOrNot(gp.getPlayer(), 5, 100);
+            // Di chuyển ngẫu nhiên khi không thấy player
             getRandomDirection(120);
         }
 
+        // Kiểm tra và tấn công
         if (!getState().isAttacking()) {
-            checkAttackOrNot(60, gp.getTileSize() * 7, gp.getTileSize() * 5);
+            checkAttackOrNot(30, gp.getTileSize() * 4, gp.getTileSize());
         }
     }
 
     public void damageReaction() {
         getState().setActionLockCounter(0);
+        getState().setOnPath(true);
     }
 
     public void checkDrop() {
-        gp.setBossBattleOn(false);
-
-        gp.stopMusic();
-        gp.playMusic(19);
-
-        for (int i = 0; i < gp.getObj()[1].length; i++) {
-            if (gp.getObj()[gp.getCurrentMap()][i] != null && gp.getObj()[gp.getCurrentMap()][i].getName().equals(OBJ_Door_Iron.objName)) {
-                gp.playSE(21);
-                gp.getObj()[gp.getCurrentMap()][i] = null;
-            }
-        }
-
         int i = new Random().nextInt(100) + 1;
 
         if (i < 50) {
             dropItem(new OBJ_Coin_Bronze(gp));
         }
-        if (i >= 50 && i < 100) {
+        if (i >= 50 && i < 75) {
             dropItem(new OBJ_Heart(gp));
         }
     }

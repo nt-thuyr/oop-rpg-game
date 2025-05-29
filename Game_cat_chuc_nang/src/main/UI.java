@@ -388,7 +388,7 @@ public class UI {
             Character monster = gp.getMonster()[gp.getCurrentMap()][i];
 
             if (monster != null && monster.inCamera()) {
-                if (monster.getState().isHpBarOn() && !monster.isBoss()) {
+                if (monster.getState().isHpBarOn()) {
                     double oneScale = (double) gp.getTileSize() / monster.getMaxLife();
                     double hpBarValue = oneScale * monster.getLife();
 
@@ -407,25 +407,6 @@ public class UI {
                         monster.getState().setHpBarCounter(0);
                         monster.getState().setHpBarOn(false);
                     }
-                } else if (monster.isBoss()) {
-                    double oneScale = (double) gp.getTileSize() * 8 / monster.getMaxLife();
-                    double hpBarValue = oneScale * monster.getLife();
-                    int x = gp.getScreenWidth() / 2 - gp.getTileSize() * 4;
-                    int y = gp.getTileSize() * 10;
-
-                    if (hpBarValue < 0) {
-                        hpBarValue = 0;
-                    }
-
-                    g2.setColor(new Color(35, 35, 35));
-                    g2.fillRect(x - 1, y - 1, gp.getTileSize() * 8 + 2, 22);
-
-                    g2.setColor(new Color(255, 0, 30));
-                    g2.fillRect(x, y, (int) hpBarValue, 20);
-
-                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 22f));
-                    g2.setColor(Color.white);
-                    g2.drawString(monster.getName(), x + 4, y - 10);
                 }
             }
         }
@@ -1082,3 +1063,4 @@ public class UI {
         return dialogueEntity;
     }
 }
+

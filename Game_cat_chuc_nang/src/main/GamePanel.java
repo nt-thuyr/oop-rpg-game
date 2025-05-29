@@ -84,9 +84,6 @@ public class GamePanel extends JPanel implements Runnable {
     private final int mapState = 10;
     private final int cutsceneState = 11;
 
-    // OTHERS
-    private boolean bossBattleOn = false;
-
     // AREA
     private int currentArea;
     private int nextArea;
@@ -112,7 +109,6 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
-        aSetter.setInteractiveTile();
 
         gameState = titleState;
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
@@ -126,7 +122,6 @@ public class GamePanel extends JPanel implements Runnable {
         stopMusic();
         currentArea = outside;
         removeTempEntity();
-        bossBattleOn = false;
         player.setDefaultPositions();
         player.restoreStatus();
         aSetter.setMonster();
@@ -137,7 +132,6 @@ public class GamePanel extends JPanel implements Runnable {
         {
             player.setDefaultValues();
             aSetter.setObject();
-            aSetter.setInteractiveTile();
 
         }
 
@@ -479,10 +473,6 @@ public class GamePanel extends JPanel implements Runnable {
         return aSetter;
     }
 
-    public boolean isBossBattleOn() {
-        return bossBattleOn;
-    }
-
     public CollisionChecker getcChecker() {
         return cChecker;
     }
@@ -707,10 +697,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.aSetter = aSetter;
     }
 
-    public void setBossBattleOn(boolean bossBattleOn) {
-        this.bossBattleOn = bossBattleOn;
-    }
-
     public void setcChecker(CollisionChecker cChecker) {
         this.cChecker = cChecker;
     }
@@ -831,3 +817,4 @@ public class GamePanel extends JPanel implements Runnable {
         this.ui = ui;
     }
 }
+
