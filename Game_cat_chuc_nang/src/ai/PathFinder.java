@@ -5,7 +5,7 @@ import main.GamePanel;
 
 import java.util.ArrayList;
 
-public class PathFinder {
+public class PathFinder extends PathFindingAlgorithm {
 
     GamePanel gp;
     Node[][] node;
@@ -48,9 +48,9 @@ public class PathFinder {
         while(col < gp.maxWorldCol && row < gp.maxWorldRow)
         {
             //reset open, checked and solid state
-            node[col][row].open = false;
-            node[col][row].checked = false;
-            node[col][row].solid = false;
+            node[col][row].setOpen(false);
+            node[col][row].setChecked(false);
+            node[col][row].setSolid(false);
 
             col++;
             if(col == gp.maxWorldCol)
@@ -83,7 +83,7 @@ public class PathFinder {
             int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
             if(gp.tileM.tile[tileNum].collision == true)
             {
-                node[col][row].solid = true;
+                node[col][row].setSolid(true) ;
 
             }
             //CHECK INTERACTIVE TILES
@@ -94,7 +94,7 @@ public class PathFinder {
                 {
                     int itCol = gp.iTile[gp.currentMap][i].worldX / gp.tileSize;
                     int itRow = gp.iTile[gp.currentMap][i].worldY / gp.tileSize;
-                    node[itCol][itRow].solid = true;
+                    node[itCol][itRow].setSolid(true);
                 }
             }
             //SET COST
@@ -108,111 +108,79 @@ public class PathFinder {
             }
         }
     }
-    public void getCost(Node node)
-    {
+    public void getCost(Node node) {
         // G Cost
-        int xDistance = Math.abs(node.col - startNode.col);
-        int yDistance = Math.abs(node.row - startNode.row);
-        node.gCost = xDistance + yDistance;
+        int xDistance = Math.abs(node.getCol() - startNode.getCol());
+        int yDistance = Math.abs(node.getRow() - startNode.getRow());
+        node.setgCost(xDistance + yDistance);
 
         // H Cost
-        xDistance = Math.abs(node.col - goalNode.col);
-        yDistance = Math.abs(node.row - goalNode.row);
-        node.hCost = xDistance + yDistance;
+        xDistance = Math.abs(node.getCol() - goalNode.getCol());
+        yDistance = Math.abs(node.getRow() - goalNode.getRow());
+        node.sethCost(xDistance + yDistance);
 
         // F Cost
-        node.fCost = node.gCost + node.hCost;
+        node.setfCost(node.getgCost() + node.gethCost());
     }
-    public boolean search()
-    {
-        while(goalReached == false && step < 500)
-        {
-            int col = currentNode.col;
-            int row = currentNode.row;
+    public boolean search() {
+        while (!goalReached && step < 500) {
+            int col = currentNode.getCol();
+            int row = currentNode.getRow();
 
-            //check the current node
-            currentNode.checked = true;
+            // Đánh dấu node đã kiểm tra
+            currentNode.setChecked(true);
             openList.remove(currentNode);
 
-            //open the UP node
-            if(row-1 >= 0)
-            {
-                 openNode(node[col][row-1]);
-            }
-            //open the LEFT node
-            if(col - 1 >= 0)
-            {
-                openNode(node[col-1][row]);
-            }
-            //open the DOWN node
-            if(row + 1 <= gp.maxWorldRow)
-            {
-                openNode(node[col][row+1]);
-            }
-            //open the RIGHT node
-            if(col + 1 <= gp.maxWorldCol)
-            {
-                openNode(node[col+1][row]);
-            }
+            // Open các node lân cận
+            if (row - 1 >= 0) openNode(node[col][row - 1]);
+            if (col - 1 >= 0) openNode(node[col - 1][row]);
+            if (row + 1 < gp.maxWorldRow) openNode(node[col][row + 1]);
+            if (col + 1 < gp.maxWorldCol) openNode(node[col + 1][row]);
 
-            //Find the best node
+            // Tìm node có fCost tốt nhất
             int bestNodeIndex = 0;
-            int bestNodefCost = 999;
+            int bestNodefCost = Integer.MAX_VALUE;
 
-            for(int i = 0; i < openList.size(); i++)
-            {
-                //Check if this node's F cost is better
-                if(openList.get(i).fCost < bestNodefCost)
-                {
+            for (int i = 0; i < openList.size(); i++) {
+                Node n = openList.get(i);
+                int f = n.getfCost();
+                if (f < bestNodefCost) {
                     bestNodeIndex = i;
-                    bestNodefCost = openList.get(i).fCost;
-                }
-                //If F cost is equal, check the G cost
-                else if(openList.get(i).fCost == bestNodefCost)
-                {
-                    if(openList.get(i).gCost < openList.get(bestNodeIndex).gCost)
-                    {
-                        bestNodeIndex = i;
-
-                    }
+                    bestNodefCost = f;
+                } else if (f == bestNodefCost && n.getgCost() < openList.get(bestNodeIndex).getgCost()) {
+                    bestNodeIndex = i;
                 }
             }
 
-            //If there is no node in the openList, end the loop
-            if(openList.size() == 0)
-            {
-                break;
-            }
+            if (openList.isEmpty()) break;
 
-            //After the loop, openList(bestNodeIndex] is the next step (= currentNode)
             currentNode = openList.get(bestNodeIndex);
 
-            if(currentNode == goalNode)
-            {
+            if (currentNode == goalNode) {
                 goalReached = true;
                 trackThePath();
             }
+
             step++;
         }
+
         return goalReached;
     }
-    public void openNode(Node node)
-    {
-        if(node.open == false && node.checked == false && node.solid == false)
-        {
-            node.open = true;
-            node.parent = currentNode;
+    public void openNode(Node node) {
+        if (!node.isOpen() && !node.isChecked() && !node.isSolid()) {
+            node.setOpen(true);
+            node.setParent(currentNode);
             openList.add(node);
         }
     }
-    public void trackThePath()
-    {
+
+    public void trackThePath() {
         Node current = goalNode;
 
-        while(current != startNode)
-        {
-            pathList.add(0,current); //last added node is in the [0]
-            current = current.parent;
+        while (current != startNode) {
+            pathList.add(0, current);
+            current = current.getParent();
         }
     }
+
 }
