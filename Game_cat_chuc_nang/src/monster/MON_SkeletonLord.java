@@ -28,15 +28,22 @@ public class MON_SkeletonLord extends Entity {
         defense = 3;
         exp = 40;
         knockBackPower = 5;
-        sleep = true;
 
-        int size = gp.tileSize * 5;
-        solidArea.x = 48;
-        solidArea.y = 48;
-        solidArea.width = size - 48*2;
-        solidArea.height = size - 48 ;
+        // Thêm pathfinding và AI
+        onPath = false;
+
+        // Điều chỉnh collision area để không bị kẹt tường
+        int size = gp.tileSize * 5;  // Kích thước tổng thể của sprite
+        int collisionSize = (int)(size * 0.4);  // Collision area chỉ bằng 40% kích thước sprite
+
+        solidArea.x = (size - collisionSize)/2;  // Căn giữa collision area
+        solidArea.y = (size - collisionSize)/2;
+        solidArea.width = collisionSize;
+        solidArea.height = collisionSize;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+
+        // Attack area
         attackArea.width = 170;
         attackArea.height = 170;
         motion1_duration = 25;
@@ -109,37 +116,49 @@ public class MON_SkeletonLord extends Entity {
         dialogues[0][2] = "HÃY ĐÓN NHẬN CÁI CHẾT CỦA NGƯƠI ĐI!";
 
     }
-    public void setAction()
-    {
-
-        if(inRage==false && life < maxLife/2)
-        {
+    public void setAction() {
+        if(inRage==false && life < maxLife/2) {
             inRage = true;
             getImage();
             getAttackImage();
             defaultSpeed++;
             speed = defaultSpeed;
             attack *= 2;
+        }
 
-        }
-        if(getTileDistance(gp.player) < 10)
-        {
-            moveTowardPlayer(60);
-        }
-        else
-        {
+        // Kiểm tra khoảng cách đến player
+        int xDistance = Math.abs(worldX - gp.player.worldX);
+        int yDistance = Math.abs(worldY - gp.player.worldY);
+        int tileDistance = (xDistance + yDistance)/gp.tileSize;
+
+        if(tileDistance < 8) {
+            // Khi player trong tầm 8 tiles, bật chế độ đuổi theo
+            onPath = true;
+
+            // Tìm đường đi đến player
+            int goalCol = getGoalCol(gp.player);
+            int goalRow = getGoalRow(gp.player);
+            searchPath(goalCol, goalRow);
+
+            // Tấn công khi ở gần
+            if(attacking == false) {
+                int attackRate = inRage ? 30 : 60;
+                checkAttackOrNot(attackRate, gp.tileSize*4, gp.tileSize*4);
+            }
+        } else {
+            // Ngoài tầm 8 tiles thì di chuyển ngẫu nhiên
+            onPath = false;
             getRandomDirection(120);
-        }
-
-        //Check if it is attacks
-        if(attacking == false)
-        {
-            checkAttackOrNot(60, gp.tileSize*7, gp.tileSize*5); //Small rate = More agressive
         }
     }
 
     public void damageReaction() {
         actionLockCounter = 0;
+        onPath = true; // Luôn kích hoạt chế độ đuổi theo khi bị đánh
+        if(inRage && life < maxLife/4) { // Tăng tốc độ khi HP dưới 25% trong rage mode
+            defaultSpeed++;
+            speed = defaultSpeed;
+        }
     }
     public void checkDrop()
     {

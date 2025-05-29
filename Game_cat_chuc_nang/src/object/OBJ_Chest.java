@@ -13,7 +13,6 @@ public class OBJ_Chest extends Entity {
     {
         super(gp);
         this.gp = gp;
-
         loot = new OBJ_Demon_Slayer(gp);
 
         type = type_obstacle;
@@ -30,6 +29,7 @@ public class OBJ_Chest extends Entity {
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
+        setDialogue();
     }
 
     public void setDialogue()
@@ -51,5 +51,4 @@ public class OBJ_Chest extends Entity {
             startDialogue(this, 2); // Hiển thị dialog khi rương đã mở
         }
     }
-
 }
