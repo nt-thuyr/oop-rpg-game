@@ -2,7 +2,9 @@ package main;
 import ai.PathFinder;
 
 import entity.Character;
+import entity.Entity;
 import entity.Player;
+import object.Item;
 import tile.Map;
 import tile.TileManager;
 import tile_interactive.InteractiveTile;
@@ -59,13 +61,13 @@ public class GamePanel extends JPanel implements Runnable{
 
     // ENTITY AND OBJECT
     private Player player = new Player(this, keyH);
-    private Character obj[][] = new Character[maxMap][20];
+    private Item obj[][] = new Item[maxMap][20];
     private Character npc[][] = new Character[maxMap][10];
     private Character monster[][] = new Character[maxMap][20];
     private InteractiveTile iTile[][] = new InteractiveTile[maxMap][50];
     private Character[][] projectile = new Character[maxMap][20];
-    private ArrayList<Character> particleList = new ArrayList<>();
-    private ArrayList<Character> entityList = new ArrayList<>();
+    private ArrayList<Entity> particleList = new ArrayList<>();
+    private ArrayList<Entity> entityList = new ArrayList<>();
 
     // GAME STATE
     private int gameState;
@@ -362,10 +364,10 @@ public class GamePanel extends JPanel implements Runnable{
             }
 
             //SORT
-            Collections.sort(entityList, new Comparator<Character>() {
+            Collections.sort(entityList, new Comparator<Entity>() {
                 @Override
-                public int compare(Character e1, Character e2) {
-                    int result = Integer.compare(e1.getWorldY(), e2.getWorldY());   // result returns : (x=y : 0, x>y : >0, x<y : <0)
+                public int compare(Entity e1, Entity e2) {
+                    int result = Integer.compare(e1.getWorldY(), e2.getWorldY());
                     return result;
                 }
             });
@@ -489,10 +491,6 @@ public class GamePanel extends JPanel implements Runnable{
         return characterState;
     }
 
-    public CutsceneManager getCsManager() {
-        return csManager;
-    }
-
     public int getCurrentArea() {
         return currentArea;
     }
@@ -521,7 +519,7 @@ public class GamePanel extends JPanel implements Runnable{
         return eHandler;
     }
 
-    public ArrayList<Character> getEntityList() {
+    public ArrayList<Entity> getEntityList() {
         return entityList;
     }
 
@@ -553,7 +551,7 @@ public class GamePanel extends JPanel implements Runnable{
         return indoor;
     }
 
-    public Character[][] getiTile() {
+    public InteractiveTile[][] getiTile() {
         return iTile;
     }
 
@@ -605,7 +603,7 @@ public class GamePanel extends JPanel implements Runnable{
         return npc;
     }
 
-    public Character[][] getObj() {
+    public Item[][] getObj() {
         return obj;
     }
 
@@ -621,7 +619,7 @@ public class GamePanel extends JPanel implements Runnable{
         return outside;
     }
 
-    public ArrayList<Character> getParticleList() {
+    public ArrayList<Entity> getParticleList() {
         return particleList;
     }
 
@@ -717,10 +715,6 @@ public class GamePanel extends JPanel implements Runnable{
         this.cChecker = cChecker;
     }
 
-    public void setCsManager(CutsceneManager csManager) {
-        this.csManager = csManager;
-    }
-
     public void setCurrentArea(int currentArea) {
         this.currentArea = currentArea;
     }
@@ -737,7 +731,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.eHandler = eHandler;
     }
 
-    public void setEntityList(ArrayList<Character> entityList) {
+    public void setEntityList(ArrayList<Entity> entityList) {
         this.entityList = entityList;
     }
 
@@ -797,7 +791,7 @@ public class GamePanel extends JPanel implements Runnable{
 //        this.obj = obj;
 //    }
 
-    public void setParticleList(ArrayList<Character> particleList) {
+    public void setParticleList(ArrayList<Entity> particleList) {
         this.particleList = particleList;
     }
 

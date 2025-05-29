@@ -3,7 +3,7 @@ package object;
 import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Door_Iron extends Character {
+public class OBJ_Door_Iron extends Item {
 
     private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Iron Door";
@@ -14,7 +14,7 @@ public class OBJ_Door_Iron extends Character {
 
         setType(getType_obstacle());
         setName(objName);
-        setDown1(setup("/objects/door_iron", gp.getTileSize(), gp.getTileSize()));
+        setImage(setup("/objects/door_iron", gp.getTileSize(), gp.getTileSize()));
         setCollision(true);
 
         getSolidArea().x = 0;

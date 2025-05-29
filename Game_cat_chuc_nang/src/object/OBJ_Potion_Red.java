@@ -3,7 +3,7 @@ package object;
 import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Potion_Red extends Character {
+public class OBJ_Potion_Red extends Item {
 
     private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Huyết dược";
@@ -16,7 +16,7 @@ public class OBJ_Potion_Red extends Character {
         setType(getType_consumable());
         setName(objName);
         setValue(5);
-        setDown1(setup("/objects/potion_red", gp.getTileSize(), gp.getTileSize()));
+        setImage(setup("/objects/potion_red", gp.getTileSize(), gp.getTileSize()));
         setDescription("[" + getName() + "]\nHồi phục " + getValue() + " máu.");
         setPrice(50);
         setStackable(true);

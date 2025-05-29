@@ -16,7 +16,6 @@ public class Player extends Character {
     private final int screenY;
     private int standCounter = 0;
     private boolean attackCanceled = false;
-    private boolean lightUpdated = false;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -57,7 +56,6 @@ public class Player extends Character {
         getState().setInvincible(false);
         setCurrentWeapon(new OBJ_Sword_Normal(gp));
         setCurrentShield(new OBJ_Shield_Wood(gp));
-        setCurrentLight(null);
 
         //projectile = new OBJ_Rock(gp);
         setAttack(getAttack());   // The total attack value is decided by strength and weapon
@@ -90,7 +88,6 @@ public class Player extends Character {
         getState().setAttacking(false);
         getState().setGuarding(false);
         getState().setKnockBack(false);
-        lightUpdated = true;
     }
 
     public void setItems()
@@ -361,7 +358,7 @@ public class Player extends Character {
     public void pickUpObject(int i) {
         if (i != 999) {
             // PICKUP ONLY ITEMS
-            if (gp.getObj()[gp.getCurrentMap()][i].getType() == getType_pickupOnly()) {
+            if (gp.getObj()[gp.getCurrentMap()][i].getType() == Item.getType_pickupOnly()) {
                 gp.getObj()[gp.getCurrentMap()][i].use(this);
                 gp.getObj()[gp.getCurrentMap()][i] = null;
             }
@@ -513,14 +510,6 @@ public class Player extends Character {
                 setCurrentShield(selectedItem);
                 setDefense(getDefense()); // Update player defense
             }
-            if (selectedItem.getType() == getType_light()) {
-                if (getCurrentLight() == selectedItem) {
-                    setCurrentLight(null);
-                } else {
-                    setCurrentLight(selectedItem);
-                }
-                setLightUpdated(true);
-            }
             if (selectedItem.getType() == getType_consumable()) {
                 if (selectedItem.use(this)) {
                     if (selectedItem.getAmount() > 1) {
@@ -542,10 +531,10 @@ public class Player extends Character {
         }
         return itemIndex;
     }
-    public boolean canObtainItem(Character item) {
+    public boolean canObtainItem(Item item) {
         boolean canObtain = false;
 
-        Character newItem = gp.geteGenerator().getObject(item.getName());
+        Item newItem = gp.geteGenerator().getObject(item.getName());
 
         // CHECK IF STACKABLE
         if (newItem.isStackable()) {

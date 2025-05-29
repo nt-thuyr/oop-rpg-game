@@ -3,7 +3,7 @@ package object;
 import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Coin_Bronze extends Character {
+public class OBJ_Coin_Bronze extends Item {
 
     private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Tiền đồng";
@@ -15,7 +15,7 @@ public class OBJ_Coin_Bronze extends Character {
         setType(getType_pickupOnly());
         setName(objName);
         setValue(30);
-        setDown1(setup("/objects/coin_bronze", gp.getTileSize(), gp.getTileSize()));
+        setImage(setup("/objects/coin_bronze", gp.getTileSize(), gp.getTileSize()));
         setPrice(25);
     }
 

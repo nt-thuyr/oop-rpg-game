@@ -3,7 +3,7 @@ package object;
 import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Pickaxe extends Character {
+public class OBJ_Pickaxe extends Item {
 
     public static final String objName = "Cuốc chim";
 
@@ -12,7 +12,7 @@ public class OBJ_Pickaxe extends Character {
 
         setType(getType_pickaxe());
         setName(objName);
-        setDown1(setup("/objects/pickaxe", gp.getTileSize(), gp.getTileSize()));
+        setImage(setup("/objects/pickaxe", gp.getTileSize(), gp.getTileSize()));
         setAttackValue(1);
         getAttackArea().width = 26;
         getAttackArea().height = 26;

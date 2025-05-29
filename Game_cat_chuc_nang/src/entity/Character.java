@@ -1,32 +1,26 @@
 package entity;
 
 import main.GamePanel;
-import main.UtilityTool;
+import object.Item;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Character extends Entity {
+public abstract class Character extends Entity {
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     private BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     private BufferedImage guardUp, guardDown, guardLeft, guardRight;
-    private Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    private Rectangle attackArea = new Rectangle(0, 0, 0, 0);
-    private int solidAreaDefaultX, solidAreaDefaultY;
-    private boolean collision = false;
+
     private Character attacker;
     private Character linkedCharacter;
     private boolean temp = false;
 
     // STATE
-    private int worldX, worldY;
     private String direction = "down";
     private int spriteNum = 1;
-//    private boolean collisionOn = false;
+    //    private boolean collisionOn = false;
 //    private boolean invincible = false;
 //    private boolean attacking = false;
 //    private boolean alive = true;
@@ -73,26 +67,19 @@ public class Character extends Entity {
     private int exp;
     private int nextLevelExp;
     private int coin;
-    private int motion1_duration;
-    private int motion2_duration;
-    private Character currentWeapon;
-    private Character currentShield;
-    private Character currentLight;
+    private Item currentWeapon;
+    private Item currentShield;
     private Projectile projectile;
     private boolean boss;
 
     // ITEM ATTRIBUTES
-    private ArrayList<Character> inventory = new ArrayList<>();
+    private ArrayList<Item> inventory = new ArrayList<>();
     private final int maxInventorySize = 20;
-    private int attackValue;
-    private int defenseValue;
     private String description = "";
     private int useCost;
-    private int value;
     private int price;
     private int knockBackPower;
     private boolean stackable = false;
-    private int amount = 1;
     private int lightRadius;
 
     // TYPE
@@ -100,92 +87,82 @@ public class Character extends Entity {
     private final int type_player = 0;
     private final int type_npc = 1;
     private final int type_monster = 2;
-    private final int type_sword = 3;
-    private final int type_axe = 4;
-    private final int type_shield = 5;
-    private final int type_consumable = 6;
-    private final int type_pickupOnly = 7;
-    private final int type_obstacle = 8;
-    private final int type_light = 9;
-    private final int type_pickaxe = 10;
-
-    private BufferedImage image1;
-    private BufferedImage image2;
-    private BufferedImage image3;
+//    private final int type_sword = 3;
+//    private final int type_axe = 4;
+//    private final int type_shield = 5;
+//    private final int type_consumable = 6;
+//    private final int type_pickupOnly = 7;
+//    private final int type_obstacle = 8;
+//    private final int type_light = 9;
+//    private final int type_pickaxe = 10;
 
     public Character(GamePanel gp) {
         super(gp);
     }
+
     public int getScreenX() {
-        int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+        int screenX = getWorldX() - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
         return screenX;
     }
-    public int getScreenY()
-    {
-        int screenY = worldY - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
+
+    public int getScreenY() {
+        int screenY = getWorldY() - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
         return screenY;
     }
-    public int getLeftX()
-    {
-        return worldX + solidArea.x;
+
+    public int getLeftX() {
+        return getWorldX() + getSolidArea().x;
     }
-    public int getRightX()
-    {
-        return worldX + solidArea.width + solidArea.width;
+
+    public int getRightX() {
+        return getWorldX() + getSolidArea().width + getSolidArea().width;
     }
-    public int getTopY()
-    {
-        return worldY + solidArea.y;
+
+    public int getTopY() {
+        return getWorldY() + getSolidArea().y;
     }
-    public int getBottomY()
-    {
-        return worldY + solidArea.y + solidArea.height;
+
+    public int getBottomY() {
+        return getWorldY() + getSolidArea().y + getSolidArea().height;
     }
-    public int getCol()
-    {
-        return (worldX + solidArea.x) / gp.getTileSize();
-    }
-    public int getRow()
-    {
-        return (worldY + solidArea.y) / gp.getTileSize();
-    }
-    public int getCenterX()
-    {
-        int centerX = worldX + left1.getWidth()/2;
+
+    public int getCenterX() {
+        int centerX = getWorldX() + left1.getWidth() / 2;
         return centerX;
     }
-    public int getCenterY()
-    {
-        int centerY = worldY + up1.getWidth()/2;
+
+    public int getCenterY() {
+        int centerY = getWorldY() + up1.getWidth() / 2;
         return centerY;
     }
-    public int getXdistance(Character target)
-    {
+
+    public int getXdistance(Character target) {
         int xDistance = Math.abs(getCenterX() - target.getCenterX());
         return xDistance;
     }
-    public int getYdistance(Character target)
-    {
+
+    public int getYdistance(Character target) {
         int yDistance = Math.abs(getCenterY() - target.getCenterY());
         return yDistance;
     }
-    public int getTileDistance(Character target)
-    {
-        int tileDistance = (getXdistance(target) + getYdistance(target))/ gp.getTileSize();
+
+    public int getTileDistance(Character target) {
+        int tileDistance = (getXdistance(target) + getYdistance(target)) / gp.getTileSize();
         return tileDistance;
     }
-    public int getGoalCol(Character target)
-    {
-        int goalCol = (target.worldX + target.solidArea.x) / gp.getTileSize();
+
+    public int getGoalCol(Character target) {
+        int goalCol = (target.getWorldX() + target.getSolidArea().x) / gp.getTileSize();
         return goalCol;
 
     }
-    public int getGoalRow(Character target)
-    {
-        int goalRow = (target.worldY + target.solidArea.y) / gp.getTileSize();
+
+    public int getGoalRow(Character target) {
+        int goalRow = (target.getWorldY() + target.getSolidArea().y) / gp.getTileSize();
         return goalRow;
     }
-//    public void resetCounter()
+
+    //    public void resetCounter()
 //    {
 //        spriteCounter = 0;
 //        actionLockCounter = 0;
@@ -197,26 +174,24 @@ public class Character extends Entity {
 //        guardCounter = 0;
 //        offBalanceCounter = 0;
 //    }
-    public void setAction()
-    {
+    public void setAction() {
 
     }
-    public void move(String direction)
-    {
+
+    public void move(String direction) {
 
     }
-    public void damageReaction()
-    {
+
+    public void damageReaction() {
 
     }
-    public void speak()
-    {
+
+    public void speak() {
 
     }
-    public void facePlayer()
-    {
-        switch (gp.getPlayer().getDirection())
-        {
+
+    public void facePlayer() {
+        switch (gp.getPlayer().getDirection()) {
             case "up":
                 direction = "down";
                 break;
@@ -231,69 +206,54 @@ public class Character extends Entity {
                 break;
         }
     }
-    public void startDialogue(Character entity, int setNum)
-    {
-        gp.setGameState(gp.getDialogueState());
-        gp.getUi().setNpc(entity);
-        dialogueSet = setNum;
-    }
-    public void interact()
-    {
 
-    }
-    public boolean use(Character entity)
-    {
+    public boolean use(Character entity) {
         return false;
         //return "true" if you used the item and "false" if you failed to use it.
     }
-    public void checkDrop()
-    {
+
+    public void checkDrop() {
 
     }
-    public void dropItem(Character droppedItem)
-    {
-        for(int i = 0; i < gp.getObj()[1].length; i++)
-        {
-            if(gp.getObj()[gp.getCurrentMap()][i] == null)
-            {
+
+    public void dropItem(Item droppedItem) {
+        for (int i = 0; i < gp.getObj()[1].length; i++) {
+            if (gp.getObj()[gp.getCurrentMap()][i] == null) {
                 gp.getObj()[gp.getCurrentMap()][i] = droppedItem;
-                gp.getObj()[gp.getCurrentMap()][i].worldX = worldX;  //the dead monster's worldX
-                gp.getObj()[gp.getCurrentMap()][i].worldY = worldY;  //the dead monster's worldY
+                droppedItem.setWorldX(this.getWorldX());  // the dead monster's worldX
+                droppedItem.setWorldY(this.getWorldY());  // the dead monster's worldY
                 break; //end loop after finding empty slot on array
             }
         }
     }
-    public Color getParticleColor()
-    {
+
+    public Color getParticleColor() {
         Color color = null;
         return color;
     }
-    public int getParticleSize()
-    {
+
+    public int getParticleSize() {
         int size = 0; //pixels
         return size;
     }
-    public int getParticleSpeed()
-    {
+
+    public int getParticleSpeed() {
         int speed = 0;
         return speed;
     }
-    public int getParticleMaxLife()
-    {
+
+    public int getParticleMaxLife() {
         int maxLife = 0;
         return maxLife;
     }
-    public void generateParticle(Character generator, Character target)
-    {
+
+    public void generateParticle(Character generator, Character target) {
         Color color = generator.getParticleColor();
         int size = generator.getParticleSize();
         int speed = generator.getParticleSpeed();
         int maxLife = generator.getParticleMaxLife();
-
-
-
-
     }
+
     public void checkCollision() {
         getState().setCollisionOn(false);
         gp.getcChecker().checkTile(this);
@@ -427,18 +387,15 @@ public class Character extends Entity {
             }
         }
     }
-    public void checkShootOrNot(int rate, int shotInterval)
-    {
+
+    public void checkShootOrNot(int rate, int shotInterval) {
         int i = new Random().nextInt(rate);
-        if (i == 0 && !projectile.getState().isAlive() && state.getShotAvailableCounter() == shotInterval)
-        {
-            projectile.set(worldX,worldY,direction,true,this);
+        if (i == 0 && !projectile.getState().isAlive() && state.getShotAvailableCounter() == shotInterval) {
+            projectile.set(getWorldX(), getWorldY(), direction, true, this);
             //gp.projectileList.add(projectile);
             //CHECK VACANCY
-            for(int ii = 0; ii < gp.getProjectile()[1].length; ii++)
-            {
-                if(gp.getProjectile()[gp.getCurrentMap()][ii] == null)
-                {
+            for (int ii = 0; ii < gp.getProjectile()[1].length; ii++) {
+                if (gp.getProjectile()[gp.getCurrentMap()][ii] == null) {
                     gp.getProjectile()[gp.getCurrentMap()][ii] = projectile;
                     break;
                 }
@@ -446,28 +403,25 @@ public class Character extends Entity {
             state.setShotAvailableCounter(0);
         }
     }
-    public void checkStartChasingOrNot(Character target, int distance, int rate)
-    {
-        if(getTileDistance(target) < distance)
-        {
+
+    public void checkStartChasingOrNot(Character target, int distance, int rate) {
+        if (getTileDistance(target) < distance) {
             int i = new Random().nextInt(rate);
-            if(i == 0)
-            {
+            if (i == 0) {
                 state.setOnPath(true);
             }
         }
     }
-    public void checkStopChasingOrNot(Character target, int distance, int rate)
-    {
-        if(getTileDistance(target) > distance)
-        {
+
+    public void checkStopChasingOrNot(Character target, int distance, int rate) {
+        if (getTileDistance(target) > distance) {
             int i = new Random().nextInt(rate);
-            if(i == 0)
-            {
+            if (i == 0) {
                 state.setOnPath(false);
             }
         }
     }
+
     public void getRandomDirection(int interval) {
         getState().setActionLockCounter(getState().getActionLockCounter() + 1);
 
@@ -595,6 +549,7 @@ public class Character extends Entity {
             getState().setAttacking(false);
         }
     }
+
     public void damagePlayer(int attack) {
         if (!gp.getPlayer().getState().isInvincible()) {
             int damage = attack - gp.getPlayer().getDefense();
@@ -754,6 +709,7 @@ public class Character extends Entity {
             changeAlpha(g2, 1F);
         }
     }
+
     // Every 5 frames switch alpha between 0 and 1
     public void dyingAnimation(Graphics2D g2) {
         getState().setDyingCounter(getState().getDyingCounter() + 1);
@@ -790,19 +746,6 @@ public class Character extends Entity {
 
     public void changeAlpha(Graphics2D g2, float alphaValue) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
-    }
-
-    public BufferedImage setup(String imagePath, int width, int height) {
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-            image = uTool.scaleImage(image, width, height); // it scales to tilesize, will fix for player attack(16px x 32px) by adding width and height
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
     }
 
     public void searchPath(int goalCol, int goalRow) {
@@ -872,7 +815,7 @@ public class Character extends Entity {
         }
     }
 
-    public int getDetected(Character user, Character target[][], String targetName) {
+    public int getDetected(Character user, Item target[][], String targetName) {
         int index = 999;
 
         // Check the surrounding object
@@ -918,14 +861,6 @@ public class Character extends Entity {
         this.ammo = ammo;
     }
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
     public int getAttack() {
         return attack;
     }
@@ -933,14 +868,6 @@ public class Character extends Entity {
     public int setAttack(int attack) {
         this.attack = attack;
         return attack;
-    }
-
-    public Rectangle getAttackArea() {
-        return attackArea;
-    }
-
-    public void setAttackArea(Rectangle attackArea) {
-        this.attackArea = attackArea;
     }
 
     public BufferedImage getAttackDown1() {
@@ -1015,14 +942,6 @@ public class Character extends Entity {
         this.attackUp2 = attackUp2;
     }
 
-    public int getAttackValue() {
-        return attackValue;
-    }
-
-    public void setAttackValue(int attackValue) {
-        this.attackValue = attackValue;
-    }
-
     public boolean isBoss() {
         return boss;
     }
@@ -1039,35 +958,19 @@ public class Character extends Entity {
         this.coin = coin;
     }
 
-    public boolean isCollision() {
-        return collision;
-    }
-
-    public void setCollision(boolean collision) {
-        this.collision = collision;
-    }
-
-    public Character getCurrentLight() {
-        return currentLight;
-    }
-
-    public void setCurrentLight(Character currentLight) {
-        this.currentLight = currentLight;
-    }
-
-    public Character getCurrentShield() {
+    public Item getCurrentShield() {
         return currentShield;
     }
 
-    public void setCurrentShield(Character currentShield) {
+    public void setCurrentShield(Item currentShield) {
         this.currentShield = currentShield;
     }
 
-    public Character getCurrentWeapon() {
+    public Item getCurrentWeapon() {
         return currentWeapon;
     }
 
-    public void setCurrentWeapon(Character currentWeapon) {
+    public void setCurrentWeapon(Item currentWeapon) {
         this.currentWeapon = currentWeapon;
     }
 
@@ -1086,14 +989,6 @@ public class Character extends Entity {
     public int setDefense(int defense) {
         this.defense = defense;
         return defense;
-    }
-
-    public int getDefenseValue() {
-        return defenseValue;
-    }
-
-    public void setDefenseValue(int defenseValue) {
-        this.defenseValue = defenseValue;
     }
 
     public String getDescription() {
@@ -1184,17 +1079,23 @@ public class Character extends Entity {
         this.guardUp = guardUp;
     }
 
-    public BufferedImage getImage1() {
-        return image1;
-    }
-
-    public ArrayList<Character> getInventory() {
+    public ArrayList<Item> getInventory() {
         return inventory;
     }
 
-    public void setInventory(ArrayList<Character> inventory) {
-        this.inventory = inventory;
+public void addToInventory(Item item) {
+    if (item.isStackable()) {
+        for (Item invItem : inventory) {
+            if (invItem.getName().equals(item.getName())) {
+                invItem.setAmount(invItem.getAmount() + item.getAmount());
+                return;
+            }
+        }
     }
+    if (inventory.size() < maxInventorySize) {
+        inventory.add(item);
+    }
+}
 
     public int getKnockBackPower() {
         return knockBackPower;
@@ -1284,22 +1185,6 @@ public class Character extends Entity {
         this.maxMana = maxMana;
     }
 
-    public int getMotion1_duration() {
-        return motion1_duration;
-    }
-
-    public void setMotion1_duration(int motion1_duration) {
-        this.motion1_duration = motion1_duration;
-    }
-
-    public int getMotion2_duration() {
-        return motion2_duration;
-    }
-
-    public void setMotion2_duration(int motion2_duration) {
-        this.motion2_duration = motion2_duration;
-    }
-
     public String getName() {
         return name;
     }
@@ -1346,30 +1231,6 @@ public class Character extends Entity {
 
     public void setRight2(BufferedImage right2) {
         this.right2 = right2;
-    }
-
-    public Rectangle getSolidArea() {
-        return solidArea;
-    }
-
-    public void setSolidArea(Rectangle solidArea) {
-        this.solidArea = solidArea;
-    }
-
-    public int getSolidAreaDefaultX() {
-        return solidAreaDefaultX;
-    }
-
-    public void setSolidAreaDefaultX(int solidAreaDefaultX) {
-        this.solidAreaDefaultX = solidAreaDefaultX;
-    }
-
-    public int getSolidAreaDefaultY() {
-        return solidAreaDefaultY;
-    }
-
-    public void setSolidAreaDefaultY(int solidAreaDefaultY) {
-        this.solidAreaDefaultY = solidAreaDefaultY;
     }
 
     public int getSpeed() {
@@ -1428,48 +1289,12 @@ public class Character extends Entity {
         this.type = type;
     }
 
-    public int getType_axe() {
-        return type_axe;
-    }
-
-    public int getType_consumable() {
-        return type_consumable;
-    }
-
-    public int getType_light() {
-        return type_light;
-    }
-
     public int getType_monster() {
         return type_monster;
     }
 
     public int getType_npc() {
         return type_npc;
-    }
-
-    public int getType_obstacle() {
-        return type_obstacle;
-    }
-
-    public int getType_pickaxe() {
-        return type_pickaxe;
-    }
-
-    public int getType_pickupOnly() {
-        return type_pickupOnly;
-    }
-
-    public int getType_player() {
-        return type_player;
-    }
-
-    public int getType_shield() {
-        return type_shield;
-    }
-
-    public int getType_sword() {
-        return type_sword;
     }
 
     public BufferedImage getUp1() {
@@ -1494,29 +1319,5 @@ public class Character extends Entity {
 
     public void setUseCost(int useCost) {
         this.useCost = useCost;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public int getWorldX() {
-        return worldX;
-    }
-
-    public void setWorldX(int worldX) {
-        this.worldX = worldX;
-    }
-
-    public int getWorldY() {
-        return worldY;
-    }
-
-    public void setWorldY(int worldY) {
-        this.worldY = worldY;
     }
 }

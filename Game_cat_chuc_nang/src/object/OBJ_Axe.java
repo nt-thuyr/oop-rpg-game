@@ -1,9 +1,8 @@
 package object;
 
-import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Axe extends Character {
+public class OBJ_Axe extends Item {
 
     public static final String objName = "Rìu đốn củi";
 
@@ -12,7 +11,7 @@ public class OBJ_Axe extends Character {
 
         setType(getType_axe());
         setName(objName);
-        setDown1(setup("/objects/axe", gp.getTileSize(), gp.getTileSize()));
+        setImage(setup("/objects/axe", gp.getTileSize(), gp.getTileSize()));
         setAttackValue(2);
         getAttackArea().width = 26;
         getAttackArea().height = 26;

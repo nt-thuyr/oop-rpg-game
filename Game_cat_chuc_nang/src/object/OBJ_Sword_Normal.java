@@ -1,9 +1,10 @@
 package object;
 
-import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Sword_Normal extends Character {
+import java.awt.*;
+
+public class OBJ_Sword_Normal extends Item {
 
     public static final String objName = "Kiếm";
 
@@ -12,10 +13,9 @@ public class OBJ_Sword_Normal extends Character {
 
         setType(getType_sword());
         setName(objName);
-        setDown1(setup("/objects/sword_normal", gp.getTileSize(), gp.getTileSize()));
+        setImage(setup("/objects/sword_normal", gp.getTileSize(), gp.getTileSize()));
         setAttackValue(3);
-        getAttackArea().width = 36;
-        getAttackArea().height = 36;
+        setAttackArea(new Rectangle(36, 36));
         setDescription("[" + getName() + "]\nMột thanh kiếm cũ kĩ.");
         setPrice(30);
         setKnockBackPower(3);

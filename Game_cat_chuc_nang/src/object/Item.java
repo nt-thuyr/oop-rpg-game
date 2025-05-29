@@ -12,26 +12,38 @@ public abstract class Item extends Entity {
     private int price;
     private boolean stackable;
     private Item loot;
+    private int amount; // For stackable items, like potions
+    private int value; // Value for pickup items, like hearts
+
+    private int attackValue; // For weapons
+    private int knockBackPower; // For weapons
+    private int defenseValue; // For shields
+
     //TYPE
     private int type;
-    private final int type_sword = 0;
     private final int type_shield = 1;
+    private final int type_sword = 0;
     private final int type_axe = 2;
     private final int type_pickaxe = 3;
-    private final int type_consumable = 4;
     private final int type_pickupOnly = 5;
     private final int type_obstacle = 6;
+    private final int type_consumable = 4;
 
     public Item(GamePanel gp) {
         super(gp);
     }
 
-    public boolean interact() {
+    public void interact() {
         // Default interaction logic, can be overridden by subclasses
+    }
+
+    // Polymorphic use method for all items
+    public boolean use(Character user) {
+        // Default use logic, can be overridden by subclasses
         return false;
     }
 
-    public int getDetected(Character user, Character[][] target, String targetName)
+    public int getDetected(Character user, Item[][] target, String targetName)
     {
         int index = 999;
 
@@ -41,21 +53,21 @@ public abstract class Item extends Entity {
 
         switch (user.getDirection())
         {
-            case "up" : nextWorldY = user.getTopY() - gp.player.speed; break;
-            case "down": nextWorldY = user.getBottomY() + gp.player.speed; break;
-            case "left": nextWorldX = user.getLeftX() - gp.player.speed; break;
-            case "right": nextWorldX = user.getRightX() + gp.player.speed; break;
+            case "up" : nextWorldY = user.getTopY() - gp.getPlayer().getSpeed(); break;
+            case "down": nextWorldY = user.getBottomY() + gp.getPlayer().getSpeed(); break;
+            case "left": nextWorldX = user.getLeftX() - gp.getPlayer().getSpeed(); break;
+            case "right": nextWorldX = user.getRightX() + gp.getPlayer().getSpeed(); break;
         }
-        int col = nextWorldX/gp.tileSize;
-        int row = nextWorldY/gp.tileSize;
+        int col = nextWorldX/gp.getTileSize();
+        int row = nextWorldY/gp.getTileSize();
 
         for(int i = 0; i < target[1].length; i++)
         {
-            if(target[gp.currentMap][i] != null)
+            if(target[gp.getCurrentMap()][i] != null)
             {
-                if (target[gp.currentMap][i].getCol() == col                                //checking if player 1 tile away from target (key etc.) (must be same direction)
-                        && target[gp.currentMap][i].getRow() == row
-                        && target[gp.currentMap][i].name.equals(targetName))
+                if (target[gp.getCurrentMap()][i].getCol() == col  // checking if player 1 tile away from target (key etc.) (must be same direction)
+                        && target[gp.getCurrentMap()][i].getRow() == row
+                        && target[gp.getCurrentMap()][i].getName().equals(targetName))
                 {
                     index = i;
                     break;
@@ -121,5 +133,73 @@ public abstract class Item extends Entity {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public int getAttackValue() {
+        return attackValue;
+    }
+
+    public void setAttackValue(int attackValue) {
+        this.attackValue = attackValue;
+    }
+
+    public int getKnockBackPower() {
+        return knockBackPower;
+    }
+
+    public void setKnockBackPower(int knockBackPower) {
+        this.knockBackPower = knockBackPower;
+    }
+
+    public int getDefenseValue() {
+        return defenseValue;
+    }
+
+    public void setDefenseValue(int defenseValue) {
+        this.defenseValue = defenseValue;
+    }
+
+    public int getType_shield() {
+        return type_shield;
+    }
+
+    public int getType_sword() {
+        return type_sword;
+    }
+
+    public int getType_axe() {
+        return type_axe;
+    }
+
+    public int getType_pickaxe() {
+        return type_pickaxe;
+    }
+
+    public int getType_pickupOnly() {
+        return type_pickupOnly;
+    }
+
+    public int getType_obstacle() {
+        return type_obstacle;
+    }
+
+    public int getType_consumable() {
+        return type_consumable;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

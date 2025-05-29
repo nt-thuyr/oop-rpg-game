@@ -1,6 +1,8 @@
 package main;
 
 import entity.Character;
+import entity.Entity;
+import object.Item;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
 
@@ -31,7 +33,7 @@ public class UI {
 
     private int subState = 0;
     private int counter = 0;
-    private Character npc;
+    private Entity npc;
     private int charIndex = 0;
     private String combinedText = "";
     private boolean isInNPCInventory = true;
@@ -49,13 +51,13 @@ public class UI {
             e.printStackTrace();
         }
 
-        Character heart = new OBJ_Heart(gp);
-        heart_full = heart.getImage1();
+        OBJ_Heart heart = new OBJ_Heart(gp);
+        heart_full = heart.getImage();
         heart_half = heart.getImage2();
         heart_blank = heart.getImage3();
 
-        Character bronzeCoin = new OBJ_Coin_Bronze(gp);
-        coin = ((OBJ_Coin_Bronze) bronzeCoin).getDown1();
+        OBJ_Coin_Bronze bronzeCoin = new OBJ_Coin_Bronze(gp);
+        coin = bronzeCoin.getImage();
     }
 
     public void drawPauseScreen() {
@@ -199,8 +201,7 @@ public class UI {
         // Draw Items
         for (int i = 0; i < character.getInventory().size(); i++) {
             if (character.getInventory().get(i) == character.getCurrentWeapon() ||
-                    character.getInventory().get(i) == character.getCurrentShield() ||
-                    character.getInventory().get(i) == character.getCurrentLight()) {
+                    character.getInventory().get(i) == character.getCurrentShield()) {
                 g2.setColor(new Color(240, 190, 90));
                 g2.fillRoundRect(slotX, slotY, gp.getTileSize(), gp.getTileSize(), 10, 10);
             }
@@ -970,7 +971,7 @@ public class UI {
         return titleScreenState;
     }
 
-    public void setNpc(Character npc) {
+    public void setNpc(Entity npc) {
         this.npc = npc;
     }
 
