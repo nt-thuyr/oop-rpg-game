@@ -57,7 +57,13 @@ public class KeyHandler implements KeyListener {
         }
         // END GAME STATE
         else if (gp.gameState == gp.endGameState) {
-            dialogueState(code);
+            if (code == KeyEvent.VK_ENTER) {
+                enterPressed = false;
+                gp.gameState = gp.titleState;
+                gp.ui.titleScreenState = 0;
+                gp.resetGame(true);
+                gp.stopMusic();
+            }
         }
     }
 

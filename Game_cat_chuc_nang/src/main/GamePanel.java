@@ -109,7 +109,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
-        aSetter.setInteractiveTile();
+
 
 
         gameState = titleState;
@@ -137,8 +137,6 @@ public class GamePanel extends JPanel implements Runnable{
         {
             player.setDefaultValues();
             aSetter.setObject();
-            aSetter.setInteractiveTile();
-
         }
 
     }
