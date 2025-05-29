@@ -2,6 +2,8 @@ package object;
 
 import main.GamePanel;
 
+import java.awt.*;
+
 public class OBJ_Demon_Slayer extends Item {
 
     public static final String objName = "Demon Slayer";
@@ -13,8 +15,7 @@ public class OBJ_Demon_Slayer extends Item {
         setName(objName);
         setImage(setup("/objects/demon_slayer", gp.getTileSize(), gp.getTileSize()));
         setAttackValue(6);
-        getAttackArea().width = 50;
-        getAttackArea().height= 50;
+        setAttackArea(new Rectangle(50, 50));
         setDescription("[" + getName() + "]\nA demon slayer to battle the boss.");
         setPrice(500);
         setKnockBackPower(6);

@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel extends JPanel implements Runnable {
     //SCREEN SETTINGS
     private final int originalTileSize = 16; // 16*16 tile. default
     private final int scale = 3; // 16*3 scale
@@ -218,13 +218,13 @@ public class GamePanel extends JPanel implements Runnable{
             {
                 if(monster[currentMap][i] != null)
                 {
-                    if(monster[currentMap][i].getState().isAlive() == true && monster[currentMap][i].getState().isDying() == false)
+                    if(monster[currentMap][i].getState().isAlive() && !monster[currentMap][i].getState().isDying())
                     {
                         monster[currentMap][i].update();
                     }
-                    if(monster[currentMap][i].getState().isAlive() == false)
+                    if(!monster[currentMap][i].getState().isAlive())
                     {
-                        monster[currentMap][i].checkDrop(); //when monster dies, i check its drop
+                        monster[currentMap][i].checkDrop(); // when monster dies, i check its drop
                         monster[currentMap][i] = null;
                     }
                 }
@@ -235,11 +235,11 @@ public class GamePanel extends JPanel implements Runnable{
             {
                 if(projectile[currentMap][i] != null)
                 {
-                    if(projectile[currentMap][i].getState().isAlive() == true)
+                    if(projectile[currentMap][i].getState().isAlive())
                     {
                         projectile[currentMap][i].update();
                     }
-                    if(projectile[currentMap][i].getState().isAlive() == false)
+                    if(!projectile[currentMap][i].getState().isAlive())
                     {
                         projectile[currentMap][i] = null;
                     }
@@ -251,11 +251,11 @@ public class GamePanel extends JPanel implements Runnable{
             {
                 if(particleList.get(i)!= null)
                 {
-                    if(particleList.get(i).getState().isAlive() == true)
+                    if(particleList.get(i).getState().isAlive())
                     {
                         particleList.get(i).update();
                     }
-                    if(particleList.get(i).getState().isAlive() == false)
+                    if(!particleList.get(i).getState().isAlive())
                     {
                         particleList.remove(i);
                     }

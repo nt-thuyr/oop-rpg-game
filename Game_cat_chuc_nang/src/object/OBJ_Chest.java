@@ -6,9 +6,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class OBJ_Chest extends Item {
-
     private Item loot;
-    private BufferedImage image2;
+    private BufferedImage image2 = setup("/objects/chest_opened", gp.getTileSize(), gp.getTileSize());
     private boolean opened = false;
 
     public static final String objName = "Chest";
@@ -19,7 +18,6 @@ public class OBJ_Chest extends Item {
         setType(getType_obstacle());
         setName(objName);
         setImage(setup("/objects/chest", gp.getTileSize(), gp.getTileSize()));
-        setImage2(setup("/objects/chest_opened", gp.getTileSize(), gp.getTileSize()));
         setCollision(true);
 
         setSolidArea(new Rectangle(4, 16, 40, 32));
@@ -37,26 +35,21 @@ public class OBJ_Chest extends Item {
     }
 
 
-    public boolean interact(Character player) {
-        if (!opened && loot != null) {
+    @Override
+    public void interact() {
+        if (!opened) {
             gp.playSE(3);
             startDialogue(this, 1);
-            player.addToInventory(loot);
+            gp.getPlayer().addToInventory(loot);
             setImage(image2);
             opened = true;
-            return true;
         } else {
             startDialogue(this, 2);
-            return false;
         }
     }
 
     public void setLoot(Item loot) {
         this.loot = loot;
         setDialogue();
-    }
-
-    public void setImage2(BufferedImage image2) {
-        this.image2 = image2;
     }
 }

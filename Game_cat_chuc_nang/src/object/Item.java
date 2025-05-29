@@ -23,8 +23,8 @@ public abstract class Item extends Entity {
 
     //TYPE
     private int type;
-    private static final int type_shield = 1;
     private static final int type_sword = 0;
+    private static final int type_shield = 1;
     private static final int type_axe = 2;
     private static final int type_pickaxe = 3;
     private static final int type_pickupOnly = 5;

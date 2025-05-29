@@ -3,6 +3,8 @@ package object;
 import entity.Character;
 import main.GamePanel;
 
+import java.awt.*;
+
 public class OBJ_Door extends Item {
 
     private GamePanel gp; // Encapsulated GamePanel
@@ -19,8 +21,7 @@ public class OBJ_Door extends Item {
 
         getSolidArea().x = 0;
         getSolidArea().y = 16;
-        getSolidArea().width = 48;
-        getSolidArea().height = 32;
+        setSolidArea(new Rectangle(48, 32));
         setSolidAreaDefaultX(getSolidArea().x);
         setSolidAreaDefaultY(getSolidArea().y);
         setPrice(35);

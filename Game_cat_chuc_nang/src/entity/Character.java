@@ -206,13 +206,7 @@ public class Character extends Entity {
         }
     }
 
-    public boolean use(Character entity) {
-        return false;
-        //return "true" if you used the item and "false" if you failed to use it.
-    }
-
     public void checkDrop() {
-
     }
 
     public void dropItem(Item droppedItem) {
