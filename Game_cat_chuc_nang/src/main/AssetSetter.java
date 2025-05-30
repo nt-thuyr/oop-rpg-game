@@ -1,6 +1,5 @@
 package main;
 
-import entity.NPC_BigRock;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.*;
@@ -78,22 +77,6 @@ public class AssetSetter {
         gp.npc[mapNum][i] = new NPC_Merchant(gp);
         gp.npc[mapNum][i].worldX = gp.tileSize*12;
         gp.npc[mapNum][i].worldY = gp.tileSize*7;
-        i++;
-
-        mapNum = 2;
-        i = 0;
-
-        gp.npc[mapNum][i] = new NPC_BigRock(gp);
-        gp.npc[mapNum][i].worldX = gp.tileSize*20;
-        gp.npc[mapNum][i].worldY = gp.tileSize*25;
-        i++;
-        gp.npc[mapNum][i] = new NPC_BigRock(gp);
-        gp.npc[mapNum][i].worldX = gp.tileSize*11;
-        gp.npc[mapNum][i].worldY = gp.tileSize*18;
-        i++;
-        gp.npc[mapNum][i] = new NPC_BigRock(gp);
-        gp.npc[mapNum][i].worldX = gp.tileSize*23;
-        gp.npc[mapNum][i].worldY = gp.tileSize*14;
         i++;
 
     }

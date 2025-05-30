@@ -80,10 +80,11 @@ public class Player extends Entity{
 
         getImage();
         getAttackImage();
-        getGuardImage();
         setItems();
         //setDialogue();
     }
+
+    // Set default positions for player when game starts or restarts
     public void setDefaultPositions()
     {
         gp.currentMap = 0;
@@ -91,10 +92,13 @@ public class Player extends Entity{
         worldY = gp.tileSize * 21;
         direction = "down";
     }
+
     public void setDialogue()
     {
         dialogues[0][0] = "Bạn đã đạt cấp " + level + " rồi!\n" + "Thấy mạnh mẽ hơn chưa!";
     }
+
+    // Restore player status to default values
     public void restoreStatus()
     {
         life = maxLife;
@@ -108,9 +112,10 @@ public class Player extends Entity{
         lightUpdated = true;
     }
 
+    // Set initial items in player's inventory
     public void setItems()
     {
-        inventory.clear(); //cuz if game restarts inventory must be cleared first
+        inventory.clear(); // cuz if game restarts inventory must be cleared first
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         /*inventory.add(new OBJ_Potion_Red(gp));
@@ -209,13 +214,7 @@ public class Player extends Entity{
         }
 
     }
-    public void getGuardImage()
-    {
-        guardUp = setup("/player/boy_guard_up",gp.tileSize,gp.tileSize);
-        guardDown = setup("/player/boy_guard_down",gp.tileSize,gp.tileSize);
-        guardLeft = setup("/player/boy_guard_left",gp.tileSize,gp.tileSize);
-        guardRight = setup("/player/boy_guard_right",gp.tileSize,gp.tileSize);
-    }
+
     public void update() // Runs 60 times every seconds.
     {
         if(knockBack == true)
