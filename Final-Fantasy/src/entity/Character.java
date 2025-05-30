@@ -1,7 +1,7 @@
 package entity;
 
 import main.GamePanel;
-import object.Item;
+import item.Item;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,35 +19,7 @@ public class Character extends Entity {
     // STATE
     private String direction = "down";
     private int spriteNum = 1;
-    //    private boolean collisionOn = false;
-//    private boolean invincible = false;
-//    private boolean attacking = false;
-//    private boolean alive = true;
-//    private boolean dying = false;
-//    private boolean hpBarOn = false;
-//    private boolean onPath = false;
-//    private boolean knockBack = false;
-//    private String knockBackDirection;
-//    private boolean guarding = false;
-//    private boolean transparent = false;
-//    private boolean offBalance = false;
-//    private boolean opened = false;
-//    private boolean inRage = false;
-//    private boolean sleep = false;
-//    private boolean drawing = true;
     private CharacterState state = new CharacterState();
-
-
-    // COUNTER
-//    private int spriteCounter = 0;
-//    private int actionLockCounter = 0;
-//    private int invincibleCounter = 0;
-//    private int shotAvailableCounter = 0;
-//    private int dyingCounter = 0;
-//    private int hpBarCounter = 0;
-//    private int knockBackCounter = 0;
-//    private int guardCounter = 0;
-//    private int offBalanceCounter = 0;
 
     // CHARACTER ATTRIBUTES
     private String name;
@@ -72,7 +44,7 @@ public class Character extends Entity {
     private boolean boss;
 
     // ITEM ATTRIBUTES
-    private ArrayList<Item> inventory = new ArrayList<>();
+    private final ArrayList<Item> inventory = new ArrayList<>();
     private final int maxInventorySize = 20;
     private String description = "";
     private int useCost;
@@ -86,14 +58,6 @@ public class Character extends Entity {
     private final int type_player = 0;
     private final int type_npc = 1;
     private final int type_monster = 2;
-//    private final int type_sword = 3;
-//    private final int type_axe = 4;
-//    private final int type_shield = 5;
-//    private final int type_consumable = 6;
-//    private final int type_pickupOnly = 7;
-//    private final int type_obstacle = 8;
-//    private final int type_light = 9;
-//    private final int type_pickaxe = 10;
 
     public Character(GamePanel gp) {
         super(gp);
@@ -255,7 +219,7 @@ public class Character extends Entity {
         gp.getcChecker().checkEntity(this, gp.getMonster());
         gp.getcChecker().checkEntity(this, gp.getiTile());
         boolean contactPlayer = gp.getcChecker().checkPlayer(this);
-        if (getType() == getType_monster() && contactPlayer == true) {
+        if (getType() == getType_monster() && contactPlayer) {
             damagePlayer(getAttack());
         }
     }
@@ -370,7 +334,7 @@ public class Character extends Entity {
                 break;
         }
 
-        if (targetInRange == true) {
+        if (targetInRange) {
             int i = new Random().nextInt(rate);
             if (i == 0) {
                 getState().setAttacking(true);
@@ -685,7 +649,7 @@ public class Character extends Entity {
         int startCol = (getWorldX() + getSolidArea().x) / gp.getTileSize();
         int startRow = (getWorldY() + getSolidArea().y) / gp.getTileSize();
         gp.getpFinder().setNodes(startCol, startRow, goalCol, goalRow, this);
-        if (gp.getpFinder().search() == true) {
+        if (gp.getpFinder().search()) {
             // Next WorldX and WorldY
             int nextX = gp.getpFinder().getPathList().get(0).getCol() * gp.getTileSize();
             int nextY = gp.getpFinder().getPathList().get(0).getRow() * gp.getTileSize();
@@ -720,35 +684,35 @@ public class Character extends Entity {
                 // up or left
                 setDirection("up");
                 checkCollision();
-                if (getState().isCollisionOn() == true) {
+                if (getState().isCollisionOn()) {
                     setDirection("left");
                 }
             } else if (enTopY > nextY && enLeftX < nextX) {
                 // up or right
                 setDirection("up");
                 checkCollision();
-                if (getState().isCollisionOn() == true) {
+                if (getState().isCollisionOn()) {
                     setDirection("right");
                 }
             } else if (enTopY < nextY && enLeftX > nextX) {
                 // down or left
                 setDirection("down");
                 checkCollision();
-                if (getState().isCollisionOn() == true) {
+                if (getState().isCollisionOn()) {
                     setDirection("left");
                 }
             } else if (enTopY < nextY && enLeftX < nextX) {
                 // down or right
                 setDirection("down");
                 checkCollision();
-                if (getState().isCollisionOn() == true) {
+                if (getState().isCollisionOn()) {
                     setDirection("right");
                 }
             }
         }
     }
 
-    public int getDetected(Character user, Item target[][], String targetName) {
+    public int getDetected(Character user, Item[][] target, String targetName) {
         int index = 999;
 
         // Check the surrounding object

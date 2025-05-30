@@ -5,7 +5,7 @@ import entity.Character;
 
 public class EventHandler{
     GamePanel gp;
-    EventRect eventRect[][][];
+    EventRect[][][] eventRect;
     Character eventMaster;
 
     int previousEventX, previousEventY;
@@ -68,17 +68,17 @@ public class EventHandler{
             canTouchEvent = true;
         }
 
-        if(canTouchEvent == true)
+        if(canTouchEvent)
         {
-            if(hit(0,27,16, "right") == true) {damagePit(gp.getDialogueState());}
-            else if(hit(0,10,39, "any") == true) {teleport(1,12,13, gp.getIndoor());} //to merchant's house
-            else if(hit(1,12,13, "any") == true) {teleport(0,10,39, gp.getOutside());} //to outside
-            else if(hit(1,12,9, "up") == true) {speak(gp.getNpc()[1][0]);} //merchant
+            if(hit(0, 27, 16, "right")) {damagePit(gp.getDialogueState());}
+            else if(hit(0, 10, 39, "any")) {teleport(1,12,13, gp.getIndoor());} //to merchant's house
+            else if(hit(1, 12, 13, "any")) {teleport(0,10,39, gp.getOutside());} //to outside
+            else if(hit(1, 12, 9, "up")) {speak(gp.getNpc()[1][0]);} //merchant
 
-            else if(hit(0,12,9, "any") == true) {teleport(2,9,41, gp.getDungeon());} //to the dungeon
-            else if(hit(2,9,41, "any") == true) {teleport(0,12,9, gp.getOutside());} //to outside
-            else if(hit(2,8,7, "any") == true) {teleport(3,26,41, gp.getDungeon());} //to B2
-            else if(hit(3,26,41, "any") == true) {teleport(2,8,7, gp.getDungeon());} //to B1
+            else if(hit(0, 12, 9, "any")) {teleport(2,9,41, gp.getDungeon());} //to the dungeon
+            else if(hit(2, 9, 41, "any")) {teleport(0,12,9, gp.getOutside());} //to outside
+            else if(hit(2, 8, 7, "any")) {teleport(3,26,41, gp.getDungeon());} //to B2
+            else if(hit(3, 26, 41, "any")) {teleport(2,8,7, gp.getDungeon());} //to B1
 
 
         }

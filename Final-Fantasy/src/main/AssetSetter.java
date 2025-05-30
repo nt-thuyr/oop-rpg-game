@@ -4,7 +4,7 @@ package main;
 import entity.Merchant;
 import entity.OldMan;
 import monster.*;
-import object.*;
+import item.*;
 
 public class AssetSetter {
 

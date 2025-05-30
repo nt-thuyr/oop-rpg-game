@@ -1,4 +1,4 @@
-package object;
+package item;
 
 import main.GamePanel;
 import java.awt.*;
@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 public class Chest extends Item {
     private Item loot;
-    private BufferedImage image2 = setup("/objects/chest_opened", gp.getTileSize(), gp.getTileSize());
+    private final BufferedImage image2 = setup("/objects/chest_opened", gp.getTileSize(), gp.getTileSize());
     private boolean opened = false;
 
     public static final String objName = "Chest";

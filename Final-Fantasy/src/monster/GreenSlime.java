@@ -2,14 +2,14 @@ package monster;
 
 import entity.Character;
 import main.GamePanel;
-import object.CoinBronze;
-import object.Heart;
+import item.CoinBronze;
+import item.Heart;
 
 import java.util.Random;
 
 public class GreenSlime extends Character {
 
-    private GamePanel gp; // Encapsulated GamePanel
+    private final GamePanel gp; // Encapsulated GamePanel
 
     public GreenSlime(GamePanel gp) {
         super(gp);

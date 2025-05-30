@@ -1,4 +1,4 @@
-package object;
+package item;
 
 import entity.Character;
 import main.GamePanel;
@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class Heart extends Item {
 
-    private GamePanel gp; // Encapsulated GamePanel
+    private final GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Heart";
     private BufferedImage image2;
     private BufferedImage image3;

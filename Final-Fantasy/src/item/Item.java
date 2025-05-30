@@ -1,4 +1,4 @@
-package object;
+package item;
 
 import entity.Character;
 import entity.Entity;
@@ -25,10 +25,8 @@ public abstract class Item extends Entity {
     private int type;
     private static final int type_sword = 0;
     private static final int type_shield = 1;
-    private static final int type_axe = 2;
-    private static final int type_pickaxe = 3;
-    private static final int type_pickupOnly = 5;
-    private static final int type_obstacle = 6;
+    private static final int type_pickupOnly = 2;
+    private static final int type_obstacle = 3;
     private static final int type_consumable = 4;
 
     public Item(GamePanel gp) {
@@ -175,14 +173,6 @@ public abstract class Item extends Entity {
 
     public static int getType_sword() {
         return type_sword;
-    }
-
-    public static int getType_axe() {
-        return type_axe;
-    }
-
-    public static int getType_pickaxe() {
-        return type_pickaxe;
     }
 
     public static int getType_pickupOnly() {

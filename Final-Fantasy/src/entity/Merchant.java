@@ -1,7 +1,7 @@
 package entity;
 
 import main.GamePanel;
-import object.*;
+import item.*;
 
 import java.awt.*;
 

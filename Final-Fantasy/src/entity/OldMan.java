@@ -60,11 +60,11 @@ public class OldMan extends Character {
                 int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
                 if (i <= 25) {
                     setDirection("up");
-                } else if (i > 25 && i <= 50) {
+                } else if (i <= 50) {
                     setDirection("down");
-                } else if (i > 50 && i <= 75) {
+                } else if (i <= 75) {
                     setDirection("left");
-                } else if (i > 75 && i <= 100) {
+                } else {
                     setDirection("right");
                 }
                 getState().setActionLockCounter(0); // reset

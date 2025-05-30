@@ -4,7 +4,7 @@ import ai.PathFinder;
 import entity.Character;
 import entity.Entity;
 import entity.Player;
-import object.Item;
+import item.Item;
 import tile.Map;
 import tile.TileManager;
 import tile_interactive.InteractiveTile;
@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int maxMap = 10;
     private int currentMap = 0;
 
-    // FOR FULLSCREEN
+    // FOR SFULLSCREEN
     private int screenWidth2 = screenWidth;
     private int screenHeight2 = screenHeight;
     private BufferedImage tempScreen;
@@ -61,11 +61,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITY AND OBJECT
     private Player player = new Player(this, keyH);
-    private Item obj[][] = new Item[maxMap][20];
-    private Character npc[][] = new Character[maxMap][10];
-    private Character monster[][] = new Character[maxMap][20];
-    private InteractiveTile iTile[][] = new InteractiveTile[maxMap][50];
-    private Character[][] projectile = new Character[maxMap][20];
+    private final Item[][] obj = new Item[maxMap][20];
+    private final Character[][] npc = new Character[maxMap][10];
+    private final Character[][] monster = new Character[maxMap][20];
+    private final InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
+    private final Character[][] projectile = new Character[maxMap][20];
     private ArrayList<Character> particleList = new ArrayList<>();
     private ArrayList<Entity> entityList = new ArrayList<>();
 
@@ -113,9 +113,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameState = titleState;
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D) tempScreen.getGraphics();
-        if (fullScreenOn) {
-            setFullScreen();
-        }
+
     }
     public void resetGame(boolean restart)
     {
@@ -128,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
         player.getState().resetCounter();
 
-        if(restart == true)
+        if(restart)
         {
             player.setDefaultValues();
             aSetter.setObject();
@@ -161,33 +159,20 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-        //long timer = 0;
-        //int drawCount = 0;
-
 
         while(gameThread != null)
         {
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
-            //timer += currentTime - lastTime;
             lastTime = currentTime;
             if(delta >= 1)
             {
                 update();
-                /*repaint(); COMMENTED FOR FULL SCREEN*/
                 drawToTempScreen(); //FOR FULL SCREEN - Draw everything to the buffered image
                 drawToScreen();     //FOR FULL SCREEN - Draw the buffered image to the screen
                 delta--;
-                //drawCount++;
             }
-            //SHOW FPS
-            /*if(timer >= 1000000000)
-            {
-                System.out.println("FPS:" + drawCount);
-                drawCount = 0;
-                timer = 0;
-            }*/
         }
     }
 
@@ -380,7 +365,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             //DEBUG
 
-            if(keyH.isShowDebugText() == true)
+            if(keyH.isShowDebugText())
             {
                 long drawEnd = System.nanoTime();
                 long passed = drawEnd - drawStart;

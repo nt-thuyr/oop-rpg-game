@@ -40,7 +40,7 @@ public class Map extends TileManager {
 
         for (int i = 0; i < gp.getMaxMap(); i++) {
             worldMap[i] = new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) worldMap[i].createGraphics(); // Attach this g2 to worldMap Buffered image
+            Graphics2D g2 = worldMap[i].createGraphics(); // Attach this g2 to worldMap Buffered image
 
             int col = 0;
             int row = 0;

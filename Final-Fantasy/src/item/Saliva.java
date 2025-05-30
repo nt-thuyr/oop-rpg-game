@@ -1,4 +1,4 @@
-package object;
+package item;
 
 import entity.Character;
 import entity.Projectile;
@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class Saliva extends Projectile {
 
-    private GamePanel gp; // Encapsulated GamePanel
+    private final GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Rock";
 
     public Saliva(GamePanel gp) {

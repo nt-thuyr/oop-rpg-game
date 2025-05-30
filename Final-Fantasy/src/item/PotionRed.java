@@ -1,11 +1,11 @@
-package object;
+package item;
 
 import entity.Character;
 import main.GamePanel;
 
 public class PotionRed extends Item {
 
-    private GamePanel gp; // Encapsulated GamePanel
+    private final GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Huyết dược";
 
     public PotionRed(GamePanel gp) {

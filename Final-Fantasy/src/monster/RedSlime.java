@@ -2,15 +2,15 @@ package monster;
 
 import entity.Character;
 import main.GamePanel;
-import object.CoinBronze;
-import object.Heart;
-import object.Saliva;
+import item.CoinBronze;
+import item.Heart;
+import item.Saliva;
 
 import java.util.Random;
 
 public class RedSlime extends Character {
 
-    private GamePanel gp; // Encapsulated GamePanel
+    private final GamePanel gp; // Encapsulated GamePanel
 
     public RedSlime(GamePanel gp) {
         super(gp);

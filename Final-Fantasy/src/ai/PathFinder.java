@@ -80,10 +80,10 @@ public class PathFinder {
             for (int i = 0; i < gp.getiTile()[1].length; i++) {
                 if (gp.getiTile()[gp.getCurrentMap()][i] != null &&
                         gp.getiTile()[gp.getCurrentMap()][i] instanceof InteractiveTile &&
-                        ((InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i]).isDestructible()) {
+                        gp.getiTile()[gp.getCurrentMap()][i].isDestructible()) {
 
-                    int itCol = ((InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i]).getWorldX() / gp.getTileSize();
-                    int itRow = ((InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i]).getWorldY() / gp.getTileSize();
+                    int itCol = gp.getiTile()[gp.getCurrentMap()][i].getWorldX() / gp.getTileSize();
+                    int itRow = gp.getiTile()[gp.getCurrentMap()][i].getWorldY() / gp.getTileSize();
                     node[itCol][itRow].setSolid(true);
                 }
             }

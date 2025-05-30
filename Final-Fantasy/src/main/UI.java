@@ -2,8 +2,8 @@ package main;
 
 import entity.Character;
 import entity.Entity;
-import object.CoinBronze;
-import object.Heart;
+import item.CoinBronze;
+import item.Heart;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -316,7 +316,7 @@ public class UI {
         int frameY = gp.getTileSize();
         int frameWidth = gp.getTileSize() * 6;
         int frameHeight = gp.getTileSize() * 5;
-        drawInventory((Character) getNpc(), true, isInNPCInventory(), frameX, frameY, frameWidth, frameHeight, getNpcSlotCol(), getNpcSlotRow());
+        drawInventory(getNpc(), true, isInNPCInventory(), frameX, frameY, frameWidth, frameHeight, getNpcSlotCol(), getNpcSlotRow());
 
         // Player Inventory (Bottom Half)
         frameY = gp.getTileSize() * 6 + 10;
@@ -463,7 +463,7 @@ public class UI {
         if (getTitleScreenState() == 0) {
             // TITLE NAME
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
-            String text = "Blue Boy Adventure\n";
+            String text = "Final Fantasy\n";
             int x = getXforCenteredText(text);
             int y = gp.getTileSize() * 3;
             // SHADOW
@@ -483,7 +483,7 @@ public class UI {
 
             text = "NEW GAME";
             x = getXforCenteredText(text);
-            y += gp.getTileSize() * 3.5;
+            y += (int) (gp.getTileSize() * 3.5);
             g2.drawString(text, x, y);
             if (getCommandNum() == 0) {
                 g2.drawString(">", x - gp.getTileSize(), y);
@@ -555,129 +555,6 @@ public class UI {
         if (getCommandNum() == 1) {
             g2.drawString(">", x - 40, y);
         }
-    }
-
-    public void drawOptionsScreen() {
-        g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(30F));
-
-        // SUB WINDOW
-        int frameX = gp.getTileSize() * 6;
-        int frameY = gp.getTileSize();
-        int frameWidth = gp.getTileSize() * 8;
-        int frameHeight = gp.getTileSize() * 10;
-
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-
-        switch (getSubState()) {
-            case 0:
-                options_top(frameX, frameY);
-                break;
-            case 1:
-                options_fullScreenNotification(frameX, frameY);
-                break;
-            case 2:
-                options_control(frameX, frameY);
-                break;
-            case 3:
-                options_endGameConfirmation(frameX, frameY);
-        }
-        gp.getKeyH().setEnterPressed(false);
-    }
-
-    public void options_top(int frameX, int frameY) {
-        int textX;
-        int textY;
-
-        // TITLE
-        String text = "Options";
-        textX = getXforCenteredText(text);
-        textY = frameY + gp.getTileSize();
-        g2.drawString(text, textX, textY);
-
-        // FULL SCREEN ON/OFF
-        textX = frameX + gp.getTileSize();
-        textY += gp.getTileSize() * 2;
-        g2.drawString("Full Screen", textX, textY);
-        if (getCommandNum() == 0) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                if (!gp.isFullScreenOn()) {
-                    gp.setFullScreenOn(true);
-                } else {
-                    gp.setFullScreenOn(false);
-                }
-                setSubState(1);
-            }
-        }
-
-        // MUSIC
-        textY += gp.getTileSize();
-        g2.drawString("Music", textX, textY);
-        if (getCommandNum() == 1) {
-            g2.drawString(">", textX - 25, textY);
-        }
-
-        // SE
-        textY += gp.getTileSize();
-        g2.drawString("SE", textX, textY);
-        if (getCommandNum() == 2) {
-            g2.drawString(">", textX - 25, textY);
-        }
-
-        // CONTROLS
-        textY += gp.getTileSize();
-        g2.drawString("Controls", textX, textY);
-        if (getCommandNum() == 3) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                setSubState(2);
-                setCommandNum(0);
-            }
-        }
-
-        // END GAME
-        textY += gp.getTileSize();
-        g2.drawString("End Game", textX, textY);
-        if (getCommandNum() == 4) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                setSubState(3);
-                setCommandNum(0);
-            }
-        }
-
-        // BACK
-        textY += gp.getTileSize() * 2;
-        g2.drawString("Back", textX, textY);
-        if (getCommandNum() == 5) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                gp.setGameState(gp.getPlayState());
-                setCommandNum(0);
-            }
-        }
-
-        // FULL SCREEN CHECK BOX
-        textX = frameX + (int) (gp.getTileSize() * 4.5);
-        textY = frameY + gp.getTileSize() * 2 + 24;
-        g2.setStroke(new BasicStroke(3));
-        g2.drawRect(textX, textY, 24, 24);
-        if (gp.isFullScreenOn()) {
-            g2.fillRect(textX, textY, 24, 24);
-        }
-
-        // MUSIC VOLUME
-        textY += gp.getTileSize();
-        g2.drawRect(textX, textY, 120, 24); // 120/5 = 24px = 1 scale
-        int volumeWidth = 24 * gp.getMusic().getVolumeScale();
-        g2.fillRect(textX, textY, volumeWidth, 24);
-
-        // SE VOLUME
-        textY += gp.getTileSize();
-        g2.drawRect(textX, textY, 120, 24);
-        volumeWidth = 24 * gp.getSe().getVolumeScale();
-        g2.fillRect(textX, textY, volumeWidth, 24);
     }
 
     public void options_fullScreenNotification(int frameX, int frameY) {

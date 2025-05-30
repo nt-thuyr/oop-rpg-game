@@ -2,7 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import object.*;
+import item.*;
 import tile_interactive.InteractiveTile;
 
 import java.awt.*;
@@ -42,13 +42,13 @@ public class Player extends Character {
         setSpeed(getDefaultSpeed());
         setDirection("down");
 
-        setLevel(6);
+        setLevel(1);
         setMaxLife(10);
         setLife(getMaxLife());
         setMaxMana(8);
-        setMana(getMaxMana());
+
         setAmmo(10);
-        setStrength(25);
+        setStrength(2);
         setDexterity(1);
         setExp(0);
         setNextLevelExp(4);
@@ -156,24 +156,6 @@ public class Player extends Character {
             setAttackLeft2(setup("/player/boy_attack_left_2", gp.getTileSize() * 2, gp.getTileSize()));      // 32x16 px
             setAttackRight1(setup("/player/boy_attack_right_1", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
             setAttackRight2(setup("/player/boy_attack_right_2", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
-        } else if (getCurrentWeapon().getType() == Item.getType_axe()) {
-            setAttackUp1(setup("/player/boy_axe_up_1", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
-            setAttackUp2(setup("/player/boy_axe_up_2", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
-            setAttackDown1(setup("/player/boy_axe_down_1", gp.getTileSize(), gp.getTileSize() * 2));     // 16x32 px
-            setAttackDown2(setup("/player/boy_axe_down_2", gp.getTileSize(), gp.getTileSize() * 2));     // 16x32 px
-            setAttackLeft1(setup("/player/boy_axe_left_1", gp.getTileSize() * 2, gp.getTileSize()));      // 32x16 px
-            setAttackLeft2(setup("/player/boy_axe_left_2", gp.getTileSize() * 2, gp.getTileSize()));      // 32x16 px
-            setAttackRight1(setup("/player/boy_axe_right_1", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
-            setAttackRight2(setup("/player/boy_axe_right_2", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
-        } else if (getCurrentWeapon().getType() == Item.getType_pickaxe()) {
-            setAttackUp1(setup("/player/boy_pick_up_1", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
-            setAttackUp2(setup("/player/boy_pick_up_2", gp.getTileSize(), gp.getTileSize() * 2));         // 16x32 px
-            setAttackDown1(setup("/player/boy_pick_down_1", gp.getTileSize(), gp.getTileSize() * 2));     // 16x32 px
-            setAttackDown2(setup("/player/boy_pick_down_2", gp.getTileSize(), gp.getTileSize() * 2));     // 16x32 px
-            setAttackLeft1(setup("/player/boy_pick_left_1", gp.getTileSize() * 2, gp.getTileSize()));      // 32x16 px
-            setAttackLeft2(setup("/player/boy_pick_left_2", gp.getTileSize() * 2, gp.getTileSize()));      // 32x16 px
-            setAttackRight1(setup("/player/boy_pick_right_1", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
-            setAttackRight2(setup("/player/boy_pick_right_2", gp.getTileSize() * 2, gp.getTileSize()));    // 32x16 px
         }
     }
 
@@ -378,7 +360,7 @@ public class Player extends Character {
     {
         if(i != 999)
         {
-            if(gp.getKeyH().isEnterPressed() == true)
+            if(gp.getKeyH().isEnterPressed())
             {
                 attackCanceled = true;
                 gp.getNpc()[gp.getCurrentMap()][i].speak();
@@ -436,8 +418,8 @@ public class Player extends Character {
     }
 
     public void damageInteractiveTile(int i) {
-        if (i != 999 && gp.getiTile()[gp.getCurrentMap()][i] instanceof InteractiveTile) {
-            InteractiveTile tile = (InteractiveTile) gp.getiTile()[gp.getCurrentMap()][i];
+        if (i != 999 && gp.getiTile()[gp.getCurrentMap()][i] != null) {
+            InteractiveTile tile = gp.getiTile()[gp.getCurrentMap()][i];
 
             if (tile.isDestructible() && tile.isCorrectItem(this) && !tile.getState().isInvincible()) {
                 tile.playSE();
@@ -490,9 +472,7 @@ public class Player extends Character {
         if (itemIndex < getInventory().size()) {
             Item selectedItem = getInventory().get(itemIndex);
 
-            if (selectedItem.getType() == Item.getType_sword() ||
-                    selectedItem.getType() == Item.getType_axe() ||
-                    selectedItem.getType() == Item.getType_pickaxe()) {
+            if (selectedItem.getType() == Item.getType_sword()) {
                 setCurrentWeapon(selectedItem);
                 setAttack(getAttack()); // Update player attack
                 getAttackImage(); // Update player attack image (sword/axe)

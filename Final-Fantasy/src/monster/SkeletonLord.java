@@ -2,14 +2,14 @@ package monster;
 
 import entity.Character;
 import main.GamePanel;
-import object.CoinBronze;
-import object.Heart;
+import item.CoinBronze;
+import item.Heart;
 
 import java.util.Random;
 
 public class SkeletonLord extends Character {
 
-    private GamePanel gp;
+    private final GamePanel gp;
 
     public SkeletonLord(GamePanel gp) {
         super(gp);
@@ -20,10 +20,10 @@ public class SkeletonLord extends Character {
         setName("Skeleton Lord");
         setDefaultSpeed(1);
         setSpeed(getDefaultSpeed());
-        setMaxLife(20);
+        setMaxLife(80);
         setLife(getMaxLife());
-        setAttack(8);
-        setDefense(3);
+        setAttack(12);
+        setDefense(8);
         setExp(10);
         setKnockBackPower(5);
 
