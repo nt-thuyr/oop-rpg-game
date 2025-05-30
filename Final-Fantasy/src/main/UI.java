@@ -557,120 +557,6 @@ public class UI {
         }
     }
 
-    public void options_fullScreenNotification(int frameX, int frameY) {
-        int textX = frameX + gp.getTileSize();
-        int textY = frameY + gp.getTileSize() * 3;
-
-        setCurrentDialogue("The change will take \neffect after restarting \nthe game.");
-        for (String line : getCurrentDialogue().split("\n")) {
-            g2.drawString(line, textX, textY);
-            textY += 40;
-        }
-
-        // BACK
-        textY = frameY + gp.getTileSize() * 9;
-        g2.drawString("Back", textX, textY);
-        if (getCommandNum() == 0) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                setSubState(0);
-            }
-        }
-    }
-
-    public void options_control(int frameX, int frameY) {
-        int textX;
-        int textY;
-
-        // TITLE
-        String text = "Controls";
-        textX = getXforCenteredText(text);
-        textY = frameY + gp.getTileSize();
-        g2.drawString(text, textX, textY);
-
-        textX = frameX + gp.getTileSize();
-        textY += gp.getTileSize();
-        g2.drawString("Move", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("Confirm/Attack", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("Shoot/Cast", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("Character Screen", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("Pause", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("Options", textX, textY);
-        textY += gp.getTileSize();
-
-        // KEYS
-        textX = frameX + gp.getTileSize() * 6;
-        textY = frameY + gp.getTileSize() * 2;
-        g2.drawString("WASD", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("ENTER", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("F", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("C", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("P", textX, textY);
-        textY += gp.getTileSize();
-        g2.drawString("ESC", textX, textY);
-        textY += gp.getTileSize();
-
-        // BACK
-        textX = frameX + gp.getTileSize();
-        textY = frameY + gp.getTileSize() * 9;
-        g2.drawString("Back", textX, textY);
-        if (getCommandNum() == 0) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                setSubState(0);
-                setCommandNum(3); // back to control row
-            }
-        }
-    }
-
-    public void options_endGameConfirmation(int frameX, int frameY) {
-        int textX = frameX + gp.getTileSize();
-        int textY = frameY + gp.getTileSize() * 3;
-
-        setCurrentDialogue("Quit the game and \nreturn to the title screen?");
-        for (String line : getCurrentDialogue().split("\n")) {
-            g2.drawString(line, textX, textY);
-            textY += 40;
-        }
-        // YES
-        String text = "Yes";
-        textX = getXforCenteredText(text);
-        textY += gp.getTileSize() * 3;
-        g2.drawString(text, textX, textY);
-        if (getCommandNum() == 0) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                setSubState(0);
-                gp.getUi().setTitleScreenState(0);
-                gp.setGameState(gp.getTitleState());
-                gp.resetGame(true);
-                gp.stopMusic();
-            }
-        }
-
-        // NO
-        text = "No";
-        textX = getXforCenteredText(text);
-        textY += gp.getTileSize();
-        g2.drawString(text, textX, textY);
-        if (getCommandNum() == 1) {
-            g2.drawString(">", textX - 25, textY);
-            if (gp.getKeyH().isEnterPressed()) {
-                setSubState(0);
-                setCommandNum(4); // back to end row
-            }
-        }
-    }
-
     public void drawSubWindow(int x, int y, int width, int height) {
         Color c = new Color(0, 0, 0, 210); // R,G,B, alpha (opacity)
         g2.setColor(c);
@@ -731,10 +617,6 @@ public class UI {
             // CHARACTER STATE
             if (gp.getGameState() == gp.getCharacterState()) {
                 drawCharacterScreen();
-            }
-            // OPTIONS STATE
-            if (gp.getGameState() == gp.getOptionsState()) {
-                drawOptionsScreen();
             }
             // GAME OVER STATE
             if (gp.getGameState() == gp.getGameOverState()) {
