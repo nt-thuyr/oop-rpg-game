@@ -7,11 +7,11 @@ import javax.sound.sampled.FloatControl;
 import java.net.URL;
 
 public class Sound {
-    Clip clip;
-    URL soundURL[] = new URL[30];
-    FloatControl fc;
-    int volumeScale = 3;
-    float volume;
+    private Clip clip;
+    private URL soundURL[] = new URL[30];
+    private FloatControl fc;
+    private int volumeScale = 3;
+    private float volume;
 
     public Sound()
     {
@@ -84,5 +84,44 @@ public class Sound {
             case 5 : volume = 6f; break;
         }
         fc.setValue(volume);
+    }
+    public Clip getClip() {
+        return clip;
+    }
+
+    public void setClip(Clip clip) {
+        this.clip = clip;
+    }
+
+    public FloatControl getFc() {
+        return fc;
+    }
+
+    public void setFc(FloatControl fc) {
+        this.fc = fc;
+    }
+
+    public URL[] getSoundURL() {
+        return soundURL;
+    }
+
+    public void setSoundURL(URL soundURL) {
+        this.soundURL = new URL[]{soundURL};
+    }
+
+    public float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(float volume) {
+        this.volume = volume;
+    }
+
+    public int getVolumeScale() {
+        return volumeScale;
+    }
+
+    public void setVolumeScale(int volumeScale) {
+        this.volumeScale = volumeScale;
     }
 }

@@ -1,54 +1,55 @@
 package object;
 
-import entity.Entity;
+import entity.Character;
 import main.GamePanel;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
-public class OBJ_Chest extends Entity {
+public class OBJ_Chest extends Item {
+    private Item loot;
+    private BufferedImage image2 = setup("/objects/chest_opened", gp.getTileSize(), gp.getTileSize());
+    private boolean opened = false;
 
-    GamePanel gp;
     public static final String objName = "Chest";
-    public OBJ_Demon_Slayer loot;
 
     public OBJ_Chest(GamePanel gp)
     {
         super(gp);
-        this.gp = gp;
-        loot = new OBJ_Demon_Slayer(gp);
+        setType(getType_obstacle());
+        setName(objName);
+        setImage(setup("/objects/chest", gp.getTileSize(), gp.getTileSize()));
+        setCollision(true);
 
-        type = type_obstacle;
-        name = objName;
-        image = setup("/objects/chest",gp.tileSize,gp.tileSize);
-        image2 = setup("/objects/chest_opened",gp.tileSize,gp.tileSize);
-        down1 = image;
-        collision = true;
-
-        solidArea.x = 4;
-        solidArea.y = 16;
-        solidArea.width = 40;
-        solidArea.height = 32;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
+        setSolidArea(new Rectangle(4, 16, 40, 32));
+        setSolidAreaDefaultX(getSolidArea().x);
+        setSolidAreaDefaultY(getSolidArea().y);
 
         setDialogue();
     }
 
     public void setDialogue()
     {
-        dialogues[0][0] = "Bạn mở rương kho báu và tìm thấy " + loot.name + "!\n...Nhưng không thể mang thêm nữa!";
-        dialogues[1][0] = "Bạn mở rương kho báu và tìm thấy " + loot.name + "!\nBạn đã sở hữu " + loot.name + "!";
+        dialogues[0][0] = "Bạn mở rương kho báu và tìm thấy " + (loot != null ? loot.getName() : "???") + "!\n...Nhưng không thể mang thêm nữa!";
+        dialogues[1][0] = "Bạn mở rương kho báu và tìm thấy " + (loot != null ? loot.getName() : "???") + "!\nBạn đã sở hữu " + (loot != null ? loot.getName() : "???") + "!";
         dialogues[2][0] = "Trống trơn hà...";
     }
+
 
     @Override
     public void interact() {
         if (!opened) {
-            gp.playSE(3); // Phát âm thanh mở rương
-            startDialogue(this, 1); // Hiển thị dialog khi mở rương
-            gp.player.inventory.add(loot); // Thêm vật phẩm vào túi đồ
-            down1 = image2; // Cập nhật hình ảnh rương mở
-            opened = true; // Đánh dấu rương đã mở
+            gp.playSE(3);
+            startDialogue(this, 1);
+            gp.getPlayer().addToInventory(loot);
+            setImage(image2);
+            opened = true;
         } else {
-            startDialogue(this, 2); // Hiển thị dialog khi rương đã mở
+            startDialogue(this, 2);
         }
+    }
+
+    public void setLoot(Item loot) {
+        this.loot = loot;
+        setDialogue();
     }
 }

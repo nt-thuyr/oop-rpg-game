@@ -1,195 +1,108 @@
 package monster;
 
-
-import entity.Entity;
+import entity.Character;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
-import object.OBJ_Door_Iron;
 import object.OBJ_Heart;
 
 import java.util.Random;
 
-public class MON_SkeletonLord extends Entity {
-    GamePanel gp; // cuz of different package
-    public static final String monName = "Hài cốt vương";
+public class MON_SkeletonLord extends Character {
+
+    private GamePanel gp;
+
     public MON_SkeletonLord(GamePanel gp) {
         super(gp);
 
         this.gp = gp;
 
-        type = type_monster;
-        boss = true;
-        name = monName;
-        defaultSpeed = 1;
-        speed = defaultSpeed;
-        maxLife = 40;
-        life = maxLife;
-        attack = 5;
-        defense = 3;
-        exp = 30;
-        knockBackPower = 5;
+        setType(getType_monster());
+        setName("Skeleton Lord");
+        setDefaultSpeed(1);
+        setSpeed(getDefaultSpeed());
+        setMaxLife(20);
+        setLife(getMaxLife());
+        setAttack(8);
+        setDefense(3);
+        setExp(10);
+        setKnockBackPower(5);
 
-        // Thêm pathfinding và AI
-        onPath = false;
+        // Điều chỉnh vùng va chạm gấp 3 lần
+        getSolidArea().x = 12; // 4 * 3
+        getSolidArea().y = 12; // 4 * 3
+        getSolidArea().width = 120; // 40 * 3
+        getSolidArea().height = 132; // 44 * 3
+        setSolidAreaDefaultX(getSolidArea().x);
+        setSolidAreaDefaultY(getSolidArea().y);
 
-        // Điều chỉnh collision area để không bị kẹt tường
-        int size = gp.tileSize * 5;  // Kích thước tổng thể của sprite
-        int collisionSize = (int)(size * 0.8);  // Tăng collision area lên 80% kích thước sprite (trước là 0.4)
-
-        solidArea.x = (size - collisionSize)/2;  // Căn giữa collision area
-        solidArea.y = (size - collisionSize)/2;
-        solidArea.width = collisionSize;
-        solidArea.height = collisionSize;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
-
-        // Attack area
-        attackArea.width = 170;
-        attackArea.height = 170;
-        motion1_duration = 25;
-        motion2_duration = 50;
+        // Điều chỉnh vùng tấn công gấp 3 lần
+        getAttackArea().width = 144; // 48 * 3
+        getAttackArea().height = 144; // 48 * 3
+        setMotion1_duration(40);
+        setMotion2_duration(85);
 
         getImage();
         getAttackImage();
-        setDialogue();
     }
 
-    public void getImage()
-    {
-
-        int i = 5;
-        if(inRage == false)
-        {
-            up1 = setup("/monster/skeletonlord_up_1",gp.tileSize * i,gp.tileSize * i);
-            up2 = setup("/monster/skeletonlord_up_2",gp.tileSize * i,gp.tileSize * i);
-            down1 = setup("/monster/skeletonlord_down_1",gp.tileSize * i,gp.tileSize * i);
-            down2 = setup("/monster/skeletonlord_down_2",gp.tileSize * i,gp.tileSize * i);
-            left1 = setup("/monster/skeletonlord_left_1",gp.tileSize * i,gp.tileSize * i);
-            left2 = setup("/monster/skeletonlord_left_2",gp.tileSize * i,gp.tileSize * i);
-            right1 = setup("/monster/skeletonlord_right_1",gp.tileSize * i,gp.tileSize * i);
-            right2 = setup("/monster/skeletonlord_right_2",gp.tileSize * i,gp.tileSize * i);
-        }
-        if(inRage == true)
-        {
-            up1 = setup("/monster/skeletonlord_phase2_up_1",gp.tileSize * i,gp.tileSize * i);
-            up2 = setup("/monster/skeletonlord_phase2_up_2",gp.tileSize * i,gp.tileSize * i);
-            down1 = setup("/monster/skeletonlord_phase2_down_1",gp.tileSize * i,gp.tileSize * i);
-            down2 = setup("/monster/skeletonlord_phase2_down_2",gp.tileSize * i,gp.tileSize * i);
-            left1 = setup("/monster/skeletonlord_phase2_left_1",gp.tileSize * i,gp.tileSize * i);
-            left2 = setup("/monster/skeletonlord_phase2_left_2",gp.tileSize * i,gp.tileSize * i);
-            right1 = setup("/monster/skeletonlord_phase2_right_1",gp.tileSize * i,gp.tileSize * i);
-            right2 = setup("/monster/skeletonlord_phase2_right_2",gp.tileSize * i,gp.tileSize * i);
-        }
+    public void getImage() {
+        // Phóng to gấp 3 lần kích thước gốc
+        int newSize = gp.getTileSize() * 3;
+        setUp1(setup("/monster/skeletonlord_down_1", newSize, newSize));
+        setUp2(setup("/monster/skeletonlord_down_2", newSize, newSize));
+        setDown1(setup("/monster/skeletonlord_down_1", newSize, newSize));
+        setDown2(setup("/monster/skeletonlord_down_2", newSize, newSize));
+        setLeft1(setup("/monster/skeletonlord_left_1", newSize, newSize));
+        setLeft2(setup("/monster/skeletonlord_left_2", newSize, newSize));
+        setRight1(setup("/monster/skeletonlord_right_1", newSize, newSize));
+        setRight2(setup("/monster/skeletonlord_right_2", newSize, newSize));
     }
-    public void getAttackImage()
-    {
 
-        int i = 5;
-
-        if(inRage == false)
-        {
-            attackUp1 = setup("/monster/skeletonlord_attack_up_1",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackUp2 = setup("/monster/skeletonlord_attack_up_2",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackDown1 = setup("/monster/skeletonlord_attack_down_1",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackDown2 = setup("/monster/skeletonlord_attack_down_2",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackLeft1 = setup("/monster/skeletonlord_attack_left_1",gp.tileSize * 2 * i, gp.tileSize * i);
-            attackLeft2 = setup("/monster/skeletonlord_attack_left_2",gp.tileSize * 2 * i, gp.tileSize * i);
-            attackRight1 = setup("/monster/skeletonlord_attack_right_1",gp.tileSize * 2 * i, gp.tileSize * i);
-            attackRight2 = setup("/monster/skeletonlord_attack_right_2",gp.tileSize * 2 * i, gp.tileSize * i);
-        }
-        if(inRage == true)
-        {
-            attackUp1 = setup("/monster/skeletonlord_phase2_attack_up_1",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackUp2 = setup("/monster/skeletonlord_phase2_attack_up_2",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackDown1 = setup("/monster/skeletonlord_phase2_attack_down_1",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackDown2 = setup("/monster/skeletonlord_phase2_attack_down_2",gp.tileSize * i, gp.tileSize * 2 * i);
-            attackLeft1 = setup("/monster/skeletonlord_phase2_attack_left_1",gp.tileSize * 2 * i, gp.tileSize * i);
-            attackLeft2 = setup("/monster/skeletonlord_phase2_attack_left_2",gp.tileSize * 2 * i, gp.tileSize * i);
-            attackRight1 = setup("/monster/skeletonlord_phase2_attack_right_1",gp.tileSize * 2 * i, gp.tileSize * i);
-            attackRight2 = setup("/monster/skeletonlord_phase2_attack_right_2",gp.tileSize * 2 * i, gp.tileSize * i);
-        }
+    public void getAttackImage() {
+        // Phóng to gấp 3 lần kích thước gốc cho cả chiều rộng và chiều cao
+        int newSize = gp.getTileSize() * 3;
+        setAttackUp1(setup("/monster/skeletonlord_attack_up_1", newSize, newSize * 2));
+        setAttackUp2(setup("/monster/skeletonlord_attack_up_2", newSize, newSize * 2));
+        setAttackDown1(setup("/monster/skeletonlord_attack_down_1", newSize, newSize * 2));
+        setAttackDown2(setup("/monster/skeletonlord_attack_down_2", newSize, newSize * 2));
+        setAttackLeft1(setup("/monster/skeletonlord_attack_left_1", newSize * 2, newSize));
+        setAttackLeft2(setup("/monster/skeletonlord_attack_left_2", newSize * 2, newSize));
+        setAttackRight1(setup("/monster/skeletonlord_attack_right_1", newSize * 2, newSize));
+        setAttackRight2(setup("/monster/skeletonlord_attack_right_2", newSize * 2, newSize));
     }
-    public void setDialogue()
-    {
-        dialogues[0][0] = "Không ai có thể đánh cắp kho báu của ta!";
-        dialogues[0][1] = "Mi sẽ bỏ mạng thôi!";
-        dialogues[0][2] = "HÃY ĐÓN NHẬN CÁI CHẾT CỦA NGƯƠI ĐI!";
 
-    }
     public void setAction() {
-        if(inRage==false && life < maxLife/2) {
-            inRage = true;
-            getImage();
-            getAttackImage();
-            defaultSpeed++;
-            speed = defaultSpeed;
-            attack *= 2;
+        if (getState().isOnPath()) {
+            // Dừng đuổi theo player nếu quá xa
+            checkStopChasingOrNot(gp.getPlayer(), 15, 100);
+            // Tìm đường đến player
+            searchPath(getGoalCol(gp.getPlayer()), getGoalRow(gp.getPlayer()));
+        } else {
+            // Bắt đầu đuổi theo nếu player đến gần
+            checkStartChasingOrNot(gp.getPlayer(), 5, 100);
+            // Di chuyển ngẫu nhiên khi không thấy player
+            getRandomDirection(120);
         }
 
-        // Kiểm tra khoảng cách đến player
-        int xDistance = Math.abs(worldX - gp.player.worldX);
-        int yDistance = Math.abs(worldY - gp.player.worldY);
-        int tileDistance = (xDistance + yDistance)/gp.tileSize;
-
-        if(tileDistance < 8) {
-            // Khi player trong tầm 8 tiles, bật chế độ đuổi theo
-            onPath = true;
-
-            // Tìm đường đi đến player
-            int goalCol = getGoalCol(gp.player);
-            int goalRow = getGoalRow(gp.player);
-            searchPath(goalCol, goalRow);
-
-            // Tấn công khi ở gần
-            if(attacking == false) {
-                int attackRate = inRage ? 30 : 60;
-                checkAttackOrNot(attackRate, gp.tileSize*4, gp.tileSize*4);
-            }
-        } else {
-            // Ngoài tầm 8 tiles thì di chuyển ngẫu nhiên
-            onPath = false;
-            getRandomDirection(120);
+        // Kiểm tra và tấn công
+        if (!getState().isAttacking()) {
+            checkAttackOrNot(30, gp.getTileSize() * 4, gp.getTileSize());
         }
     }
 
     public void damageReaction() {
-        actionLockCounter = 0;
-        onPath = true; // Luôn kích hoạt chế độ đuổi theo khi bị đánh
-        if(inRage && life < maxLife/4) { // Tăng tốc độ khi HP dưới 25% trong rage mode
-            defaultSpeed++;
-            speed = defaultSpeed;
-        }
+        getState().setActionLockCounter(0);
+        getState().setOnPath(true);
     }
+
     public void checkDrop() {
-        // Reset boss battle status
-        gp.bossBattleOn = false;
-        gp.stopMusic();
+        int i = new Random().nextInt(100) + 1;
 
-        // Remove the iron doors
-        for(int i = 0; i < gp.obj[1].length; i++) {
-            if(gp.obj[gp.currentMap][i] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)) {
-                gp.playSE(21);
-                gp.obj[gp.currentMap][i] = null;
-            }
-        }
-
-        // Drop items
-        int i = new Random().nextInt(100)+1;
-        if(i < 50) {
+        if (i < 50) {
             dropItem(new OBJ_Coin_Bronze(gp));
         }
-        if(i >= 50 && i < 100) {
+        if (i >= 50 && i < 75) {
             dropItem(new OBJ_Heart(gp));
         }
-
-        // End game when boss is defeated
-        gp.gameState = gp.endGameState;
-    }
-
-    public void setDying() {
-        dying = true;
-        gp.playSE(4);
     }
 }
-
-

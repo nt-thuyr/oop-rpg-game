@@ -1,36 +1,37 @@
 package object;
 
-import entity.Entity;
+import entity.Character;
 import main.GamePanel;
 
-public class OBJ_Door_Iron extends Entity {
+public class OBJ_Door_Iron extends Item {
 
-    GamePanel gp;
+    private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Iron Door";
 
-    public OBJ_Door_Iron(GamePanel gp)
-    {
+    public OBJ_Door_Iron(GamePanel gp) {
         super(gp);
         this.gp = gp;
-        type = type_obstacle;
-        name = objName;
-        down1 = setup("/objects/door_iron",gp.tileSize,gp.tileSize);
-        collision = true;
 
-        solidArea.x = 0;
-        solidArea.y = 16;
-        solidArea.width = 48;
-        solidArea.height = 32;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
-        price = 35;
+        setType(getType_obstacle());
+        setName(objName);
+        setImage(setup("/objects/door_iron", gp.getTileSize(), gp.getTileSize()));
+        setCollision(true);
+
+        getSolidArea().x = 0;
+        getSolidArea().y = 16;
+        getSolidArea().width = 48;
+        getSolidArea().height = 32;
+        setSolidAreaDefaultX(getSolidArea().x);
+        setSolidAreaDefaultY(getSolidArea().y);
+        setPrice(35);
         setDialogue();
     }
-    public void setDialogue()
-    {
-        dialogues[0][0] = "Nó sẽ không nhúc nhích.";
+
+    public void setDialogue() {
+        getDialogues()[0][0] = "Nó sẽ không nhúc nhích.";
     }
+
     public void interact() {
-        startDialogue(this,0);
+        startDialogue(this, 0);
     }
 }

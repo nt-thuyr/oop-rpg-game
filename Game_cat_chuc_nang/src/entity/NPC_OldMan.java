@@ -5,42 +5,36 @@ import main.GamePanel;
 import java.awt.*;
 import java.util.Random;
 
+public class NPC_OldMan extends Character {
 
-public class NPC_OldMan extends Entity{
-
-    public NPC_OldMan(GamePanel gp)
-    {
+    public NPC_OldMan(GamePanel gp) {
         super(gp);
-        direction = "down";
-        speed = 1;
+        setDirection("down");
+        setSpeed(1);
 
-        solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 16;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        setSolidArea(new Rectangle(8, 16, 32, 32));
+        setSolidAreaDefaultX(8);
+        setSolidAreaDefaultY(16);
 
-        solidAreaDefaultX = 8;
-        solidAreaDefaultY = 16;
-
-        dialogueSet = -1; //For first dialogueSet(= 0)
+        setDialogueSet(-1); // For first dialogueSet (= 0)
 
         getImage();
         setDialogue();
     }
-    public void getImage()
-    {
-        up1 = setup("/npc/oldman_up_1",gp.tileSize,gp.tileSize);
-        up2 = setup("/npc/oldman_up_2",gp.tileSize,gp.tileSize);
-        down1 = setup("/npc/oldman_down_1",gp.tileSize,gp.tileSize);
-        down2 = setup("/npc/oldman_down_2",gp.tileSize,gp.tileSize);
-        left1 = setup("/npc/oldman_left_1",gp.tileSize,gp.tileSize);
-        left2 = setup("/npc/oldman_left_2",gp.tileSize,gp.tileSize);
-        right1 = setup("/npc/oldman_right_1",gp.tileSize,gp.tileSize);
-        right2 = setup("/npc/oldman_right_2",gp.tileSize,gp.tileSize);
+
+    public void getImage() {
+        setUp1(setup("/npc/oldman_up_1", gp.getTileSize(), gp.getTileSize()));
+        setUp2(setup("/npc/oldman_up_2", gp.getTileSize(), gp.getTileSize()));
+        setDown1(setup("/npc/oldman_down_1", gp.getTileSize(), gp.getTileSize()));
+        setDown2(setup("/npc/oldman_down_2", gp.getTileSize(), gp.getTileSize()));
+        setLeft1(setup("/npc/oldman_left_1", gp.getTileSize(), gp.getTileSize()));
+        setLeft2(setup("/npc/oldman_left_2", gp.getTileSize(), gp.getTileSize()));
+        setRight1(setup("/npc/oldman_right_1", gp.getTileSize(), gp.getTileSize()));
+        setRight2(setup("/npc/oldman_right_2", gp.getTileSize(), gp.getTileSize()));
     }
-    public void setDialogue()
-    {
+
+    public void setDialogue() {
+        String[][] dialogues = getDialogues();
         dialogues[0][0] = "Này nhóc!";
         dialogues[0][1] = "Nhóc đến đây để tìm kho báu hửm?";
         dialogues[0][2] = "Ta đây từng là một đại pháp sư...\nNhưng giờ già cả rồi...";
@@ -53,66 +47,38 @@ public class NPC_OldMan extends Entity{
 
         dialogues[2][0] = "Làm sao để mở cánh cửa đó nhỉ...";
     }
-    public void setAction()
-    {
-        if(onPath == true)
-        {
-//            int goalCol = 12;
-//            int goalRow = 9;
 
-            int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
-            int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
+    public void setAction() {
+        if (getState().isOnPath()) {
+            int goalCol = (gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x) / gp.getTileSize();
+            int goalRow = (gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y) / gp.getTileSize();
             searchPath(goalCol, goalRow);
-
-        }
-        else
-        {
-            actionLockCounter++;
-
-            if(actionLockCounter == 120)
-            {
+        } else {
+            getState().setActionLockCounter(getState().getActionLockCounter() + 1);
+            if (getState().getActionLockCounter() == 120) {
                 Random random = new Random();
-                int i = random.nextInt(100) + 1;  // pick up  a number from 1 to 100
-                if(i <= 25)
-                {
-                    direction = "up";
+                int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
+                if (i <= 25) {
+                    setDirection("up");
+                } else if (i > 25 && i <= 50) {
+                    setDirection("down");
+                } else if (i > 50 && i <= 75) {
+                    setDirection("left");
+                } else if (i > 75 && i <= 100) {
+                    setDirection("right");
                 }
-                if(i>25 && i <= 50)
-                {
-                    direction = "down";
-                }
-                if(i>50 && i <= 75)
-                {
-                    direction = "left";
-                }
-                if(i>75 && i <= 100)
-                {
-                    direction = "right";
-                }
-                actionLockCounter = 0; // reset
+                getState().setActionLockCounter(0); // reset
             }
         }
     }
-    public void speak()
-    {
-        //ENTITY CLASS SPEAK()
-        //Do this character specific stuff
 
+    public void speak() {
         facePlayer();
-        startDialogue(this,dialogueSet);
+        startDialogue(this, getDialogueSet());
 
-        dialogueSet++;
-        if(dialogues[dialogueSet][0] == null)
-        {
-            //dialogueSet = 0;
-            dialogueSet--; //displays last set
+        setDialogueSet(getDialogueSet() + 1);
+        if (getDialogues()[getDialogueSet()][0] == null) {
+            setDialogueSet(getDialogueSet() - 1); // Displays last set
         }
-
-        /*if(gp.player.life < gp.player.maxLife/3)
-        {
-            dialogueSet = 1;
-        }*/
-        //follow me, come with me  or something like that
-        //onPath = true;
     }
 }

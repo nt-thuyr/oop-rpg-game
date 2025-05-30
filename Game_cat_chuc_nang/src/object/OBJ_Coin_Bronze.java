@@ -1,29 +1,28 @@
 package object;
 
-import entity.Entity;
+import entity.Character;
 import main.GamePanel;
 
-import java.awt.*;
+public class OBJ_Coin_Bronze extends Item {
 
-public class OBJ_Coin_Bronze extends Entity {
-
-    GamePanel gp;
+    private GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Tiền đồng";
+
     public OBJ_Coin_Bronze(GamePanel gp) {
         super(gp);
         this.gp = gp;
 
-        type = type_pickupOnly;
-        name = objName;
-        value = 30;
-        down1 = setup("/objects/coin_bronze", gp.tileSize, gp.tileSize);
-        price = 25;
+        setType(getType_pickupOnly());
+        setName(objName);
+        setValue(30);
+        setImage(setup("/objects/coin_bronze", gp.getTileSize(), gp.getTileSize()));
+        setPrice(25);
     }
-    public boolean use(Entity entity)
-    {
+
+    public boolean use(Character entity) {
         gp.playSE(1);
-        gp.ui.addMessage("Coin +" + value);
-        entity.coin += value;
+        gp.getUi().addMessage("Coin +" + getValue());
+        entity.setCoin(entity.getCoin() + getValue());
         return true;
     }
 }
