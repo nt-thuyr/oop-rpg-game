@@ -85,7 +85,6 @@ public class Sound {
         }
         fc.setValue(volume);
     }
-
     public Clip getClip() {
         return clip;
     }
