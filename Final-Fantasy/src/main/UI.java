@@ -1,7 +1,6 @@
 package main;
 
 import entity.Character;
-import entity.Entity;
 import item.CoinBronze;
 import item.Heart;
 
@@ -32,7 +31,7 @@ public class UI {
 
     private int subState = 0;
     private int counter = 0;
-    private Entity dialogueEntity; // Can be Character or Item
+    private Character dialogueEntity; // Can be Character or Item
     private Character npc;
     private int charIndex = 0;
     private String combinedText = "";
@@ -832,11 +831,11 @@ public class UI {
         this.titleScreenState = titleScreenState;
     }
 
-    public void setDialogueEntity(Entity entity) {
-        this.dialogueEntity = entity;
+    public void setDialogueEntity(Character character) {
+        this.dialogueEntity = character;
     }
 
-    public Entity getDialogueEntity() {
-        return dialogueEntity;
+    public Character getDialogueEntity() {
+        return  dialogueEntity;
     }
 }
