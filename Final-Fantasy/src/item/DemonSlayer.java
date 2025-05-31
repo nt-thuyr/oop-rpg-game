@@ -16,7 +16,7 @@ public class DemonSlayer extends Item {
         setImage(setup("/objects/demon_slayer", gp.getTileSize(), gp.getTileSize()));
         setAttackValue(6);
         setAttackArea(new Rectangle(50, 50));
-        setDescription("[" + getName() + "]\nA demon slayer to battle the boss.");
+        setDescription("[" + getName() + "]\nA demon slayer\nto battle the boss.");
         setPrice(500);
         setKnockBackPower(6);
         setMotion1_duration(5);
