@@ -43,15 +43,11 @@ public class Character extends Entity {
     private Projectile projectile;
     private boolean boss;
 
-    // ITEM ATTRIBUTES
+    // INVENTORY ATTRIBUTES
     private final ArrayList<Item> inventory = new ArrayList<>();
     private final int maxInventorySize = 20;
-    private String description = "";
     private int useCost;
-    private int price;
     private int knockBackPower;
-    private boolean stackable = false;
-    private int lightRadius;
 
     // TYPE
     private int type;
@@ -125,18 +121,6 @@ public class Character extends Entity {
         return goalRow;
     }
 
-    //    public void resetCounter()
-//    {
-//        spriteCounter = 0;
-//        actionLockCounter = 0;
-//        invincibleCounter = 0;
-//        shotAvailableCounter = 0;
-//        dyingCounter = 0;
-//        hpBarCounter = 0;
-//        knockBackCounter = 0;
-//        guardCounter = 0;
-//        offBalanceCounter = 0;
-//    }
     public void setAction() {
 
     }
@@ -712,44 +696,6 @@ public class Character extends Entity {
         }
     }
 
-    public int getDetected(Character user, Item[][] target, String targetName) {
-        int index = 999;
-
-        // Check the surrounding object
-        int nextWorldX = user.getLeftX();
-        int nextWorldY = user.getTopY();
-
-        switch (user.getDirection()) {
-            case "up":
-                nextWorldY = user.getTopY() - gp.getPlayer().getSpeed();
-                break;
-            case "down":
-                nextWorldY = user.getBottomY() + gp.getPlayer().getSpeed();
-                break;
-            case "left":
-                nextWorldX = user.getLeftX() - gp.getPlayer().getSpeed();
-                break;
-            case "right":
-                nextWorldX = user.getRightX() + gp.getPlayer().getSpeed();
-                break;
-        }
-        int col = nextWorldX / gp.getTileSize();
-        int row = nextWorldY / gp.getTileSize();
-
-        for (int i = 0; i < target[1].length; i++) {
-            if (target[gp.getCurrentMap()][i] != null) {
-                if (target[gp.getCurrentMap()][i].getCol() == col // checking if player 1 tile away from target (key etc.) (must be same direction)
-                        && target[gp.getCurrentMap()][i].getRow() == row
-                        && target[gp.getCurrentMap()][i].getName().equals(targetName)) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-        return index;
-    }
-
-
     public int getAmmo() {
         return ammo;
     }
@@ -888,14 +834,6 @@ public class Character extends Entity {
         return defense;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public int getDexterity() {
         return dexterity;
     }
@@ -942,38 +880,6 @@ public class Character extends Entity {
 
     public void setGp(GamePanel gp) {
         this.gp = gp;
-    }
-
-    public BufferedImage getGuardDown() {
-        return guardDown;
-    }
-
-    public void setGuardDown(BufferedImage guardDown) {
-        this.guardDown = guardDown;
-    }
-
-    public BufferedImage getGuardLeft() {
-        return guardLeft;
-    }
-
-    public void setGuardLeft(BufferedImage guardLeft) {
-        this.guardLeft = guardLeft;
-    }
-
-    public BufferedImage getGuardRight() {
-        return guardRight;
-    }
-
-    public void setGuardRight(BufferedImage guardRight) {
-        this.guardRight = guardRight;
-    }
-
-    public BufferedImage getGuardUp() {
-        return guardUp;
-    }
-
-    public void setGuardUp(BufferedImage guardUp) {
-        this.guardUp = guardUp;
     }
 
     public ArrayList<Item> getInventory() {
@@ -1034,26 +940,6 @@ public void addToInventory(Item item) {
         this.life = life;
     }
 
-    public int getLightRadius() {
-        return lightRadius;
-    }
-
-    public void setLightRadius(int lightRadius) {
-        this.lightRadius = lightRadius;
-    }
-
-//    public Character getLinkedEntity() {
-//        return linkedCharacter;
-//    }
-
-//    public void setLinkedEntity(Character linkedCharacter) {
-//        this.linkedCharacter = linkedCharacter;
-//    }
-
-//    public Character getLoot() {
-//        return loot;
-//    }
-
     public int getMana() {
         return mana;
     }
@@ -1098,14 +984,6 @@ public void addToInventory(Item item) {
         this.nextLevelExp = nextLevelExp;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     public Projectile getProjectile() {
         return projectile;
     }
@@ -1146,13 +1024,6 @@ public void addToInventory(Item item) {
         this.spriteNum = spriteNum;
     }
 
-    public boolean isStackable() {
-        return stackable;
-    }
-
-    public void setStackable(boolean stackable) {
-        this.stackable = stackable;
-    }
 
     public CharacterState getState() {
         return state;

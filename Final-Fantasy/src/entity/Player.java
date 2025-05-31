@@ -546,9 +546,6 @@ public class Player extends Character {
                     tempScreenY -= gp.getTileSize(); // Adjusted position
                     image = (getSpriteNum() == 1) ? getAttackUp1() : getAttackUp2();
                 }
-                if (getState().isGuarding()) {
-                    image = getGuardUp();
-                }
                 break;
 
             case "down":
@@ -556,9 +553,6 @@ public class Player extends Character {
                     image = (getSpriteNum() == 1) ? getDown1() : getDown2();
                 } else { // Attacking sprites
                     image = (getSpriteNum() == 1) ? getAttackDown1() : getAttackDown2();
-                }
-                if (getState().isGuarding()) {
-                    image = getGuardDown();
                 }
                 break;
 
@@ -569,9 +563,6 @@ public class Player extends Character {
                     tempScreenX -= gp.getTileSize(); // Adjusted position
                     image = (getSpriteNum() == 1) ? getAttackLeft1() : getAttackLeft2();
                 }
-                if (getState().isGuarding()) {
-                    image = getGuardLeft();
-                }
                 break;
 
             case "right":
@@ -579,9 +570,6 @@ public class Player extends Character {
                     image = (getSpriteNum() == 1) ? getRight1() : getRight2();
                 } else { // Attacking sprites
                     image = (getSpriteNum() == 1) ? getAttackRight1() : getAttackRight2();
-                }
-                if (getState().isGuarding()) {
-                    image = getGuardRight();
                 }
                 break;
         }

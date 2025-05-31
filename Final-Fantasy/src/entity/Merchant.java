@@ -49,6 +49,7 @@ public class Merchant extends Character {
 
     public void speak() {
         facePlayer();
+        startDialogue(this, 0);
         gp.setGameState(gp.getTradeState());
         gp.getUi().setNpc(this);
     }
