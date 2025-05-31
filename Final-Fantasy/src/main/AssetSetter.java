@@ -22,10 +22,6 @@ public class AssetSetter {
         gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 12);
         i++;
         gp.getObj()[mapNum][i] = new Key(gp);
-        gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 22);
-        gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 41);
-        i++;
-        gp.getObj()[mapNum][i] = new Key(gp);
         gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 38);
         gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 40);
         i++;
