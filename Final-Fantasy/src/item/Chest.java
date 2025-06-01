@@ -47,9 +47,11 @@ public class Chest extends Item {
 //        }
     }
 
-//    public void setLoot(Item loot) {
+
+
+//        public void setLoot(Item loot) {
 //        this.loot = loot;
-//        setDialogue();
-////    }
+////        setDialogue();
+//    }
     }
 }

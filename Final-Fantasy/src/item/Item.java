@@ -123,10 +123,10 @@ public abstract class Item {
         return  index;
     }
 
-//    public void setLoot(Item loot) {
-//        this.loot = loot; // Gán giá trị loot cho thuộc tính loot
+    public void setLoot(Item loot) {
+        this.loot = loot; // Gán giá trị loot cho thuộc tính loot
 //        setDialogue(); // Thiết lập hội thoại
-//    }
+    }
 
     public BufferedImage getImage() {
         return image;

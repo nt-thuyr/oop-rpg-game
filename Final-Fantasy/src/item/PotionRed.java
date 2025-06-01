@@ -28,10 +28,10 @@ public class PotionRed extends Item {
 //        getDialogues()[0][0] = "Bạn đã uống " + getName() + "!\n" + "Bạn sẽ được hồi phục " + getValue() + " máu.";
 //    }
 //
-//    public boolean use(Character character) {
+    public boolean use(Character character) {
 //        startDialogue(this, 0);
-//        character.setLife(character.getLife() + getValue());
-//        gp.playSE(2);
-//        return true;
-//    }
+        character.setLife(character.getLife() + getValue());
+        gp.playSE(2);
+        return true;
+    }
 }

@@ -27,18 +27,18 @@ public class Key extends Item {
 //        getDialogues()[1][0] = "Làm cái gì zậy?";
 //    }
 //
-//    public boolean use(Character entity) {
-//        int objIndex = getDetected(entity, gp.getObj(), "Door"); // user, target, name
-//        if (objIndex != 999) {
+    public boolean use(Character entity) {
+        int objIndex = getDetected(entity, gp.getObj(), "Door"); // user, target, name
+        if (objIndex != 999) {
 //            startDialogue(this, 0);
-//            gp.playSE(3);
-//            gp.getObj()[gp.getCurrentMap()][objIndex] = null;
-//            return true;
-//        } else {
+            gp.playSE(3);
+            gp.getObj()[gp.getCurrentMap()][objIndex] = null;
+            return true;
+        } else {
 //            startDialogue(this, 1);
-//            return false;
-//        }
-//    }
+            return false;
+        }
+    }
 
 
 }
