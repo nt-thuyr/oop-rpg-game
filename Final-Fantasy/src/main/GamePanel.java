@@ -62,12 +62,12 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player = new Player(this, keyH);
     private final Item[][] obj = new Item[maxMap][20];
     private final Character[][] npc = new Character[maxMap][10];
-    private final Character[][] monster = new Character[maxMap][20];
+    private Character[][] monster = new Character[maxMap][20];
     private final InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
     private final Character[][] projectile = new Character[maxMap][20];
     private ArrayList<Character> particleList = new ArrayList<>();
-    private  ArrayList<Character> charactersList = new ArrayList<>();
-    private  ArrayList<Item> itemsList = new ArrayList<>();
+    private ArrayList<Character> charactersList = new ArrayList<>();
+    private ArrayList<Item> itemsList = new ArrayList<>();
 
 
 
@@ -758,7 +758,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.maxWorldRow = maxWorldRow;
     }
 
-//    public void setMonster(Entity monster) {
+//    public void setMonster(Character[][] monster) {
 //        this.monster = monster;
 //    }
 
@@ -816,6 +816,22 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setUi(UI ui) {
         this.ui = ui;
+    }
+
+    public ArrayList<Character> getCharactersList() {
+        return charactersList;
+    }
+
+    public void setCharactersList(ArrayList<Character> charactersList) {
+        this.charactersList = charactersList;
+    }
+
+    public ArrayList<Item> getItemsList() {
+        return itemsList;
+    }
+
+    public void setItemsList(ArrayList<Item> itemsList) {
+        this.itemsList = itemsList;
     }
 }
 
