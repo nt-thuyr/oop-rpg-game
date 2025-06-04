@@ -5,6 +5,7 @@ import entity.Entity;
 import item.CoinBronze;
 import item.Heart;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class UI {
 
     private Font determinationSans, purisaB;
     private BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
+    private BufferedImage backgroundImage; // Background image for the title screen
 
     private ArrayList<String> message = new ArrayList<>();
     private ArrayList<Integer> messageCounter = new ArrayList<>();
@@ -47,6 +49,9 @@ public class UI {
 
             is = getClass().getResourceAsStream("/font/Purisa Bold.ttf");
             purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
+
+            is = getClass().getResourceAsStream("/image/background.png");
+            backgroundImage = ImageIO.read(is);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
@@ -457,16 +462,24 @@ public class UI {
     }
 
     public void drawTitleScreen() {
-        // Changed background color to a darker blue/gray
-        g2.setColor(new Color(20, 30, 40)); // New color
-        g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+        // Vẽ hình ảnh nền
+        if (backgroundImage != null) {
+            g2.drawImage(backgroundImage, 0, 0, gp.getScreenWidth(), gp.getScreenHeight(), null);
+            g2.setColor(new Color(0, 0, 0, 100)); // Lớp phủ đen mờ
+            g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+        } else {
+            // Fallback: Vẽ màu nền nếu hình ảnh không tải được
+            g2.setColor(new Color(20, 30, 40));
+            g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+        }
+
         // MAIN MENU
         if (getTitleScreenState() == 0) {
             // TITLE NAME
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
             String text = "Final Fantasy\n";
             int x = getXforCenteredText(text);
-            int y = gp.getTileSize() * 2; // Giữ nguyên vị trí tên game ở trên cùng
+            int y = gp.getTileSize() * 3; // Lùi xuống bằng cách tăng y
             // SHADOW
             g2.setColor(Color.gray);
             g2.drawString(text, x + 5, y + 5);
@@ -474,61 +487,61 @@ public class UI {
             g2.setColor(Color.white);
             g2.drawString(text, x, y);
 
-            // BLUE BOY IMAGE
-            int charY = y + g2.getFontMetrics().getHeight() + gp.getTileSize() / 2; // Sử dụng g2.getFontMetrics()
-            x = gp.getScreenWidth() / 2 - (gp.getTileSize() * 2) / 2; // Giữ nguyên căn giữa
-            g2.drawImage(gp.getPlayer().getDown1(), x, charY, gp.getTileSize() * 2, gp.getTileSize() * 2, null);
-
             // MENU
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+            FontMetrics metrics = g2.getFontMetrics(g2.getFont());
 
             // START BUTTON
             text = "START";
-            FontMetrics metrics = g2.getFontMetrics(g2.getFont()); // Lấy FontMetrics của font hiện tại của g2
+            // Tính chiều rộng và cao của hộp dựa trên văn bản "START"
             int buttonWidth = (int) metrics.getStringBounds(text, g2).getWidth() + 40;
             int buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
-
-            // Tính toán vị trí Y mới cho nút START
-            int startY = charY + gp.getTileSize() * 2 + gp.getTileSize();
-
-            int startX = getXforCenteredText(text);
-
-            drawMenuOptionBox(startX - 20, startY - buttonHeight / 2 - 10, buttonWidth, buttonHeight);
+            // Căn giữa hộp so với màn hình
+            int startBoxX = gp.getScreenWidth() / 2 - buttonWidth / 2;
+            int startBoxY = y + gp.getTileSize() * 3; // Dịch lên cao
+            // Tính toán vị trí thực tế của hộp khi vẽ
+            int startBoxYActual = startBoxY - buttonHeight / 2 - 10;
+            // Căn giữa văn bản trong hộp
+            int startTextX = startBoxX + (buttonWidth - (int) metrics.getStringBounds(text, g2).getWidth()) / 2;
+            int startTextY = startBoxYActual + (buttonHeight + metrics.getAscent() - metrics.getDescent()) / 2;
+            drawMenuOptionBox(startBoxX, startBoxYActual, buttonWidth, buttonHeight);
             g2.setColor(Color.white);
-            g2.drawString(text, startX, startY);
-            text = "NEW GAME";
-            x = getXforCenteredText(text);
-            y += (int) (gp.getTileSize() * 3.5);
-            g2.drawString(text, x, y);
+            g2.drawString(text, startTextX, startTextY);
             if (getCommandNum() == 0) {
-                g2.drawString(">", startX - gp.getTileSize(), startY);
+                g2.drawString(">", startBoxX - gp.getTileSize(), startTextY);
             }
 
             // QUIT BUTTON
             text = "QUIT";
-            buttonWidth = (int) metrics.getStringBounds(text, g2).getWidth() + 40;
+            // Dùng cùng chiều rộng của "START" để đồng đều
+            buttonWidth = (int) metrics.getStringBounds("START", g2).getWidth() + 40;
             buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
-            int quitX = getXforCenteredText(text);
-            int quitY = startY + buttonHeight + gp.getTileSize() / 2;
-
-            drawMenuOptionBox(quitX - 20, quitY - buttonHeight / 2 - 10, buttonWidth, buttonHeight);
+            // Căn giữa hộp so với màn hình
+            int quitBoxX = gp.getScreenWidth() / 2 - buttonWidth / 2;
+            int quitBoxY = startBoxY + buttonHeight + gp.getTileSize() / 2;
+            // Tính toán vị trí thực tế của hộp khi vẽ
+            int quitBoxYActual = quitBoxY - buttonHeight / 2 - 10;
+            // Căn giữa văn bản trong hộp
+            int quitTextX = quitBoxX + (buttonWidth - (int) metrics.getStringBounds(text, g2).getWidth()) / 2;
+            int quitTextY = quitBoxYActual + (buttonHeight + metrics.getAscent() - metrics.getDescent()) / 2;
+            drawMenuOptionBox(quitBoxX, quitBoxYActual, buttonWidth, buttonHeight);
             g2.setColor(Color.white);
-            g2.drawString(text, quitX, quitY);
+            g2.drawString(text, quitTextX, quitTextY);
             if (getCommandNum() == 1) {
-                g2.drawString(">", quitX - gp.getTileSize(), quitY);
+                g2.drawString(">", quitBoxX - gp.getTileSize(), quitTextY);
             }
         }
         // SECOND SCREEN (CLASS SELECTION)
         else if (getTitleScreenState() == 1) {
             g2.setColor(Color.white);
-            g2.setFont(g2.getFont().deriveFont(40F));
+            g2.setFont(g2.getFont().deriveFont(50F));
 
-            String text = "- You are ready-";
+            String text = "Sẵn sàng chưaaaaaa?";
             int x = getXforCenteredText(text);
             int y = gp.getTileSize() * 3;
             g2.drawString(text, x, y);
 
-            text = "Fighter";
+            text = "Rồiii!";
             x = getXforCenteredText(text);
             y += gp.getTileSize() * 3;
             g2.drawString(text, x, y);
