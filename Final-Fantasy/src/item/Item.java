@@ -1,12 +1,17 @@
 package item;
 
 import entity.Character;
-import entity.Entity;
-import main.GamePanel;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics2D;
 
-public abstract class Item extends Entity {
+import main.GamePanel;
+import main.UtilityTool;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
+
+public abstract class Item {
     private BufferedImage image;
     private String name;
     private String description;
@@ -29,13 +34,53 @@ public abstract class Item extends Entity {
     private static final int type_obstacle = 3;
     private static final int type_consumable = 4;
 
+    protected GamePanel gp; //
+    private int worldX, worldY; // Toạ độ trên thế giới
+    private int motion1_duration; // Thời gian thực hiển chuyển động đầu tiên
+    private int motion2_duration; // Thời gian thực hiện chuyển động thứ hai
+    private boolean collision = false; // kiểm tra va chạm
+    private Rectangle solidArea = new Rectangle(0, 0, 48, 48); // Khu vực va chạm mặc định
+    private int solidAreaDefaultX, solidAreaDefaultY; // Toạ độ mặc định của khu vực va chạm
+
+    private Rectangle attackArea = new Rectangle(0, 0, 0, 0); // Khu vực tấn công của thực thể
+
+
     public Item(GamePanel gp) {
-        super(gp);
+        this.gp = gp;
+    }
+    public void interact() {
     }
 
-    public void interact() {
-        // Default interaction logic, can be overridden by subclasses
+//    public void setDialogue() { // thiết lập hội thoại
+//        dialogues[0][0] = "No dialogue set.";
+//    }
+
+    public boolean inCamera() { // Kiểm tra xem thực thể có nằm trong phạm vi hiển thị hay không
+        boolean inCamera = getWorldX() + gp.getTileSize() * 5 > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && //*5 because skeleton lord disappears when the top left corner isn't on the screen
+                getWorldX() - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
+                getWorldY() + gp.getTileSize() * 5 > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() &&
+                getWorldY() - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
+        return inCamera;
     }
+
+    public BufferedImage setup(String imagePath, int width, int height) { // Tải và thiết lập hình ảnh cho thực thể
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath + ".png")));
+            image = uTool.scaleImage(image, width, height); // it scales to tilesize, will fix for player attack(16px x 32px) by adding width and height
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+//    public void startDialogue(Item item, int setNum) { // Bắt đầu đoạn hội thoại với thực thể được chỉ định
+//        gp.setGameState(gp.getDialogueState());
+//        gp.getUi().setDialogueEntity(item); // Always set the dialogue entity
+//        setDialogueSet(setNum);
+//    }
 
     // Polymorphic use method for all items
     public boolean use(Character user) {
@@ -80,7 +125,7 @@ public abstract class Item extends Entity {
 
     public void setLoot(Item loot) {
         this.loot = loot; // Gán giá trị loot cho thuộc tính loot
-        setDialogue(); // Thiết lập hội thoại
+//        setDialogue(); // Thiết lập hội thoại
     }
 
     public BufferedImage getImage() {
@@ -195,7 +240,6 @@ public abstract class Item extends Entity {
         this.amount = amount;
     }
 
-    @Override
     public void draw(Graphics2D g2) {
         if (inCamera()) {
             int tempScreenX = getWorldX() - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
@@ -223,5 +267,104 @@ public abstract class Item extends Entity {
 
     public void setTemp(boolean temp) {
         this.temp = temp;
+    }
+
+    public Rectangle getAttackArea() {
+        return attackArea;
+    }
+
+    public void setAttackArea(Rectangle attackArea) {
+        this.attackArea = attackArea;
+    }
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
+    }
+
+
+//    public String[][] getDialogues() {
+//        return dialogues;
+//    }
+//
+//    public void setDialogues(String[][] dialogues) {
+//        this.dialogues = dialogues;
+//    }
+
+
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public int getMotion1_duration() {
+        return motion1_duration;
+    }
+
+    public void setMotion1_duration(int motion1_duration) {
+        this.motion1_duration = motion1_duration;
+    }
+
+    public int getMotion2_duration() {
+        return motion2_duration;
+    }
+
+    public void setMotion2_duration(int motion2_duration) {
+        this.motion2_duration = motion2_duration;
+    }
+
+    public Rectangle getSolidArea() {
+        return solidArea;
+    }
+
+    public void setSolidArea(Rectangle solidArea) {
+        this.solidArea = solidArea;
+    }
+
+    public int getSolidAreaDefaultX() {
+        return solidAreaDefaultX;
+    }
+
+    public void setSolidAreaDefaultX(int solidAreaDefaultX) {
+        this.solidAreaDefaultX = solidAreaDefaultX;
+    }
+
+    public int getSolidAreaDefaultY() {
+        return solidAreaDefaultY;
+    }
+
+    public void setSolidAreaDefaultY(int solidAreaDefaultY) {
+        this.solidAreaDefaultY = solidAreaDefaultY;
+    }
+
+    public int getWorldX() {
+        return worldX;
+    }
+
+    public void setWorldX(int worldX) {
+        this.worldX = worldX;
+    }
+
+    public int getWorldY() {
+        return worldY;
+    }
+
+    public void setWorldY(int worldY) {
+        this.worldY = worldY;
+    }
+
+    public int getCol() {
+        return worldX / gp.getTileSize();
+    }
+
+    public int getRow() {
+        return worldY / gp.getTileSize();
     }
 }

@@ -2,13 +2,17 @@ package entity;
 
 import main.GamePanel;
 import item.Item;
+import main.UtilityTool;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
-public class Character extends Entity {
+public class Character {
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     private BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     private BufferedImage guardUp, guardDown, guardLeft, guardRight;
@@ -55,8 +59,22 @@ public class Character extends Entity {
     private final int type_npc = 1;
     private final int type_monster = 2;
 
+    protected GamePanel gp; //
+    private int worldX, worldY; // Toạ độ trên thế giới
+     private int dialogueSet = 0; // Xác định tập hội thoại
+    private int dialogueIndex = 0; // Xác định đoạ hội thoại
+    protected String[][] dialogues = new String[20][20]; // Lưu trữ các đoạn hội thoại
+    private int motion1_duration; // Thời gian thực hiển chuyển động đầu tiên
+    private int motion2_duration; // Thời gian thực hiện chuyển động thứ hai
+    private boolean collision = false; // kiểm tra va chạm
+    private Rectangle solidArea = new Rectangle(0, 0, 48, 48); // Khu vực va chạm mặc định
+    private int solidAreaDefaultX, solidAreaDefaultY; // Toạ độ mặc định của khu vực va chạm
+
+    private Rectangle attackArea = new Rectangle(0, 0, 0, 0); // Khu vực tấn công của thực thể
+
+
     public Character(GamePanel gp) {
-        super(gp);
+        this.gp = gp;
     }
 
     public int getScreenX() {
@@ -534,8 +552,6 @@ public class Character extends Entity {
         target.setSpeed(target.getSpeed() + knockBackPower);
         target.getState().setKnockBack(true);
     }
-
-    @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
@@ -694,6 +710,37 @@ public class Character extends Entity {
                 }
             }
         }
+    }
+
+    public boolean inCamera() { // Kiểm tra xem thực thể có nằm trong phạm vi hiển thị hay không
+        boolean inCamera = getWorldX() + gp.getTileSize() * 5 > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && //*5 because skeleton lord disappears when the top left corner isn't on the screen
+                getWorldX() - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
+                getWorldY() + gp.getTileSize() * 5 > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() &&
+                getWorldY() - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
+        return inCamera;
+    }
+
+    public BufferedImage setup(String imagePath, int width, int height) { // Tải và thiết lập hình ảnh cho thực thể
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath + ".png")));
+            image = uTool.scaleImage(image, width, height); // it scales to tilesize, will fix for player attack(16px x 32px) by adding width and height
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    public void startDialogue(Character character, int setNum) { // Bắt đầu đoạn hội thoại với thực thể được chỉ định
+        gp.setGameState(gp.getDialogueState());
+        gp.getUi().setDialogueEntity(character); // Always set the dialogue entity
+        setDialogueSet(setNum);
+    }
+
+    public void setDialogue() { // thiết lập hội thoại
+        dialogues[0][0] = "No dialogue set.";
     }
 
     public int getAmmo() {
@@ -1079,5 +1126,146 @@ public void addToInventory(Item item) {
 
     public void setUseCost(int useCost) {
         this.useCost = useCost;
+    }
+
+    public Rectangle getAttackArea() {
+        return attackArea;
+    }
+
+    public void setAttackArea(Rectangle attackArea) {
+        this.attackArea = attackArea;
+    }
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
+    }
+
+
+    public String[][] getDialogues() {
+        return dialogues;
+    }
+
+    public void setDialogues(String[][] dialogues) {
+        this.dialogues = dialogues;
+    }
+
+    public BufferedImage getGuardDown() {
+        return guardDown;
+    }
+
+    public void setGuardDown(BufferedImage guardDown) {
+        this.guardDown = guardDown;
+    }
+
+    public BufferedImage getGuardLeft() {
+        return guardLeft;
+    }
+
+    public void setGuardLeft(BufferedImage guardLeft) {
+        this.guardLeft = guardLeft;
+    }
+
+    public BufferedImage getGuardRight() {
+        return guardRight;
+    }
+
+    public void setGuardRight(BufferedImage guardRight) {
+        this.guardRight = guardRight;
+    }
+
+    public BufferedImage getGuardUp() {
+        return guardUp;
+    }
+
+    public void setGuardUp(BufferedImage guardUp) {
+        this.guardUp = guardUp;
+    }
+
+    public Character getLinkedCharacter() {
+        return linkedCharacter;
+    }
+
+    public void setLinkedCharacter(Character linkedCharacter) {
+        this.linkedCharacter = linkedCharacter;
+    }
+
+    public int getMotion1_duration() {
+        return motion1_duration;
+    }
+
+    public void setMotion1_duration(int motion1_duration) {
+        this.motion1_duration = motion1_duration;
+    }
+
+    public int getMotion2_duration() {
+        return motion2_duration;
+    }
+
+    public void setMotion2_duration(int motion2_duration) {
+        this.motion2_duration = motion2_duration;
+    }
+
+    public Rectangle getSolidArea() {
+        return solidArea;
+    }
+
+    public void setSolidArea(Rectangle solidArea) {
+        this.solidArea = solidArea;
+    }
+
+    public int getSolidAreaDefaultX() {
+        return solidAreaDefaultX;
+    }
+
+    public void setSolidAreaDefaultX(int solidAreaDefaultX) {
+        this.solidAreaDefaultX = solidAreaDefaultX;
+    }
+
+    public int getSolidAreaDefaultY() {
+        return solidAreaDefaultY;
+    }
+
+    public void setSolidAreaDefaultY(int solidAreaDefaultY) {
+        this.solidAreaDefaultY = solidAreaDefaultY;
+    }
+
+    public int getType_player() {
+        return type_player;
+    }
+
+    public int getWorldX() {
+        return worldX;
+    }
+
+    public void setWorldX(int worldX) {
+        this.worldX = worldX;
+    }
+
+    public int getWorldY() {
+        return worldY;
+    }
+
+    public void setWorldY(int worldY) {
+        this.worldY = worldY;
+    }
+
+    public int getDialogueIndex() {
+        return dialogueIndex;
+    }
+
+    public void setDialogueIndex(int dialogueIndex) {
+        this.dialogueIndex = dialogueIndex;
+    }
+
+    public int getDialogueSet() {
+        return dialogueSet;
+    }
+
+    public void setDialogueSet(int dialogueSet) {
+        this.dialogueSet = dialogueSet;
     }
 }

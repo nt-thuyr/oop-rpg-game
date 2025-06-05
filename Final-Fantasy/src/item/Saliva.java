@@ -23,6 +23,7 @@ public class Saliva extends Projectile {
         setUseCost(1); // spend 1 mana
         getState().setAlive(false);
         getImage();
+//        setPrice(25);
         setKnockBackPower(1);
     }
 

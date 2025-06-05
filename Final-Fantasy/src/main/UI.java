@@ -1,7 +1,6 @@
 package main;
 
 import entity.Character;
-import entity.Entity;
 import item.CoinBronze;
 import item.Heart;
 
@@ -32,7 +31,7 @@ public class UI {
 
     private int subState = 0;
     private int counter = 0;
-    private Entity dialogueEntity; // Can be Character or Item
+    private Character dialogueEntity; // Can be Character or Item
     private Character npc;
     private int charIndex = 0;
     private String combinedText = "";
@@ -457,8 +456,7 @@ public class UI {
     }
 
     public void drawTitleScreen() {
-        // Changed background color to a darker blue/gray
-        g2.setColor(new Color(20, 30, 40)); // New color
+        g2.setColor(new Color(0, 0, 0)); // FILL BACKGROUND BLACK
         g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
         // MAIN MENU
         if (getTitleScreenState() == 0) {
@@ -466,7 +464,7 @@ public class UI {
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
             String text = "Final Fantasy\n";
             int x = getXforCenteredText(text);
-            int y = gp.getTileSize() * 2; // Giữ nguyên vị trí tên game ở trên cùng
+            int y = gp.getTileSize() * 3;
             // SHADOW
             g2.setColor(Color.gray);
             g2.drawString(text, x + 5, y + 5);
@@ -475,55 +473,36 @@ public class UI {
             g2.drawString(text, x, y);
 
             // BLUE BOY IMAGE
-            int charY = y + g2.getFontMetrics().getHeight() + gp.getTileSize() / 2; // Sử dụng g2.getFontMetrics()
-            x = gp.getScreenWidth() / 2 - (gp.getTileSize() * 2) / 2; // Giữ nguyên căn giữa
-            g2.drawImage(gp.getPlayer().getDown1(), x, charY, gp.getTileSize() * 2, gp.getTileSize() * 2, null);
+            x = gp.getScreenWidth() / 2 - (gp.getTileSize() * 2) / 2;
+            y += gp.getTileSize() * 2;
+            g2.drawImage(gp.getPlayer().getDown1(), x, y, gp.getTileSize() * 2, gp.getTileSize() * 2, null);
 
             // MENU
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
 
-            // START BUTTON
-            text = "START";
-            FontMetrics metrics = g2.getFontMetrics(g2.getFont()); // Lấy FontMetrics của font hiện tại của g2
-            int buttonWidth = (int) metrics.getStringBounds(text, g2).getWidth() + 40;
-            int buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
-
-            // Tính toán vị trí Y mới cho nút START
-            int startY = charY + gp.getTileSize() * 2 + gp.getTileSize();
-
-            int startX = getXforCenteredText(text);
-
-            drawMenuOptionBox(startX - 20, startY - buttonHeight / 2 - 10, buttonWidth, buttonHeight);
-            g2.setColor(Color.white);
-            g2.drawString(text, startX, startY);
             text = "NEW GAME";
             x = getXforCenteredText(text);
             y += (int) (gp.getTileSize() * 3.5);
             g2.drawString(text, x, y);
             if (getCommandNum() == 0) {
-                g2.drawString(">", startX - gp.getTileSize(), startY);
+                g2.drawString(">", x - gp.getTileSize(), y);
             }
 
-            // QUIT BUTTON
             text = "QUIT";
-            buttonWidth = (int) metrics.getStringBounds(text, g2).getWidth() + 40;
-            buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
-            int quitX = getXforCenteredText(text);
-            int quitY = startY + buttonHeight + gp.getTileSize() / 2;
-
-            drawMenuOptionBox(quitX - 20, quitY - buttonHeight / 2 - 10, buttonWidth, buttonHeight);
-            g2.setColor(Color.white);
-            g2.drawString(text, quitX, quitY);
+            x = getXforCenteredText(text);
+            y += gp.getTileSize();
+            g2.drawString(text, x, y);
             if (getCommandNum() == 1) {
-                g2.drawString(">", quitX - gp.getTileSize(), quitY);
+                g2.drawString(">", x - gp.getTileSize(), y);
             }
         }
-        // SECOND SCREEN (CLASS SELECTION)
+        // SECOND SCREEN
         else if (getTitleScreenState() == 1) {
+            // CLASS SELECTION SCREEN
             g2.setColor(Color.white);
             g2.setFont(g2.getFont().deriveFont(40F));
 
-            String text = "- You are ready-";
+            String text = "- You are -";
             int x = getXforCenteredText(text);
             int y = gp.getTileSize() * 3;
             g2.drawString(text, x, y);
@@ -536,18 +515,6 @@ public class UI {
                 g2.drawString(">", x - gp.getTileSize(), y);
             }
         }
-    }
-
-    // New helper method to draw menu option boxes
-    public void drawMenuOptionBox(int x, int y, int width, int height) {
-        Color c = new Color(0, 0, 0, 180); // Semi-transparent black for the box background
-        g2.setColor(c);
-        g2.fillRoundRect(x, y, width, height, 25, 25); // Rounded rectangle
-
-        c = new Color(255, 255, 255); // White border
-        g2.setColor(c);
-        g2.setStroke(new BasicStroke(3)); // Thicker border
-        g2.drawRoundRect(x + 3, y + 3, width - 6, height - 6, 20, 20); // Slightly smaller rounded rectangle for the border
     }
 
     public void drawGameOverScreen() {
@@ -602,16 +569,14 @@ public class UI {
 
     public int getXforCenteredText(String text) {
         int textLength;
-        textLength = (int) g2.getFontMetrics(g2.getFont()).getStringBounds(text, g2).getWidth();
-
+        textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // Gets width of text.
         int x = gp.getScreenWidth() / 2 - textLength / 2;
         return x;
     }
 
     public int getXforAlignToRight(String text, int tailX) {
         int textLength;
-        textLength = (int) g2.getFontMetrics(g2.getFont()).getStringBounds(text, g2).getWidth();
-
+        textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // Gets width of text.
         int x = tailX - textLength;
         return x;
     }
@@ -682,10 +647,6 @@ public class UI {
         return commandNum;
     }
 
-    public void setCommandNum(int commandNum) {
-        this.commandNum = commandNum;
-    }
-
     public int getCounter() {
         return counter;
     }
@@ -700,10 +661,6 @@ public class UI {
 
     public String getCurrentDialogue() {
         return currentDialogue;
-    }
-
-    public void setCurrentDialogue(String currentDialogue) {
-        this.currentDialogue = currentDialogue;
     }
 
     public Font getDeterminationSans() {
@@ -730,6 +687,10 @@ public class UI {
         return heart_half;
     }
 
+    public boolean isInNPCInventory() {
+        return isInNPCInventory;
+    }
+
     public ArrayList<String> getMessage() {
         return message;
     }
@@ -742,40 +703,20 @@ public class UI {
         return npc;
     }
 
-    public void setNpc(Character npc) {
-        this.npc = npc;
-    }
-
     public int getNpcSlotCol() {
         return npcSlotCol;
-    }
-
-    public void setNpcSlotCol(int npcSlotCol) {
-        this.npcSlotCol = npcSlotCol;
     }
 
     public int getNpcSlotRow() {
         return npcSlotRow;
     }
 
-    public void setNpcSlotRow(int npcSlotRow) {
-        this.npcSlotRow = npcSlotRow;
-    }
-
     public int getPlayerSlotCol() {
         return playerSlotCol;
     }
 
-    public void setPlayerSlotCol(int playerSlotCol) {
-        this.playerSlotCol = playerSlotCol;
-    }
-
     public int getPlayerSlotRow() {
         return playerSlotRow;
-    }
-
-    public void setPlayerSlotRow(int playerSlotRow) {
-        this.playerSlotRow = playerSlotRow;
     }
 
     public Font getPurisaB() {
@@ -786,31 +727,115 @@ public class UI {
         return subState;
     }
 
-    public void setSubState(int subState) {
-        this.subState = subState;
-    }
-
     public int getTitleScreenState() {
         return titleScreenState;
     }
 
-    public void setTitleScreenState(int titleScreenState) {
-        this.titleScreenState = titleScreenState;
+    public void setNpc(Character npc) {
+        this.npc = npc;
     }
 
-    public boolean isInNPCInventory() {
-        return isInNPCInventory;
+    public void setCommandNum(int commandNum) {
+        this.commandNum = commandNum;
+    }
+
+    public void setCharIndex(int charIndex) {
+        this.charIndex = charIndex;
+    }
+
+    public void setCoin(BufferedImage coin) {
+        this.coin = coin;
+    }
+
+    public void setCombinedText(String combinedText) {
+        this.combinedText = combinedText;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public void setCrystal_blank(BufferedImage crystal_blank) {
+        this.crystal_blank = crystal_blank;
+    }
+
+    public void setCrystal_full(BufferedImage crystal_full) {
+        this.crystal_full = crystal_full;
+    }
+
+    public void setCurrentDialogue(String currentDialogue) {
+        this.currentDialogue = currentDialogue;
+    }
+
+    public void setDeterminationSans(Font determinationSans) {
+        this.determinationSans = determinationSans;
+    }
+
+    public void setG2(Graphics2D g2) {
+        this.g2 = g2;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public void setHeart_blank(BufferedImage heart_blank) {
+        this.heart_blank = heart_blank;
+    }
+
+    public void setHeart_full(BufferedImage heart_full) {
+        this.heart_full = heart_full;
+    }
+
+    public void setHeart_half(BufferedImage heart_half) {
+        this.heart_half = heart_half;
     }
 
     public void setInNPCInventory(boolean inNPCInventory) {
         isInNPCInventory = inNPCInventory;
     }
 
-    public Entity getDialogueEntity() {
-        return dialogueEntity;
+    public void setMessage(ArrayList<String> message) {
+        this.message = message;
     }
 
-    public void setDialogueEntity(Entity dialogueEntity) {
-        this.dialogueEntity = dialogueEntity;
+    public void setMessageCounter(ArrayList<Integer> messageCounter) {
+        this.messageCounter = messageCounter;
+    }
+
+    public void setNpcSlotCol(int npcSlotCol) {
+        this.npcSlotCol = npcSlotCol;
+    }
+
+    public void setNpcSlotRow(int npcSlotRow) {
+        this.npcSlotRow = npcSlotRow;
+    }
+
+    public void setPlayerSlotCol(int playerSlotCol) {
+        this.playerSlotCol = playerSlotCol;
+    }
+
+    public void setPlayerSlotRow(int playerSlotRow) {
+        this.playerSlotRow = playerSlotRow;
+    }
+
+    public void setPurisaB(Font purisaB) {
+        this.purisaB = purisaB;
+    }
+
+    public void setSubState(int subState) {
+        this.subState = subState;
+    }
+
+    public void setTitleScreenState(int titleScreenState) {
+        this.titleScreenState = titleScreenState;
+    }
+
+    public void setDialogueEntity(Character character) {
+        this.dialogueEntity = character;
+    }
+
+    public Character getDialogueEntity() {
+        return  dialogueEntity;
     }
 }

@@ -2,7 +2,6 @@ package main;
 import ai.PathFinder;
 
 import entity.Character;
-import entity.Entity;
 import entity.Player;
 import item.Item;
 import tile.Map;
@@ -63,11 +62,14 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player = new Player(this, keyH);
     private final Item[][] obj = new Item[maxMap][20];
     private final Character[][] npc = new Character[maxMap][10];
-    private final Character[][] monster = new Character[maxMap][20];
+    private Character[][] monster = new Character[maxMap][20];
     private final InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
     private final Character[][] projectile = new Character[maxMap][20];
     private ArrayList<Character> particleList = new ArrayList<>();
-    private ArrayList<Entity> entityList = new ArrayList<>();
+    private ArrayList<Character> charactersList = new ArrayList<>();
+    private ArrayList<Item> itemsList = new ArrayList<>();
+
+
 
     // GAME STATE
     private int gameState;
@@ -295,14 +297,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             //ADD ENTITIES TO THE LIST
             //PLAYER
-            entityList.add(player);
+            charactersList.add(player);
 
             //NPCs
             for(int i = 0; i < npc[1].length; i++)
             {
                 if(npc[currentMap][i] != null)
                 {
-                    entityList.add(npc[currentMap][i]);
+                    charactersList.add(npc[currentMap][i]);
                 }
             }
 
@@ -311,7 +313,7 @@ public class GamePanel extends JPanel implements Runnable {
             {
                 if(obj[currentMap][i] != null)
                 {
-                    entityList.add(obj[currentMap][i]);
+                    itemsList.add(obj[currentMap][i]);
                 }
             }
 
@@ -320,7 +322,7 @@ public class GamePanel extends JPanel implements Runnable {
             {
                 if(monster[currentMap][i] != null)
                 {
-                    entityList.add(monster[currentMap][i]);
+                    charactersList.add(monster[currentMap][i]);
                 }
             }
 
@@ -329,7 +331,7 @@ public class GamePanel extends JPanel implements Runnable {
             {
                 if(projectile[currentMap][i] != null)
                 {
-                    entityList.add(projectile[currentMap][i]);
+                    charactersList.add(projectile[currentMap][i]);
                 }
             }
 
@@ -338,27 +340,48 @@ public class GamePanel extends JPanel implements Runnable {
             {
                 if(particleList.get(i) != null)
                 {
-                    entityList.add(particleList.get(i));
+                    charactersList.add(particleList.get(i));
                 }
             }
 
-            //SORT
-            Collections.sort(entityList, new Comparator<Entity>() {
+            // Tạo danh sách chung
+            ArrayList<Object> combinedList = new ArrayList<>();
+            (combinedList).addAll(charactersList);
+            combinedList.addAll(itemsList);
+
+// Sắp xếp danh sách dựa trên worldY
+            Collections.sort(combinedList, new Comparator<Object>() {
                 @Override
-                public int compare(Entity e1, Entity e2) {
-                    int result = Integer.compare(e1.getWorldY(), e2.getWorldY());
-                    return result;
+                public int compare(Object o1, Object o2) {
+                    int y1 = 0, y2 = 0;
+
+                    if (o1 instanceof Character) {
+                        y1 = ((Character) o1).getWorldY();
+                    } else if (o1 instanceof Item) {
+                        y1 = ((Item) o1).getWorldY();
+                    }
+
+                    if (o2 instanceof Character) {
+                        y2 = ((Character) o2).getWorldY();
+                    } else if (o2 instanceof Item) {
+                        y2 = ((Item) o2).getWorldY();
+                    }
+
+                    return Integer.compare(y1, y2);
                 }
             });
 
-            //DRAW ENTITIES
-            for(int i = 0; i < entityList.size(); i++)
-            {
-                entityList.get(i).draw(g2);
+// Vẽ các thực thể
+            for (Object obj : combinedList) {
+                if (obj instanceof Character) {
+                    ((Character) obj).draw(g2);
+                } else if (obj instanceof Item) {
+                    ((Item) obj).draw(g2);
+                }
             }
 
             //EMPTY ENTITY LIST
-            entityList.clear();
+            combinedList.clear();
 
             //UI
             ui.draw(g2);
@@ -494,9 +517,6 @@ public class GamePanel extends JPanel implements Runnable {
         return eHandler;
     }
 
-    public ArrayList<Entity> getEntityList() {
-        return entityList;
-    }
 
     public int getFPS() {
         return FPS;
@@ -702,10 +722,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.eHandler = eHandler;
     }
 
-    public void setEntityList(ArrayList<Entity> entityList) {
-        this.entityList = entityList;
-    }
-
     public void setFPS(int FPS) {
         this.FPS = FPS;
     }
@@ -742,7 +758,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.maxWorldRow = maxWorldRow;
     }
 
-//    public void setMonster(Entity monster) {
+//    public void setMonster(Character[][] monster) {
 //        this.monster = monster;
 //    }
 
@@ -800,6 +816,22 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setUi(UI ui) {
         this.ui = ui;
+    }
+
+    public ArrayList<Character> getCharactersList() {
+        return charactersList;
+    }
+
+    public void setCharactersList(ArrayList<Character> charactersList) {
+        this.charactersList = charactersList;
+    }
+
+    public ArrayList<Item> getItemsList() {
+        return itemsList;
+    }
+
+    public void setItemsList(ArrayList<Item> itemsList) {
+        this.itemsList = itemsList;
     }
 }
 
