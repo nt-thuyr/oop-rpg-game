@@ -21,7 +21,6 @@ public abstract class Item {
     private int amount; // For stackable items, like potions
     private int value; // Value for pickup items, like hearts
     private boolean temp = false;
-
     private int attackValue; // For weapons
     private int knockBackPower; // For weapons
     private int defenseValue; // For shields
@@ -44,6 +43,9 @@ public abstract class Item {
 
     private Rectangle attackArea = new Rectangle(0, 0, 0, 0); // Khu vực tấn công của thực thể
 
+    private int dialogueSet = 0; // Xác định tập hội thoại
+    private int dialogueIndex = 0; // Xác định đoạ hội thoại
+    protected String[][] dialogues = new String[20][20]; // Lưu trữ các đoạn hội thoại
 
     public Item(GamePanel gp) {
         this.gp = gp;
@@ -51,9 +53,9 @@ public abstract class Item {
     public void interact() {
     }
 
-//    public void setDialogue() { // thiết lập hội thoại
-//        dialogues[0][0] = "No dialogue set.";
-//    }
+    public void setDialogue() { // thiết lập hội thoại
+        dialogues[0][0] = "No dialogue set.";
+    }
 
     public boolean inCamera() { // Kiểm tra xem thực thể có nằm trong phạm vi hiển thị hay không
         boolean inCamera = getWorldX() + gp.getTileSize() * 5 > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && //*5 because skeleton lord disappears when the top left corner isn't on the screen
@@ -76,11 +78,11 @@ public abstract class Item {
         return image;
     }
 
-//    public void startDialogue(Item item, int setNum) { // Bắt đầu đoạn hội thoại với thực thể được chỉ định
-//        gp.setGameState(gp.getDialogueState());
-//        gp.getUi().setDialogueEntity(item); // Always set the dialogue entity
-//        setDialogueSet(setNum);
-//    }
+    public void startDialogue(Item item, int setNum) { // Bắt đầu đoạn hội thoại với thực thể được chỉ định
+        gp.setGameState(gp.getDialogueState());
+        gp.getUi().setDialogueItem(item); // Always set the dialogue entity
+        setDialogueSet(setNum);
+    }
 
     // Polymorphic use method for all items
     public boolean use(Character user) {
@@ -125,7 +127,7 @@ public abstract class Item {
 
     public void setLoot(Item loot) {
         this.loot = loot; // Gán giá trị loot cho thuộc tính loot
-//        setDialogue(); // Thiết lập hội thoại
+        setDialogue(); // Thiết lập hội thoại
     }
 
     public BufferedImage getImage() {
@@ -286,15 +288,13 @@ public abstract class Item {
     }
 
 
-//    public String[][] getDialogues() {
-//        return dialogues;
-//    }
-//
-//    public void setDialogues(String[][] dialogues) {
-//        this.dialogues = dialogues;
-//    }
+    public String[][] getDialogues() {
+        return dialogues;
+    }
 
-
+    public void setDialogues(String[][] dialogues) {
+        this.dialogues = dialogues;
+    }
 
     public GamePanel getGp() {
         return gp;
@@ -366,5 +366,21 @@ public abstract class Item {
 
     public int getRow() {
         return worldY / gp.getTileSize();
+    }
+
+    public int getDialogueIndex() {
+        return dialogueIndex;
+    }
+
+    public void setDialogueIndex(int dialogueIndex) {
+        this.dialogueIndex = dialogueIndex;
+    }
+
+    public int getDialogueSet() {
+        return dialogueSet;
+    }
+
+    public void setDialogueSet(int dialogueSet) {
+        this.dialogueSet = dialogueSet;
     }
 }

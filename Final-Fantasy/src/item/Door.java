@@ -24,14 +24,14 @@ public class Door extends Item {
         setSolidAreaDefaultX(getSolidArea().x);
         setSolidAreaDefaultY(getSolidArea().y);
         setPrice(35);
-//        setDialogue();
+        setDialogue();
     }
-//
-//    public void setDialogue() {
-//        getDialogues()[0][0] = "Cần chìa khoá để mở cửa.";
-//    }
-//
-//    public void interact() {
-//        startDialogue(this, 0);
-//    }
+
+    public void setDialogue() {
+        getDialogues()[0][0] = "Cần chìa khoá để mở cửa.";
+    }
+
+    public void interact() {
+        startDialogue(this, 0);
+    }
 }

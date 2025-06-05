@@ -61,7 +61,7 @@ public class Character {
 
     protected GamePanel gp; //
     private int worldX, worldY; // Toạ độ trên thế giới
-     private int dialogueSet = 0; // Xác định tập hội thoại
+    private int dialogueSet = 0; // Xác định tập hội thoại
     private int dialogueIndex = 0; // Xác định đoạ hội thoại
     protected String[][] dialogues = new String[20][20]; // Lưu trữ các đoạn hội thoại
     private int motion1_duration; // Thời gian thực hiển chuyển động đầu tiên
@@ -716,7 +716,7 @@ public class Character {
 
     public void startDialogue(Character character, int setNum) { // Bắt đầu đoạn hội thoại với thực thể được chỉ định
         gp.setGameState(gp.getDialogueState());
-        gp.getUi().setDialogueEntity(character); // Always set the dialogue entity
+        gp.getUi().setDialogueCharacter(character); // Always set the dialogue entity
         setDialogueSet(setNum);
     }
 
