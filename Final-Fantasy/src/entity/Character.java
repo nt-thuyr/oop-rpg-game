@@ -611,32 +611,13 @@ public class Character {
     public void dyingAnimation(Graphics2D g2) {
         getState().setDyingCounter(getState().getDyingCounter() + 1);
         int i = 5; // interval
+        int totalFrames = i * 8; // Tổng số khung hình cho hoạt hình
 
-        if (getState().getDyingCounter() <= i) {
-            changeAlpha(g2, 0f);
-        }
-        if (getState().getDyingCounter() > i && getState().getDyingCounter() <= i * 2) {
-            changeAlpha(g2, 1f);
-        }
-        if (getState().getDyingCounter() > i * 2 && getState().getDyingCounter() <= i * 3) {
-            changeAlpha(g2, 0f);
-        }
-        if (getState().getDyingCounter() > i * 3 && getState().getDyingCounter() <= i * 4) {
-            changeAlpha(g2, 1f);
-        }
-        if (getState().getDyingCounter() > i * 4 && getState().getDyingCounter() <= i * 5) {
-            changeAlpha(g2, 0f);
-        }
-        if (getState().getDyingCounter() > i * 5 && getState().getDyingCounter() <= i * 6) {
-            changeAlpha(g2, 1f);
-        }
-        if (getState().getDyingCounter() > i * 6 && getState().getDyingCounter() <= i * 7) {
-            changeAlpha(g2, 0f);
-        }
-        if (getState().getDyingCounter() > i * 7 && getState().getDyingCounter() <= i * 8) {
-            changeAlpha(g2, 1f);
-        }
-        if (getState().getDyingCounter() > i * 8) {
+        if (getState().getDyingCounter() <= totalFrames) {
+            // Chuyển đổi alpha: 0 nếu dyingCounter / i là số lẻ, 1 nếu là số chẵn
+            float alpha = ((getState().getDyingCounter() - 1) / i) % 2 == 0 ? 0f : 1f;
+            changeAlpha(g2, alpha);
+        } else {
             getState().setAlive(false);
         }
     }
