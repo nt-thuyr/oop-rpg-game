@@ -293,9 +293,9 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
 
-// Xóa danh sách trước khi thêm mới
+            // Xóa danh sách trước khi thêm mới
             charactersList.clear();
-            itemsList.clear(); // Xóa itemsList để tránh trùng lặp
+            itemsList.clear();
 
             // Thêm player
             charactersList.add(player);
@@ -307,7 +307,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
 
-            // Thêm monsters (bao gồm cả quái đang trong trạng thái dying)
+            // Thêm monsters
             for (int i = 0; i < monster[1].length; i++) {
                 if (monster[currentMap][i] != null && (monster[currentMap][i].getState().isAlive() || monster[currentMap][i].getState().isDying())) {
                     charactersList.add(monster[currentMap][i]);
