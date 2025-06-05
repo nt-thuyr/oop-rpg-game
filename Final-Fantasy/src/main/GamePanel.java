@@ -69,8 +69,6 @@ public class GamePanel extends JPanel implements Runnable {
     private ArrayList<Character> charactersList = new ArrayList<>();
     private ArrayList<Item> itemsList = new ArrayList<>();
 
-
-
     // GAME STATE
     private int gameState;
     private final int titleState = 0;
@@ -205,7 +203,7 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                     if(!monster[currentMap][i].getState().isAlive())
                     {
-                        monster[currentMap][i].checkDrop(); // when monster dies, i check its drop
+                        monster[currentMap][i].checkDrop(); // when monster dies, check its drop
                         monster[currentMap][i] = null;
                     }
                 }
@@ -295,83 +293,59 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
 
-            //ADD ENTITIES TO THE LIST
-            //PLAYER
+// Xóa danh sách trước khi thêm mới
+            charactersList.clear();
+            itemsList.clear(); // Xóa itemsList để tránh trùng lặp
+
+            // Thêm player
             charactersList.add(player);
 
-            //NPCs
-            for(int i = 0; i < npc[1].length; i++)
-            {
-                if(npc[currentMap][i] != null)
-                {
+            // Thêm NPCs
+            for (int i = 0; i < npc[1].length; i++) {
+                if (npc[currentMap][i] != null) {
                     charactersList.add(npc[currentMap][i]);
                 }
             }
 
-            //OBJECTS
-            for(int i = 0; i < obj[1].length; i++)
-            {
-                if(obj[currentMap][i] != null)
-                {
-                    itemsList.add(obj[currentMap][i]);
-                }
-            }
-
-            //MONSTERS
-            for(int i = 0; i < monster[1].length; i++)
-            {
-                if(monster[currentMap][i] != null)
-                {
+            // Thêm monsters (bao gồm cả quái đang trong trạng thái dying)
+            for (int i = 0; i < monster[1].length; i++) {
+                if (monster[currentMap][i] != null && (monster[currentMap][i].getState().isAlive() || monster[currentMap][i].getState().isDying())) {
                     charactersList.add(monster[currentMap][i]);
                 }
             }
 
-            //PROJECTILES
-            for(int i = 0; i < projectile[1].length; i++)
-            {
-                if(projectile[currentMap][i] != null)
-                {
-                    charactersList.add(projectile[currentMap][i]);
-                }
-            }
-
-            //PARTICLES
-            for(int i = 0; i < particleList.size(); i++)
-            {
-                if(particleList.get(i) != null)
-                {
-                    charactersList.add(particleList.get(i));
+            // Thêm items
+            for (int i = 0; i < obj[1].length; i++) {
+                if (obj[currentMap][i] != null) {
+                    itemsList.add(obj[currentMap][i]);
                 }
             }
 
             // Tạo danh sách chung
             ArrayList<Object> combinedList = new ArrayList<>();
-            (combinedList).addAll(charactersList);
+            combinedList.addAll(charactersList);
             combinedList.addAll(itemsList);
 
-// Sắp xếp danh sách dựa trên worldY
+            // Sắp xếp danh sách dựa trên worldY
             Collections.sort(combinedList, new Comparator<Object>() {
                 @Override
                 public int compare(Object o1, Object o2) {
                     int y1 = 0, y2 = 0;
-
                     if (o1 instanceof Character) {
                         y1 = ((Character) o1).getWorldY();
                     } else if (o1 instanceof Item) {
                         y1 = ((Item) o1).getWorldY();
                     }
-
                     if (o2 instanceof Character) {
                         y2 = ((Character) o2).getWorldY();
                     } else if (o2 instanceof Item) {
                         y2 = ((Item) o2).getWorldY();
                     }
-
                     return Integer.compare(y1, y2);
                 }
             });
 
-// Vẽ các thực thể
+            // Vẽ các thực thể
             for (Object obj : combinedList) {
                 if (obj instanceof Character) {
                     ((Character) obj).draw(g2);
@@ -380,7 +354,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
 
-            //EMPTY ENTITY LIST
+            // Xóa combinedList
             combinedList.clear();
 
             //UI
