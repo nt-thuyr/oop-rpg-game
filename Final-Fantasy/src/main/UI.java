@@ -1,6 +1,6 @@
 package main;
 
-import entity.Character;
+import character.Character;
 import item.CoinBronze;
 import item.Heart;
 import item.Item;

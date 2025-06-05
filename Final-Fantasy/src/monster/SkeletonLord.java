@@ -1,6 +1,6 @@
 package monster;
 
-import entity.Character;
+import character.Character;
 import main.GamePanel;
 import item.CoinBronze;
 import item.Heart;

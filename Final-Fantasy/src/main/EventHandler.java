@@ -1,7 +1,7 @@
 package main;
 
 
-import entity.Character;
+import character.Character;
 
 public class EventHandler{
     GamePanel gp;

@@ -1,6 +1,6 @@
 package item;
 
-import entity.Character;
+import character.Character;
 
 import main.GamePanel;
 import main.UtilityTool;

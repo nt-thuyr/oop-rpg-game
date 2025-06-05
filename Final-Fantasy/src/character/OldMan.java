@@ -1,4 +1,4 @@
-package entity;
+package character;
 
 import main.GamePanel;
 

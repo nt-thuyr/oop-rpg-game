@@ -1,4 +1,4 @@
-package entity;
+package character;
 
 public class CharacterState {
 

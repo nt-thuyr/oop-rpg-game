@@ -1,6 +1,6 @@
 package main;
 
-import entity.Character;
+import character.Character;
 
 public class CollisionChecker {
     GamePanel gp;

@@ -1,8 +1,8 @@
 package main;
 
 //import entity.NPC_BigRock;
-import entity.Merchant;
-import entity.OldMan;
+import character.Merchant;
+import character.OldMan;
 import monster.*;
 import item.*;
 

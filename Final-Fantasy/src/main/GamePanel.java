@@ -1,8 +1,8 @@
 package main;
 import ai.PathFinder;
 
-import entity.Character;
-import entity.Player;
+import character.Character;
+import character.Player;
 import item.Item;
 import tile.Map;
 import tile.TileManager;

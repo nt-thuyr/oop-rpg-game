@@ -1,6 +1,6 @@
 package tile_interactive;
 
-import entity.Character;
+import character.Character;
 import main.GamePanel;
 
 import java.awt.*;

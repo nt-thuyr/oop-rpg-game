@@ -1,7 +1,6 @@
 package item;
 
-import entity.Character;
-import entity.Projectile;
+import character.Projectile;
 import main.GamePanel;
 
 import java.awt.*;
