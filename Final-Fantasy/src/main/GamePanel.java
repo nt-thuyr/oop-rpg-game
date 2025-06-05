@@ -669,14 +669,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.gameState = gameState;
     }
 
-    public void setaSetter(AssetSetter aSetter) {
-        this.aSetter = aSetter;
-    }
-
-    public void setcChecker(CollisionChecker cChecker) {
-        this.cChecker = cChecker;
-    }
-
     public void setCurrentArea(int currentArea) {
         this.currentArea = currentArea;
     }
@@ -685,124 +677,12 @@ public class GamePanel extends JPanel implements Runnable {
         this.currentMap = currentMap;
     }
 
-    public void seteGenerator(EntityGenerator eGenerator) {
-        this.eGenerator = eGenerator;
-    }
-
-    public void seteHandler(EventHandler eHandler) {
-        this.eHandler = eHandler;
-    }
-
-    public void setFPS(int FPS) {
-        this.FPS = FPS;
-    }
-
-    public void setFullScreenOn(boolean fullScreenOn) {
-        this.fullScreenOn = fullScreenOn;
-    }
-
-    public void setG2(Graphics2D g2) {
-        this.g2 = g2;
-    }
-
-    public void setGameThread(Thread gameThread) {
-        this.gameThread = gameThread;
-    }
-
-//    public void setiTile(InteractiveTile iTile) {
-//        this.iTile = iTile;
-//    }
-
-    public void setKeyH(KeyHandler keyH) {
-        this.keyH = keyH;
-    }
-
-    public void setMap(Map map) {
-        this.map = map;
-    }
-
-    public void setMaxWorldCol(int maxWorldCol) {
-        this.maxWorldCol = maxWorldCol;
-    }
-
-    public void setMaxWorldRow(int maxWorldRow) {
-        this.maxWorldRow = maxWorldRow;
-    }
-
-//    public void setMonster(Character[][] monster) {
-//        this.monster = monster;
-//    }
-
-    public void setMusic(Sound music) {
-        this.music = music;
-    }
+    public void setMonster(Character[][] monster) {
+        this.monster = monster;
+   }
 
     public void setNextArea(int nextArea) {
         this.nextArea = nextArea;
-    }
-
-//    public void setNpc(Entity npc) {
-//        this.npc = npc;
-//    }
-
-//    public void setObj(Entity obj) {
-//        this.obj = obj;
-//    }
-
-    public void setParticleList(ArrayList<Character> particleList) {
-        this.particleList = particleList;
-    }
-
-    public void setpFinder(PathFinder pFinder) {
-        this.pFinder = pFinder;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-//    public void setProjectile(Entity projectile) {
-//        this.projectile = projectile;
-//    }
-
-    public void setScreenHeight2(int screenHeight2) {
-        this.screenHeight2 = screenHeight2;
-    }
-
-    public void setScreenWidth2(int screenWidth2) {
-        this.screenWidth2 = screenWidth2;
-    }
-
-    public void setSe(Sound se) {
-        this.se = se;
-    }
-
-    public void setTempScreen(BufferedImage tempScreen) {
-        this.tempScreen = tempScreen;
-    }
-
-    public void setTileM(TileManager tileM) {
-        this.tileM = tileM;
-    }
-
-    public void setUi(UI ui) {
-        this.ui = ui;
-    }
-
-    public ArrayList<Character> getCharactersList() {
-        return charactersList;
-    }
-
-    public void setCharactersList(ArrayList<Character> charactersList) {
-        this.charactersList = charactersList;
-    }
-
-    public ArrayList<Item> getItemsList() {
-        return itemsList;
-    }
-
-    public void setItemsList(ArrayList<Item> itemsList) {
-        this.itemsList = itemsList;
     }
 }
 

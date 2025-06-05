@@ -39,6 +39,4 @@ public class Key extends Item {
             return false;
         }
     }
-
-
 }

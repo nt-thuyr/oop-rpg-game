@@ -45,7 +45,6 @@ public class Player extends Character {
         setLevel(20);
         setMaxLife(10);
         setLife(getMaxLife());
-        setMaxMana(8);
 
         setAmmo(10);
         setStrength(20);
@@ -78,12 +77,10 @@ public class Player extends Character {
     public void restoreStatus()
     {
         setLife(getMaxLife());
-        setMana(getMaxMana());
         setSpeed(getDefaultSpeed());
         getState().setInvincible(false);
         getState().setTransparent(false);
         getState().setAttacking(false);
-        getState().setGuarding(false);
         getState().setKnockBack(false);
     }
 
@@ -200,9 +197,6 @@ public class Player extends Character {
             }
         } else if (getState().isAttacking()) {
             attacking();
-        } else if (keyH.isSpacePressed()) {
-            getState().setGuarding(true);
-            getState().incrementGuardCounter();
         } else if (keyH.isUpPressed() || keyH.isDownPressed() || keyH.isLeftPressed() || keyH.isRightPressed() || keyH.isEnterPressed()) {
             if (keyH.isUpPressed()) {
                 setDirection("up");
@@ -257,8 +251,6 @@ public class Player extends Character {
 
             setAttackCanceled(false);
             keyH.setEnterPressed(false);
-            getState().setGuarding(false);
-            getState().resetGuardCounter();
 
             getState().setSpriteCounter(getState().getSpriteCounter() + 1);
             if (getState().getSpriteCounter() > 12) {
@@ -275,8 +267,6 @@ public class Player extends Character {
                 setSpriteNum(1);
                 setStandCounter(0);
             }
-            getState().setGuarding(false);
-            getState().setGuardCounter(0);
         }
 
         if (gp.getKeyH().isShotKeyPressed() && !getProjectile().getState().isAlive() && getState().getShotAvailableCounter() == 30 && getProjectile().haveResource(this)) {
@@ -308,9 +298,6 @@ public class Player extends Character {
         }
         if (getLife() > getMaxLife()) {
             setLife(getMaxLife());
-        }
-        if (getMana() > getMaxMana()) {
-            setMana(getMaxMana());
         }
         if (!keyH.isGodModeOn()) {
             if (getLife() <= 0) {

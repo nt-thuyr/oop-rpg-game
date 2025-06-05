@@ -24,6 +24,7 @@ public class Door extends Item {
         setSolidAreaDefaultX(getSolidArea().x);
         setSolidAreaDefaultY(getSolidArea().y);
         setPrice(35);
+
         setDialogue();
     }
 

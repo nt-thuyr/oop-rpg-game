@@ -89,16 +89,13 @@ public void drawDialogueScreen() {
     y += gp.getTileSize();
 
     String[] dialogues = null;
-    int dialogueSet = 0;
     int dialogueIndex = 0;
 
     if (dialogueCharacter != null) {
         dialogues = dialogueCharacter.getDialogues()[dialogueCharacter.getDialogueSet()];
-        dialogueSet = dialogueCharacter.getDialogueSet();
         dialogueIndex = dialogueCharacter.getDialogueIndex();
     } else if (dialogueItem != null) {
         dialogues = dialogueItem.getDialogues()[dialogueItem.getDialogueSet()];
-        dialogueSet = dialogueItem.getDialogueSet();
         dialogueIndex = dialogueItem.getDialogueIndex();
     }
 
@@ -314,9 +311,11 @@ public void drawDialogueScreen() {
                 int textX = dFrameX + 20;
                 int textY = frameY + gp.getTileSize();
                 g2.setFont(g2.getFont().deriveFont(22F));
-                for (String line : character.getInventory().get(itemIndex).getDescription().split("\n")) {
-                    g2.drawString(line, textX, textY);
-                    textY += 32;
+                if (itemIndex >= 0 && itemIndex < character.getInventory().size()) {
+                    for (String line : character.getInventory().get(itemIndex).getDescription().split("\n")) {
+                        g2.drawString(line, textX, textY);
+                        textY += 32;
+                    }
                 }
 
                 if (isTrading) {
@@ -932,10 +931,6 @@ public void drawDialogueScreen() {
         this.playerSlotRow = playerSlotRow;
     }
 
-    public void setPurisaB(Font purisaB) {
-        this.purisaB = purisaB;
-    }
-
     public void setSubState(int subState) {
         this.subState = subState;
     }
@@ -950,6 +945,9 @@ public void drawDialogueScreen() {
 
     public void setDialogueCharacter(Character dialogueCharacter) {
         this.dialogueCharacter = dialogueCharacter;
+        this.dialogueItem = null; // Only one dialogue source at a time
+        this.currentDialogue = ""; // Reset dialogue text
+        this.charIndex = 0; // Reset character index for typewriter effect if used
     }
 
     public Item getDialogueItem() {
@@ -958,5 +956,8 @@ public void drawDialogueScreen() {
 
     public void setDialogueItem(Item dialogueItem) {
         this.dialogueItem = dialogueItem;
+        this.dialogueCharacter = null; // Only one dialogue source at a time
+        this.currentDialogue = ""; // Reset dialogue text
+        this.charIndex = 0; // Reset character index for typewriter effect if used
     }
 }

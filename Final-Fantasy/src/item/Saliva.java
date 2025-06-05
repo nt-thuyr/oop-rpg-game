@@ -20,7 +20,6 @@ public class Saliva extends Projectile {
         setMaxLife(60); // after 80 frames, projectile disappears
         setLife(getMaxLife());
         setAttack(2);
-        setUseCost(1); // spend 1 mana
         getState().setAlive(false);
         getImage();
         setKnockBackPower(1);
@@ -35,14 +34,6 @@ public class Saliva extends Projectile {
         setLeft2(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
         setRight1(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
         setRight2(setup("/projectile/rock_down_1", gp.getTileSize(), gp.getTileSize()));
-    }
-
-    public boolean haveResource(Character user) {
-        return user.getAmmo() >= getUseCost();
-    }
-
-    public void subtractResource(Character user) {
-        user.setAmmo(user.getAmmo() - getUseCost());
     }
 
     public Color getParticleColor() {
