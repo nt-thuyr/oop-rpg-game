@@ -83,7 +83,10 @@ public class GamePanel extends JPanel implements Runnable {
     private final int sleepState = 9;
     private final int mapState = 10;
     private final int cutsceneState = 11;
-
+    private final int endGameState = 12;
+    public int getEndGameState() {
+        // ui.drawEndGameScreen();
+        return endGameState; }
     // AREA
     private int currentArea;
     private int nextArea;
@@ -134,17 +137,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
     }
-    public void setFullScreen()
-    {
-        //GET LOCAL SCREEN DEVICE
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        gd.setFullScreenWindow(Main.window);
 
-        //GET FULL SCREEN WIDTH AND HEIGHT
-        screenWidth2 = Main.window.getWidth();
-        screenHeight2 = Main.window.getHeight();
-    }
 
     public void startGameThread()
     {
@@ -277,6 +270,10 @@ public class GamePanel extends JPanel implements Runnable {
         else if(gameState == mapState)
         {
             map.drawFullMapScreen(g2);
+        }
+        // ENDGAME SCREEN
+        else if (gameState == endGameState) {
+            ui.draw(g2); // Call UI to draw endgame screen
         }
         //OTHERS
         else

@@ -20,12 +20,12 @@ public class SkeletonLord extends Character {
         setName("Skeleton Lord");
         setDefaultSpeed(1);
         setSpeed(getDefaultSpeed());
-        setMaxLife(80);
+        setMaxLife(2);
         setLife(getMaxLife());
-        setAttack(12);
-        setDefense(8);
-        setExp(10);
-        setKnockBackPower(5);
+        setAttack(2);
+        setDefense(2);
+        setExp(1);
+        setKnockBackPower(1);
 
         // Điều chỉnh vùng va chạm gấp 3 lần
         getSolidArea().x = 12; // 4 * 3
@@ -96,8 +96,11 @@ public class SkeletonLord extends Character {
     }
 
     public void checkDrop() {
+        gp.stopMusic();
+        gp.playSE(4); // Phát âm thanh chiến thắng
+        gp.setGameState(gp.getEndGameState()); // Chuyển sang endGameState
+        // Drop vật phẩm
         int i = new Random().nextInt(100) + 1;
-
         if (i < 50) {
             dropItem(new CoinBronze(gp));
         }

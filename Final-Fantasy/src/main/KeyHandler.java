@@ -39,6 +39,9 @@ public class KeyHandler implements KeyListener {
         } else if (gp.getGameState() == gp.getMapState()) {
             mapState(code);
         }
+        else if (gp.getGameState() == gp.getEndGameState()) {
+            endGameState(code);
+        }
     }
 
     private void titleState(int code) {
@@ -113,6 +116,33 @@ public class KeyHandler implements KeyListener {
         }
     }
 
+    private void endGameState(int code) {
+        if (code == KeyEvent.VK_W) {
+            gp.getUi().setCommandNum(gp.getUi().getCommandNum() - 1);
+            if (gp.getUi().getCommandNum() < 0) {
+                gp.getUi().setCommandNum(1);
+            }
+            gp.playSE(9);
+        }
+        if (code == KeyEvent.VK_S) {
+            gp.getUi().setCommandNum(gp.getUi().getCommandNum() + 1);
+            if (gp.getUi().getCommandNum() > 1) {
+                gp.getUi().setCommandNum(0);
+            }
+            gp.playSE(9);
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            if (gp.getUi().getCommandNum() == 0) {
+                gp.setGameState(gp.getPlayState());
+                gp.resetGame(false);
+                gp.playMusic(0);
+            } else if (gp.getUi().getCommandNum() == 1) {
+                gp.getUi().setTitleScreenState(0);
+                gp.setGameState(gp.getTitleState());
+                gp.resetGame(true);
+            }
+        }
+    }
     private void characterState(int code) {
         if (code == KeyEvent.VK_C) {
             gp.setGameState(gp.getPlayState());

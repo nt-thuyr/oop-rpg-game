@@ -187,6 +187,44 @@ public class UI {
         }
     }
 
+    public void drawEndGameScreen() {
+        g2.setColor(new Color(0, 0, 0, 150)); // Độ trong suốt 150/255
+        g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+        int x;
+        int y;
+        String text;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 110f));
+
+        text = "Chiến Thắng!";
+        // Shadow
+        g2.setColor(Color.BLACK);
+        x = getXforCenteredText(text);
+        y = gp.getTileSize() * 4;
+        g2.drawString(text, x, y);
+        // Main text
+        g2.setColor(Color.WHITE);
+        g2.drawString(text, x - 4, y - 4);
+
+        // Retry button
+        g2.setFont(g2.getFont().deriveFont(50f));
+        text = "Chơi Lại";
+        x = getXforCenteredText(text);
+        y += gp.getTileSize() * 4;
+        g2.drawString(text, x, y);
+        if (commandNum == 0) { // Arrow for Retry
+            g2.drawString(">", x - 40, y);
+        }
+
+        // Quit button
+        text = "Thoát Game";
+        x = getXforCenteredText(text);
+        y += 55;
+        g2.drawString(text, x, y);
+        if (commandNum == 1) { // Arrow for Quit
+            g2.drawString(">", x - 40, y);
+        }
+    }
+
     public void drawInventory(Character character, boolean isTrading, boolean cursor, int frameX, int frameY, int frameWidth, int frameHeight, int slotCol, int slotRow) {
         // Inventory Frame
         int slotStartX = frameX + 20;
@@ -595,6 +633,10 @@ public class UI {
         // TITLE STATE
         if (gp.getGameState() == gp.getTitleState()) {
             drawTitleScreen();
+        }
+        // ENDGAME STATE
+        else if (gp.getGameState() == gp.getEndGameState()) {
+            drawEndGameScreen();
         }
         // OTHERS
         else {
