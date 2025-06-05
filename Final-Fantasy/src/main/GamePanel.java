@@ -2,7 +2,6 @@ package main;
 import ai.PathFinder;
 
 import entity.Character;
-import entity.Entity;
 import entity.Player;
 import item.Item;
 import tile.Map;
@@ -63,11 +62,12 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player = new Player(this, keyH);
     private final Item[][] obj = new Item[maxMap][20];
     private final Character[][] npc = new Character[maxMap][10];
-    private final Character[][] monster = new Character[maxMap][20];
+    private Character[][] monster = new Character[maxMap][20];
     private final InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
     private final Character[][] projectile = new Character[maxMap][20];
     private ArrayList<Character> particleList = new ArrayList<>();
-    private ArrayList<Entity> entityList = new ArrayList<>();
+    private ArrayList<Character> charactersList = new ArrayList<>();
+    private ArrayList<Item> itemsList = new ArrayList<>();
 
     // GAME STATE
     private int gameState;
@@ -83,7 +83,10 @@ public class GamePanel extends JPanel implements Runnable {
     private final int sleepState = 9;
     private final int mapState = 10;
     private final int cutsceneState = 11;
-
+    private final int endGameState = 12;
+    public int getEndGameState() {
+        // ui.drawEndGameScreen();
+        return endGameState; }
     // AREA
     private int currentArea;
     private int nextArea;
@@ -134,17 +137,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
     }
-    public void setFullScreen()
-    {
-        //GET LOCAL SCREEN DEVICE
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        gd.setFullScreenWindow(Main.window);
 
-        //GET FULL SCREEN WIDTH AND HEIGHT
-        screenWidth2 = Main.window.getWidth();
-        screenHeight2 = Main.window.getHeight();
-    }
 
     public void startGameThread()
     {
@@ -203,7 +196,7 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                     if(!monster[currentMap][i].getState().isAlive())
                     {
-                        monster[currentMap][i].checkDrop(); // when monster dies, i check its drop
+                        monster[currentMap][i].checkDrop(); // when monster dies, check its drop
                         monster[currentMap][i] = null;
                     }
                 }
@@ -278,6 +271,10 @@ public class GamePanel extends JPanel implements Runnable {
         {
             map.drawFullMapScreen(g2);
         }
+        // ENDGAME SCREEN
+        else if (gameState == endGameState) {
+            ui.draw(g2); // Call UI to draw endgame screen
+        }
         //OTHERS
         else
         {
@@ -293,72 +290,69 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
 
-            //ADD ENTITIES TO THE LIST
-            //PLAYER
-            entityList.add(player);
+            // Xóa danh sách trước khi thêm mới
+            charactersList.clear();
+            itemsList.clear();
 
-            //NPCs
-            for(int i = 0; i < npc[1].length; i++)
-            {
-                if(npc[currentMap][i] != null)
-                {
-                    entityList.add(npc[currentMap][i]);
+            // Thêm player
+            charactersList.add(player);
+
+            // Thêm NPCs
+            for (int i = 0; i < npc[1].length; i++) {
+                if (npc[currentMap][i] != null) {
+                    charactersList.add(npc[currentMap][i]);
                 }
             }
 
-            //OBJECTS
-            for(int i = 0; i < obj[1].length; i++)
-            {
-                if(obj[currentMap][i] != null)
-                {
-                    entityList.add(obj[currentMap][i]);
+            // Thêm monsters
+            for (int i = 0; i < monster[1].length; i++) {
+                if (monster[currentMap][i] != null && (monster[currentMap][i].getState().isAlive() || monster[currentMap][i].getState().isDying())) {
+                    charactersList.add(monster[currentMap][i]);
                 }
             }
 
-            //MONSTERS
-            for(int i = 0; i < monster[1].length; i++)
-            {
-                if(monster[currentMap][i] != null)
-                {
-                    entityList.add(monster[currentMap][i]);
+            // Thêm items
+            for (int i = 0; i < obj[1].length; i++) {
+                if (obj[currentMap][i] != null) {
+                    itemsList.add(obj[currentMap][i]);
                 }
             }
 
-            //PROJECTILES
-            for(int i = 0; i < projectile[1].length; i++)
-            {
-                if(projectile[currentMap][i] != null)
-                {
-                    entityList.add(projectile[currentMap][i]);
-                }
-            }
+            // Tạo danh sách chung
+            ArrayList<Object> combinedList = new ArrayList<>();
+            combinedList.addAll(charactersList);
+            combinedList.addAll(itemsList);
 
-            //PARTICLES
-            for(int i = 0; i < particleList.size(); i++)
-            {
-                if(particleList.get(i) != null)
-                {
-                    entityList.add(particleList.get(i));
-                }
-            }
-
-            //SORT
-            Collections.sort(entityList, new Comparator<Entity>() {
+            // Sắp xếp danh sách dựa trên worldY
+            Collections.sort(combinedList, new Comparator<Object>() {
                 @Override
-                public int compare(Entity e1, Entity e2) {
-                    int result = Integer.compare(e1.getWorldY(), e2.getWorldY());
-                    return result;
+                public int compare(Object o1, Object o2) {
+                    int y1 = 0, y2 = 0;
+                    if (o1 instanceof Character) {
+                        y1 = ((Character) o1).getWorldY();
+                    } else if (o1 instanceof Item) {
+                        y1 = ((Item) o1).getWorldY();
+                    }
+                    if (o2 instanceof Character) {
+                        y2 = ((Character) o2).getWorldY();
+                    } else if (o2 instanceof Item) {
+                        y2 = ((Item) o2).getWorldY();
+                    }
+                    return Integer.compare(y1, y2);
                 }
             });
 
-            //DRAW ENTITIES
-            for(int i = 0; i < entityList.size(); i++)
-            {
-                entityList.get(i).draw(g2);
+            // Vẽ các thực thể
+            for (Object obj : combinedList) {
+                if (obj instanceof Character) {
+                    ((Character) obj).draw(g2);
+                } else if (obj instanceof Item) {
+                    ((Item) obj).draw(g2);
+                }
             }
 
-            //EMPTY ENTITY LIST
-            entityList.clear();
+            // Xóa combinedList
+            combinedList.clear();
 
             //UI
             ui.draw(g2);
@@ -494,9 +488,6 @@ public class GamePanel extends JPanel implements Runnable {
         return eHandler;
     }
 
-    public ArrayList<Entity> getEntityList() {
-        return entityList;
-    }
 
     public int getFPS() {
         return FPS;
@@ -702,10 +693,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.eHandler = eHandler;
     }
 
-    public void setEntityList(ArrayList<Entity> entityList) {
-        this.entityList = entityList;
-    }
-
     public void setFPS(int FPS) {
         this.FPS = FPS;
     }
@@ -742,7 +729,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.maxWorldRow = maxWorldRow;
     }
 
-//    public void setMonster(Entity monster) {
+//    public void setMonster(Character[][] monster) {
 //        this.monster = monster;
 //    }
 
@@ -800,6 +787,22 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setUi(UI ui) {
         this.ui = ui;
+    }
+
+    public ArrayList<Character> getCharactersList() {
+        return charactersList;
+    }
+
+    public void setCharactersList(ArrayList<Character> charactersList) {
+        this.charactersList = charactersList;
+    }
+
+    public ArrayList<Item> getItemsList() {
+        return itemsList;
+    }
+
+    public void setItemsList(ArrayList<Item> itemsList) {
+        this.itemsList = itemsList;
     }
 }
 

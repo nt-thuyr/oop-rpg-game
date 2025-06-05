@@ -42,14 +42,14 @@ public class Player extends Character {
         setSpeed(getDefaultSpeed());
         setDirection("down");
 
-        setLevel(1);
+        setLevel(20);
         setMaxLife(10);
         setLife(getMaxLife());
         setMaxMana(8);
 
         setAmmo(10);
-        setStrength(2);
-        setDexterity(1);
+        setStrength(20);
+        setDexterity(20);
         setExp(0);
         setNextLevelExp(4);
         setCoin(40);

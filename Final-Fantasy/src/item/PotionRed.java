@@ -21,15 +21,15 @@ public class PotionRed extends Item {
         setPrice(50);
         setStackable(true);
 
-        setDialogue();
+//        setDialogue();
     }
 
-    public void setDialogue() {
-        getDialogues()[0][0] = "Bạn đã uống " + getName() + "!\n" + "Bạn sẽ được hồi phục " + getValue() + " máu.";
-    }
-
+//    public void setDialogue() {
+//        getDialogues()[0][0] = "Bạn đã uống " + getName() + "!\n" + "Bạn sẽ được hồi phục " + getValue() + " máu.";
+//    }
+//
     public boolean use(Character character) {
-        startDialogue(this, 0);
+//        startDialogue(this, 0);
         character.setLife(character.getLife() + getValue());
         gp.playSE(2);
         return true;
