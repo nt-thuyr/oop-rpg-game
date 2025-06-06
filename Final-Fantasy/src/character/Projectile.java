@@ -1,4 +1,4 @@
-package entity;
+package character;
 
 import main.GamePanel;
 
@@ -32,11 +32,7 @@ public class Projectile extends Character {
             boolean contactPlayer = gp.getcChecker().checkPlayer(this);
             if (!gp.getPlayer().getState().isInvincible() && contactPlayer) {
                 damagePlayer(getAttack());
-                if (gp.getPlayer().getState().isGuarding()) {
-                    generateParticle(user.getProjectile(), user.getProjectile());
-                } else {
-                    generateParticle(user.getProjectile(), gp.getPlayer());
-                }
+                generateParticle(user.getProjectile(), gp.getPlayer());
                 getState().setAlive(false);
             }
         }

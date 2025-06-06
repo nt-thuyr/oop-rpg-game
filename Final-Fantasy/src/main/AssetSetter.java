@@ -1,8 +1,8 @@
 package main;
 
 //import entity.NPC_BigRock;
-import entity.Merchant;
-import entity.OldMan;
+import character.Merchant;
+import character.OldMan;
 import monster.*;
 import item.*;
 
@@ -36,12 +36,12 @@ public class AssetSetter {
         mapNum = 2;
         i = 0;
         gp.getObj()[mapNum][i] = new Chest(gp);
-//        gp.getObj()[mapNum][i].setLoot(new DemonSlayer(gp));
+        gp.getObj()[mapNum][i].setLoot(new DemonSlayer(gp));
         gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 40);
         gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 18);
         i++;
         gp.getObj()[mapNum][i] = new Chest(gp);
-//        gp.getObj()[mapNum][i].setLoot(new PotionRed(gp));
+        gp.getObj()[mapNum][i].setLoot(new PotionRed(gp));
         gp.getObj()[mapNum][i].setWorldX(gp.getTileSize() * 27);
         gp.getObj()[mapNum][i].setWorldY(gp.getTileSize() * 32);
         i++;

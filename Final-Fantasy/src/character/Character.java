@@ -1,4 +1,4 @@
-package entity;
+package character;
 
 import main.GamePanel;
 import item.Item;
@@ -15,10 +15,8 @@ import java.util.Random;
 public class Character {
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     private BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
-    private BufferedImage guardUp, guardDown, guardLeft, guardRight;
 
     private Character attacker;
-    private Character linkedCharacter;
 
     // STATE
     private String direction = "down";
@@ -31,8 +29,6 @@ public class Character {
     private int speed;
     private int maxLife;
     private int life;
-    private int maxMana;
-    private int mana;
     private int ammo;
     private int level;
     private int strength;
@@ -50,23 +46,19 @@ public class Character {
     // INVENTORY ATTRIBUTES
     private final ArrayList<Item> inventory = new ArrayList<>();
     private final int maxInventorySize = 20;
-    private int useCost;
     private int knockBackPower;
 
     // TYPE
     private int type;
-    private final int type_player = 0;
-    private final int type_npc = 1;
     private final int type_monster = 2;
 
-    protected GamePanel gp; //
+    protected GamePanel gp;
     private int worldX, worldY; // Toạ độ trên thế giới
-     private int dialogueSet = 0; // Xác định tập hội thoại
+    private int dialogueSet = 0; // Xác định tập hội thoại
     private int dialogueIndex = 0; // Xác định đoạ hội thoại
     protected String[][] dialogues = new String[20][20]; // Lưu trữ các đoạn hội thoại
     private int motion1_duration; // Thời gian thực hiển chuyển động đầu tiên
     private int motion2_duration; // Thời gian thực hiện chuyển động thứ hai
-    private boolean collision = false; // kiểm tra va chạm
     private Rectangle solidArea = new Rectangle(0, 0, 48, 48); // Khu vực va chạm mặc định
     private int solidAreaDefaultX, solidAreaDefaultY; // Toạ độ mặc định của khu vực va chạm
 
@@ -492,33 +484,12 @@ public class Character {
     public void damagePlayer(int attack) {
         if (!gp.getPlayer().getState().isInvincible()) {
             int damage = attack - gp.getPlayer().getDefense();
-            // Get an opposite direction of this attacker
-            String canGuardDirection = getOppositeDirection(getDirection());
-
-            if (gp.getPlayer().getState().isGuarding() && gp.getPlayer().getDirection().equals(canGuardDirection)) {
-                // Parry: If you press guard key less than 10 frames before the attack, you receive 0 damage and get a critical chance
-                if (gp.getPlayer().getState().getGuardCounter() < 10) {
-                    damage = 0;
-                    gp.playSE(16);
-                    setKnockBack(this, gp.getPlayer(), getKnockBackPower()); // Knockback attacker
-                    getState().setOffBalance(true);
-                    getState().setSpriteCounter(getState().getSpriteCounter() - 60); // Attacker's sprites return to motion1 (stun effect)
-                } else {
-                    // Normal Guard
-                    damage /= 2;
-                    gp.playSE(15);
-                }
-            } else {
-                // Not guarding
-                gp.playSE(6); // receivedamage.wav
-                if (damage < 1) {
-                    damage = 1;
-                }
+            gp.playSE(6); // receivedamage.wav
+            if (damage < 1) {
+                damage = 1;
             }
-            if (damage != 0) {
-                gp.getPlayer().getState().setTransparent(true);
-                setKnockBack(gp.getPlayer(), this, getKnockBackPower());
-            }
+            gp.getPlayer().getState().setTransparent(true);
+            setKnockBack(gp.getPlayer(), this, getKnockBackPower());
 
             // Apply damage
             gp.getPlayer().setLife(gp.getPlayer().getLife() - damage);
@@ -696,7 +667,7 @@ public class Character {
 
     public void startDialogue(Character character, int setNum) { // Bắt đầu đoạn hội thoại với thực thể được chỉ định
         gp.setGameState(gp.getDialogueState());
-        gp.getUi().setDialogueEntity(character); // Always set the dialogue entity
+        gp.getUi().setDialogueCharacter(character); // Always set the dialogue entity
         setDialogueSet(setNum);
     }
 
@@ -948,14 +919,6 @@ public void addToInventory(Item item) {
         this.life = life;
     }
 
-    public int getMana() {
-        return mana;
-    }
-
-    public void setMana(int mana) {
-        this.mana = mana;
-    }
-
     public int getMaxInventorySize() {
         return maxInventorySize;
     }
@@ -966,14 +929,6 @@ public void addToInventory(Item item) {
 
     public void setMaxLife(int maxLife) {
         this.maxLife = maxLife;
-    }
-
-    public int getMaxMana() {
-        return maxMana;
-    }
-
-    public void setMaxMana(int maxMana) {
-        this.maxMana = maxMana;
     }
 
     public String getName() {
@@ -1061,10 +1016,6 @@ public void addToInventory(Item item) {
         return type_monster;
     }
 
-    public int getType_npc() {
-        return type_npc;
-    }
-
     public BufferedImage getUp1() {
         return up1;
     }
@@ -1081,14 +1032,6 @@ public void addToInventory(Item item) {
         this.up2 = up2;
     }
 
-    public int getUseCost() {
-        return useCost;
-    }
-
-    public void setUseCost(int useCost) {
-        this.useCost = useCost;
-    }
-
     public Rectangle getAttackArea() {
         return attackArea;
     }
@@ -1097,61 +1040,8 @@ public void addToInventory(Item item) {
         this.attackArea = attackArea;
     }
 
-    public boolean isCollision() {
-        return collision;
-    }
-
-    public void setCollision(boolean collision) {
-        this.collision = collision;
-    }
-
-
     public String[][] getDialogues() {
         return dialogues;
-    }
-
-    public void setDialogues(String[][] dialogues) {
-        this.dialogues = dialogues;
-    }
-
-    public BufferedImage getGuardDown() {
-        return guardDown;
-    }
-
-    public void setGuardDown(BufferedImage guardDown) {
-        this.guardDown = guardDown;
-    }
-
-    public BufferedImage getGuardLeft() {
-        return guardLeft;
-    }
-
-    public void setGuardLeft(BufferedImage guardLeft) {
-        this.guardLeft = guardLeft;
-    }
-
-    public BufferedImage getGuardRight() {
-        return guardRight;
-    }
-
-    public void setGuardRight(BufferedImage guardRight) {
-        this.guardRight = guardRight;
-    }
-
-    public BufferedImage getGuardUp() {
-        return guardUp;
-    }
-
-    public void setGuardUp(BufferedImage guardUp) {
-        this.guardUp = guardUp;
-    }
-
-    public Character getLinkedCharacter() {
-        return linkedCharacter;
-    }
-
-    public void setLinkedCharacter(Character linkedCharacter) {
-        this.linkedCharacter = linkedCharacter;
     }
 
     public int getMotion1_duration() {
@@ -1192,10 +1082,6 @@ public void addToInventory(Item item) {
 
     public void setSolidAreaDefaultY(int solidAreaDefaultY) {
         this.solidAreaDefaultY = solidAreaDefaultY;
-    }
-
-    public int getType_player() {
-        return type_player;
     }
 
     public int getWorldX() {

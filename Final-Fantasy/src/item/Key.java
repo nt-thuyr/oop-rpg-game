@@ -1,6 +1,7 @@
 package item;
 
-import entity.Character;
+import character.Character;
+
 import main.GamePanel;
 
 public class Key extends Item {
@@ -19,17 +20,23 @@ public class Key extends Item {
         setPrice(350);
         setStackable(true);
 
+        setDialogue();
+    }
+
+    public void setDialogue() {
+        getDialogues()[0][0] = "Bạn đã dùng " + getName() + " để mở cánh cửa này.";
+        getDialogues()[1][0] = "Làm cái gì zậy?";
     }
 
     public boolean use(Character entity) {
         int objIndex = getDetected(entity, gp.getObj(), "Door"); // user, target, name
         if (objIndex != 999) {
-//            startDialogue(this, 0);
+            startDialogue(this, 0);
             gp.playSE(3);
             gp.getObj()[gp.getCurrentMap()][objIndex] = null;
             return true;
         } else {
-//            startDialogue(this, 1);
+            startDialogue(this, 1);
             return false;
         }
     }

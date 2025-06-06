@@ -1,6 +1,6 @@
 package ai;
 
-import entity.Character;
+import character.Character;
 import main.GamePanel;
 import tile_interactive.InteractiveTile;
 

@@ -1,4 +1,4 @@
-package entity;
+package character;
 
 public class CharacterState {
 
@@ -12,7 +12,6 @@ public class CharacterState {
     private boolean onPath = false;
     private boolean knockBack = false;
     private String knockBackDirection;
-    private boolean guarding = false;
     private boolean transparent = false;
     private boolean offBalance = false;
     private boolean opened = false;
@@ -29,7 +28,6 @@ public class CharacterState {
     private int dyingCounter = 0; // Theo dõi thời gian diễn ra animation chết của một thực thể.
     private int hpBarCounter = 0; // Quản lý thời gian hiển thị thanh máu của một thực thể (thường là quái vật) sau khi nó bị tấn công.
     private int knockBackCounter = 0; // Theo dõi thời gian mà một thực thể đang bị đẩy lùi (knockback) sau khi bị tấn công.
-    private int guardCounter = 0; // Theo dõi thời gian mà người chơi (hoặc một thực thể có khả năng phòng thủ) đang giữ nút phòng thủ.
     private int offBalanceCounter = 0; // Theo dõi thời gian mà một thực thể đang trong trạng thái mất cân bằng (off-balance), thường sau khi bị một đòn tấn công mạnh hoặc bị parry.
 
     public CharacterState() {
@@ -44,7 +42,6 @@ public class CharacterState {
         dyingCounter = 0;
         hpBarCounter = 0;
         knockBackCounter = 0;
-        guardCounter = 0;
         offBalanceCounter = 0;
     }
 
@@ -112,14 +109,6 @@ public class CharacterState {
         knockBackCounter = 0;
     }
 
-    public void incrementGuardCounter() {
-        guardCounter++;
-    }
-
-    public void resetGuardCounter() {
-        guardCounter = 0;
-    }
-
     public void incrementOffBalanceCounter() {
         offBalanceCounter++;
     }
@@ -182,22 +171,6 @@ public class CharacterState {
 
     public void setDyingCounter(int dyingCounter) {
         this.dyingCounter = dyingCounter;
-    }
-
-    public int getGuardCounter() {
-        return guardCounter;
-    }
-
-    public void setGuardCounter(int guardCounter) {
-        this.guardCounter = guardCounter;
-    }
-
-    public boolean isGuarding() {
-        return guarding;
-    }
-
-    public void setGuarding(boolean guarding) {
-        this.guarding = guarding;
     }
 
     public int getHpBarCounter() {
