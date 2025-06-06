@@ -50,8 +50,6 @@ public abstract class Item {
     public Item(GamePanel gp) {
         this.gp = gp;
     }
-    public void interact() {
-    }
 
     public void setDialogue() { // thiết lập hội thoại
         dialogues[0][0] = "No dialogue set.";
@@ -88,6 +86,10 @@ public abstract class Item {
     public boolean use(Character user) {
         // Default use logic, can be overridden by subclasses
         return false;
+    }
+
+    public void interact() {
+
     }
 
     public int getDetected(Character user, Item[][] target, String targetName)

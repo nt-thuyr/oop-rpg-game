@@ -6,7 +6,6 @@ import main.GamePanel;
 
 public class Key extends Item {
 
-    private final GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Chìa khoá";
 
     public Key(GamePanel gp) {

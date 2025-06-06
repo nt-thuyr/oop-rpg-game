@@ -5,7 +5,6 @@ import main.GamePanel;
 
 public class PotionRed extends Item {
 
-    private final GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Huyết dược";
 
     public PotionRed(GamePanel gp) {

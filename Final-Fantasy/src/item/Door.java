@@ -6,7 +6,6 @@ import java.awt.*;
 
 public class Door extends Item {
 
-    private final GamePanel gp; // Encapsulated GamePanel
     public static final String objName = "Door";
 
     public Door(GamePanel gp) {
