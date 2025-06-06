@@ -396,27 +396,6 @@ public class Character {
     }
 
 
-    public String getOppositeDirection(String direction) {
-        String oppositeDirection = "";
-
-        switch (direction) {
-            case "up":
-                oppositeDirection = "down";
-                break;
-            case "down":
-                oppositeDirection = "up";
-                break;
-            case "left":
-                oppositeDirection = "right";
-                break;
-            case "right":
-                oppositeDirection = "left";
-                break;
-        }
-
-        return oppositeDirection;
-    }
-
     public void attacking() {
         getState().setSpriteCounter(getState().getSpriteCounter() + 1);
 
