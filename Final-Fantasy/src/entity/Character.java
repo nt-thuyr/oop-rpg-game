@@ -403,26 +403,6 @@ public class Character {
         }
     }
 
-    public void moveTowardPlayer(int interval) {
-        getState().setActionLockCounter(getState().getActionLockCounter() + 1);
-
-        if (getState().getActionLockCounter() > interval) {
-            if (getXdistance(gp.getPlayer()) > getYdistance(gp.getPlayer())) { // If entity is farther from the player on the X-axis
-                if (gp.getPlayer().getCenterX() < getCenterX()) { // Player is on the left side, entity moves left
-                    setDirection("left");
-                } else {
-                    setDirection("right");
-                }
-            } else if (getXdistance(gp.getPlayer()) < getYdistance(gp.getPlayer())) { // If entity is farther from the player on the Y-axis
-                if (gp.getPlayer().getCenterY() < getCenterY()) { // Player is above, entity moves up
-                    setDirection("up");
-                } else {
-                    setDirection("down");
-                }
-            }
-            getState().setActionLockCounter(0);
-        }
-    }
 
     public String getOppositeDirection(String direction) {
         String oppositeDirection = "";

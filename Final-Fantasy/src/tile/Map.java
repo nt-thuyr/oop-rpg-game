@@ -102,13 +102,7 @@ public class Map extends TileManager {
         this.height = height;
     }
 
-    public boolean isMiniMapOn() {
-        return miniMapOn;
-    }
 
-    public void setMiniMapOn(boolean miniMapOn) {
-        this.miniMapOn = miniMapOn;
-    }
 
     public int getWidth() {
         return width;
@@ -118,11 +112,4 @@ public class Map extends TileManager {
         this.width = width;
     }
 
-    public BufferedImage[] getWorldMap() {
-        return worldMap;
-    }
-
-    public void setWorldMap(BufferedImage[] worldMap) {
-        this.worldMap = worldMap;
-    }
 }

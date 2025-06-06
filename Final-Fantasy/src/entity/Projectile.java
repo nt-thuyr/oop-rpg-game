@@ -71,20 +71,4 @@ public class Projectile extends Character {
             getState().setSpriteCounter(0);
         }
     }
-
-    public boolean haveResource(Character user) {
-        return false;
-    }
-
-    public void subtractResource(Character user) {
-        // No implementation provided
-    }
-
-    public Character getUser() {
-        return user;
-    }
-
-    public void setUser(Character user) {
-        this.user = user;
-    }
 }

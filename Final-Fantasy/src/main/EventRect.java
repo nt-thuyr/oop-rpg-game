@@ -11,9 +11,6 @@ public class EventRect extends Rectangle {
         return eventDone;
     }
 
-    public void setEventDone(boolean eventDone) {
-        this.eventDone = eventDone;
-    }
 
     public int getEventRectDefaultX() {
         return eventRectDefaultX;

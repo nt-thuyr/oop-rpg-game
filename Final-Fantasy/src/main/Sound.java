@@ -85,43 +85,4 @@ public class Sound {
         }
         fc.setValue(volume);
     }
-    public Clip getClip() {
-        return clip;
-    }
-
-    public void setClip(Clip clip) {
-        this.clip = clip;
-    }
-
-    public FloatControl getFc() {
-        return fc;
-    }
-
-    public void setFc(FloatControl fc) {
-        this.fc = fc;
-    }
-
-    public URL[] getSoundURL() {
-        return soundURL;
-    }
-
-    public void setSoundURL(URL soundURL) {
-        this.soundURL = new URL[]{soundURL};
-    }
-
-    public float getVolume() {
-        return volume;
-    }
-
-    public void setVolume(float volume) {
-        this.volume = volume;
-    }
-
-    public int getVolumeScale() {
-        return volumeScale;
-    }
-
-    public void setVolumeScale(int volumeScale) {
-        this.volumeScale = volumeScale;
-    }
 }

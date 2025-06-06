@@ -106,25 +106,6 @@ public class Player extends Character {
         return setDefense(getDexterity() * getCurrentShield().getDefenseValue());
     }
 
-    public int getCurrentWeaponSlot() {
-        int currentWeaponSlot = 0;
-        for (int i = 0; i < getInventory().size(); i++) {
-            if (getInventory().get(i) == getCurrentWeapon()) {
-                currentWeaponSlot = i;
-            }
-        }
-        return currentWeaponSlot;
-    }
-
-    public int getCurrentShieldSlot() {
-        int currentShieldSlot = 0;
-        for (int i = 0; i < getInventory().size(); i++) {
-            if (getInventory().get(i) == getCurrentShield()) {
-                currentShieldSlot = i;
-            }
-        }
-        return currentShieldSlot;
-    }
 
     public void getImage() {
         setUp1(setup("/player/boy_up_1", gp.getTileSize(), gp.getTileSize()));
@@ -161,7 +142,7 @@ public class Player extends Character {
 
     public void update() // Runs 60 times every second.
     {
-        if (getState().isKnockBack()) {
+        if (getState().isKnockBack()) {// hiệu ứng khi nhân vật bị tấn công
 
             getState().setCollisionOn(false);
             if (isMoving() || keyH.isEnterPressed()) {
@@ -279,21 +260,6 @@ public class Player extends Character {
             getState().setGuardCounter(0);
         }
 
-        if (gp.getKeyH().isShotKeyPressed() && !getProjectile().getState().isAlive() && getState().getShotAvailableCounter() == 30 && getProjectile().haveResource(this)) {
-            getProjectile().set(getWorldX(), getWorldY(), getDirection(), true, this);
-            getProjectile().subtractResource(this);
-
-            for (int i = 0; i < gp.getProjectile()[1].length; i++) {
-                if (gp.getProjectile()[gp.getCurrentMap()][i] == null) {
-                    gp.getProjectile()[gp.getCurrentMap()][i] = getProjectile();
-                    break;
-                }
-            }
-
-            getState().resetShotAvailableCounter();
-            gp.playSE(10);
-        }
-
         if (getState().isInvincible()) {
             getState().incrementInvincibleCounter();
             if (getState().getInvincibleCounter() > 60) {
@@ -303,9 +269,6 @@ public class Player extends Character {
             }
         }
 
-        if (getState().getShotAvailableCounter() < 30) {
-            getState().incrementShotAvailableCounter();
-        }
         if (getLife() > getMaxLife()) {
             setLife(getMaxLife());
         }

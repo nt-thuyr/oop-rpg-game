@@ -58,6 +58,7 @@ public class EventHandler{
         eventMaster.getDialogues()[1][1] = "Khà, nước được phết đấy.";
     }
     public void checkEvent()
+    // Kiểm tra và kích hoạt các sự kiện khi người chơi di chuyển đến các vị trí cụ thể
     {
         //Check if the player character is more than 1 tile away from the last event
         int xDistance = Math.abs(gp.getPlayer().getWorldX() - previousEventX);  //pure distance
@@ -85,6 +86,7 @@ public class EventHandler{
 
     }
     public boolean hit(int map, int col, int row, String reqDirection)
+    // Kiểm tra xem người chơi có va chạm với một EventRect tại vị trí cụ thể và hướng di chuyển có khớp với yêu cầu không.
     {
         boolean hit = false;
         if(map == gp.getCurrentMap())
@@ -144,30 +146,6 @@ public class EventHandler{
             character.speak();
         }
     }
-
-    public boolean isCanTouchEvent() {
-        return canTouchEvent;
-    }
-
-    public void setCanTouchEvent(boolean canTouchEvent) {
-        this.canTouchEvent = canTouchEvent;
-    }
-
-    public Character getEventMaster() {
-        return eventMaster;
-    }
-
-    public void setEventMaster(Character eventMaster) {
-        this.eventMaster = eventMaster;
-    }
-
-//    public EventRect getEventRect() {
-//        return eventRect;
-//    }
-//
-//    public void setEventRect(EventRect eventRect) {
-//        this.eventRect = eventRect;
-//    }
 
     public GamePanel getGp() {
         return gp;

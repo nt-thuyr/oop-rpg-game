@@ -720,46 +720,16 @@ public class UI {
             }
         }
     }
-    public int getCharIndex() {
-        return charIndex;
-    }
 
     public BufferedImage getCoin() {
         return coin;
     }
-
-    public String getCombinedText() {
-        return combinedText;
-    }
-
     public int getCommandNum() {
         return commandNum;
     }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    public BufferedImage getCrystal_blank() {
-        return crystal_blank;
-    }
-
-    public BufferedImage getCrystal_full() {
-        return crystal_full;
-    }
-
-    public String getCurrentDialogue() {
-        return currentDialogue;
-    }
-
     public Font getDeterminationSans() {
         return determinationSans;
     }
-
-    public Graphics2D getG2() {
-        return g2;
-    }
-
     public GamePanel getGp() {
         return gp;
     }
@@ -808,10 +778,6 @@ public class UI {
         return playerSlotRow;
     }
 
-    public Font getPurisaB() {
-        return purisaB;
-    }
-
     public int getSubState() {
         return subState;
     }
@@ -828,68 +794,13 @@ public class UI {
         this.commandNum = commandNum;
     }
 
-    public void setCharIndex(int charIndex) {
-        this.charIndex = charIndex;
-    }
-
-    public void setCoin(BufferedImage coin) {
-        this.coin = coin;
-    }
-
-    public void setCombinedText(String combinedText) {
-        this.combinedText = combinedText;
-    }
-
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
-
-    public void setCrystal_blank(BufferedImage crystal_blank) {
-        this.crystal_blank = crystal_blank;
-    }
-
-    public void setCrystal_full(BufferedImage crystal_full) {
-        this.crystal_full = crystal_full;
-    }
-
-    public void setCurrentDialogue(String currentDialogue) {
-        this.currentDialogue = currentDialogue;
-    }
-
-    public void setDeterminationSans(Font determinationSans) {
-        this.determinationSans = determinationSans;
-    }
-
-    public void setG2(Graphics2D g2) {
-        this.g2 = g2;
-    }
 
     public void setGp(GamePanel gp) {
         this.gp = gp;
     }
 
-    public void setHeart_blank(BufferedImage heart_blank) {
-        this.heart_blank = heart_blank;
-    }
-
-    public void setHeart_full(BufferedImage heart_full) {
-        this.heart_full = heart_full;
-    }
-
-    public void setHeart_half(BufferedImage heart_half) {
-        this.heart_half = heart_half;
-    }
-
     public void setInNPCInventory(boolean inNPCInventory) {
         isInNPCInventory = inNPCInventory;
-    }
-
-    public void setMessage(ArrayList<String> message) {
-        this.message = message;
-    }
-
-    public void setMessageCounter(ArrayList<Integer> messageCounter) {
-        this.messageCounter = messageCounter;
     }
 
     public void setNpcSlotCol(int npcSlotCol) {
@@ -907,11 +818,6 @@ public class UI {
     public void setPlayerSlotRow(int playerSlotRow) {
         this.playerSlotRow = playerSlotRow;
     }
-
-    public void setPurisaB(Font purisaB) {
-        this.purisaB = purisaB;
-    }
-
     public void setSubState(int subState) {
         this.subState = subState;
     }

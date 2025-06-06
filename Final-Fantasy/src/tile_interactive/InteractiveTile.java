@@ -57,9 +57,6 @@ public class InteractiveTile extends Character {
         return destructible;
     }
 
-    public void setDestructible(boolean destructible) {
-        this.destructible = destructible;
-    }
 
     @Override
     public GamePanel getGp() {
