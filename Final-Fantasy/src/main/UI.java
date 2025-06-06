@@ -534,83 +534,62 @@ public void drawDialogueScreen() {
         }
 
         // MAIN MENU
-        if (getTitleScreenState() == 0) {
-            // TITLE NAME
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
-            String text = "Final Fantasy\n";
-            int x = getXforCenteredText(text);
-             // Lùi xuống bằng cách tăng y
-            int y = gp.getTileSize() * 3;
-            // SHADOW
-            g2.setColor(Color.gray);
-            g2.drawString(text, x + 5, y + 5);
-            // MAIN COLOR
-            g2.setColor(Color.white);
-            g2.drawString(text, x, y);
+        // TITLE NAME
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90F));
+        String text = "Final Fantasy\n";
+        int x = getXforCenteredText(text);
+        int y = gp.getTileSize() * 3;
+        // SHADOW
+        g2.setColor(Color.gray);
+        g2.drawString(text, x + 5, y + 5);
+        // MAIN COLOR
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
 
-            // MENU
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-            FontMetrics metrics = g2.getFontMetrics(g2.getFont());
+        // MENU
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+        FontMetrics metrics = g2.getFontMetrics(g2.getFont());
 
-            // START BUTTON
-            text = "START";
-            // Tính chiều rộng và cao của hộp dựa trên văn bản "START"
-            int buttonWidth = (int) metrics.getStringBounds(text, g2).getWidth() + 40;
-            int buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
-            // Căn giữa hộp so với màn hình
-            int startBoxX = gp.getScreenWidth() / 2 - buttonWidth / 2;
-            int startBoxY = y + gp.getTileSize() * 3; // Dịch lên cao
-            // Tính toán vị trí thực tế của hộp khi vẽ
-            int startBoxYActual = startBoxY - buttonHeight / 2 - 10;
-            // Căn giữa văn bản trong hộp
-            int startTextX = startBoxX + (buttonWidth - (int) metrics.getStringBounds(text, g2).getWidth()) / 2;
-            int startTextY = startBoxYActual + (buttonHeight + metrics.getAscent() - metrics.getDescent()) / 2;
-            drawMenuOptionBox(startBoxX, startBoxYActual, buttonWidth, buttonHeight);
-            g2.setColor(Color.white);
-            g2.drawString(text, startTextX, startTextY);
-            if (getCommandNum() == 0) {
-                g2.drawString(">", startBoxX - gp.getTileSize(), startTextY);
-            }
-
-            // QUIT BUTTON
-            text = "QUIT";
-            // Dùng cùng chiều rộng của "START" để đồng đều
-            buttonWidth = (int) metrics.getStringBounds("START", g2).getWidth() + 40;
-            buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
-            // Căn giữa hộp so với màn hình
-            int quitBoxX = gp.getScreenWidth() / 2 - buttonWidth / 2;
-            int quitBoxY = startBoxY + buttonHeight + gp.getTileSize() / 2;
-            // Tính toán vị trí thực tế của hộp khi vẽ
-            int quitBoxYActual = quitBoxY - buttonHeight / 2 - 10;
-            // Căn giữa văn bản trong hộp
-            int quitTextX = quitBoxX + (buttonWidth - (int) metrics.getStringBounds(text, g2).getWidth()) / 2;
-            int quitTextY = quitBoxYActual + (buttonHeight + metrics.getAscent() - metrics.getDescent()) / 2;
-            drawMenuOptionBox(quitBoxX, quitBoxYActual, buttonWidth, buttonHeight);
-            g2.setColor(Color.white);
-            g2.drawString(text, quitTextX, quitTextY);
-            if (getCommandNum() == 1) {
-                g2.drawString(">", quitBoxX - gp.getTileSize(), quitTextY);
-            }
+        // START BUTTON
+        text = "START";
+        // Tính chiều rộng và cao của hộp dựa trên văn bản "START"
+        int buttonWidth = (int) metrics.getStringBounds(text, g2).getWidth() + 40;
+        int buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
+        // Căn giữa hộp so với màn hình
+        int startBoxX = gp.getScreenWidth() / 2 - buttonWidth / 2;
+        int startBoxY = y + gp.getTileSize() * 3; // Dịch lên cao
+        // Tính toán vị trí thực tế của hộp khi vẽ
+        int startBoxYActual = startBoxY - buttonHeight / 2 - 10;
+        // Căn giữa văn bản trong hộp
+        int startTextX = startBoxX + (buttonWidth - (int) metrics.getStringBounds(text, g2).getWidth()) / 2;
+        int startTextY = startBoxYActual + (buttonHeight + metrics.getAscent() - metrics.getDescent()) / 2;
+        drawMenuOptionBox(startBoxX, startBoxYActual, buttonWidth, buttonHeight);
+        g2.setColor(Color.white);
+        g2.drawString(text, startTextX, startTextY);
+        if (getCommandNum() == 0) {
+            g2.drawString(">", startBoxX - gp.getTileSize(), startTextY);
         }
-        // SECOND SCREEN
-        else if (getTitleScreenState() == 1) {
-            // CLASS SELECTION SCREEN
-            g2.setColor(Color.white);
-            g2.setFont(g2.getFont().deriveFont(50F));
 
-            String text = "Sẵn sàng chưaaaaaa?";
-            int x = getXforCenteredText(text);
-            int y = gp.getTileSize() * 3;
-            g2.drawString(text, x, y);
-
-            text = "Rồiii!";
-            x = getXforCenteredText(text);
-            y += gp.getTileSize() * 3;
-            g2.drawString(text, x, y);
-            if (getCommandNum() == 0) {
-                g2.drawString(">", x - gp.getTileSize(), y);
-            }
+        // QUIT BUTTON
+        text = "QUIT";
+        // Dùng cùng chiều rộng của "START" để đồng đều
+        buttonWidth = (int) metrics.getStringBounds("START", g2).getWidth() + 40;
+        buttonHeight = (int) metrics.getStringBounds(text, g2).getHeight() + 20;
+        // Căn giữa hộp so với màn hình
+        int quitBoxX = gp.getScreenWidth() / 2 - buttonWidth / 2;
+        int quitBoxY = startBoxY + buttonHeight + gp.getTileSize() / 2;
+        // Tính toán vị trí thực tế của hộp khi vẽ
+        int quitBoxYActual = quitBoxY - buttonHeight / 2 - 10;
+        // Căn giữa văn bản trong hộp
+        int quitTextX = quitBoxX + (buttonWidth - (int) metrics.getStringBounds(text, g2).getWidth()) / 2;
+        int quitTextY = quitBoxYActual + (buttonHeight + metrics.getAscent() - metrics.getDescent()) / 2;
+        drawMenuOptionBox(quitBoxX, quitBoxYActual, buttonWidth, buttonHeight);
+        g2.setColor(Color.white);
+        g2.drawString(text, quitTextX, quitTextY);
+        if (getCommandNum() == 1) {
+            g2.drawString(">", quitBoxX - gp.getTileSize(), quitTextY);
         }
+
     }
 
     // New helper method to draw menu option boxes
@@ -872,3 +851,4 @@ public void drawDialogueScreen() {
         this.charIndex = 0; // Reset character index for typewriter effect if used
     }
 }
+

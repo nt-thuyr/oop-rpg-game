@@ -60,16 +60,12 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER) {
                 if (gp.getUi().getCommandNum() == 0) {
-                    gp.getUi().setTitleScreenState(1);
-                    gp.getUi().setCommandNum(0);
+                    // Sửa: Vào game ngay khi chọn START
+                    gp.setGameState(gp.getPlayState());
+                    gp.playMusic(0);
                 } else if (gp.getUi().getCommandNum() == 1) {
                     System.exit(0);
                 }
-            }
-        } else if (gp.getUi().getTitleScreenState() == 1) {
-            if (code == KeyEvent.VK_ENTER) {
-                gp.setGameState(gp.getPlayState());
-                gp.playMusic(0);
             }
         }
     }
@@ -489,3 +485,4 @@ public class KeyHandler implements KeyListener {
         this.shotKeyPressed = shotKeyPressed;
     }
 }
+
