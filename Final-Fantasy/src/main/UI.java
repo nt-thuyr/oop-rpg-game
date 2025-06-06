@@ -214,6 +214,15 @@ public void drawDialogueScreen() {
     }
 
     public void drawEndGameScreen() {
+        if (backgroundImage != null) {
+            g2.drawImage(backgroundImage, 0, 0, gp.getScreenWidth(), gp.getScreenHeight(), null);
+            g2.setColor(new Color(0, 0, 0, 100)); // Lớp phủ đen mờ
+            g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+        } else {
+            // Fallback: Vẽ màu nền nếu hình ảnh không tải được
+            g2.setColor(new Color(20, 30, 40));
+            g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+        }
         g2.setColor(new Color(0, 0, 0, 150)); // Độ trong suốt 150/255
         g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
         int x;
