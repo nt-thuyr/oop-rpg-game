@@ -2,7 +2,6 @@ package ai;
 
 import character.Character;
 import main.GamePanel;
-import tile_interactive.InteractiveTile;
 
 import java.util.ArrayList;
 
@@ -75,17 +74,6 @@ public class PathFinder {
             int tileNum = gp.getTileM().getMapTileNum()[gp.getCurrentMap()][col][row];
             if (gp.getTileM().getTile()[tileNum].isCollision()) {
                 node[col][row].setSolid(true);
-            }
-            // CHECK INTERACTIVE TILES
-            for (int i = 0; i < gp.getiTile()[1].length; i++) {
-                if (gp.getiTile()[gp.getCurrentMap()][i] != null &&
-                        gp.getiTile()[gp.getCurrentMap()][i] instanceof InteractiveTile &&
-                        gp.getiTile()[gp.getCurrentMap()][i].isDestructible()) {
-
-                    int itCol = gp.getiTile()[gp.getCurrentMap()][i].getWorldX() / gp.getTileSize();
-                    int itRow = gp.getiTile()[gp.getCurrentMap()][i].getWorldY() / gp.getTileSize();
-                    node[itCol][itRow].setSolid(true);
-                }
             }
 
             getCost(node[col][row]); // Calculate G, H, and F costs for the current node

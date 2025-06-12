@@ -33,7 +33,7 @@ public abstract class Item {
     private static final int type_obstacle = 3;
     private static final int type_consumable = 4;
 
-    protected GamePanel gp; //
+    protected GamePanel gp;
     private int worldX, worldY; // Toạ độ trên thế giới
     private int motion1_duration; // Thời gian thực hiển chuyển động đầu tiên
     private int motion2_duration; // Thời gian thực hiện chuyển động thứ hai
@@ -84,7 +84,6 @@ public abstract class Item {
 
     // Polymorphic use method for all items
     public boolean use(Character user) {
-        // Default use logic, can be overridden by subclasses
         return false;
     }
 
@@ -125,6 +124,14 @@ public abstract class Item {
 
         }
         return  index;
+    }
+
+    public void draw(Graphics2D g2) {
+        if (inCamera()) {
+            int tempScreenX = getWorldX() - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+            int tempScreenY = getWorldY() - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
+            g2.drawImage(getImage(), tempScreenX, tempScreenY, null);
+        }
     }
 
     public void setLoot(Item loot) {
@@ -170,10 +177,6 @@ public abstract class Item {
 
     public void setStackable(boolean stackable) {
         this.stackable = stackable;
-    }
-
-    public Item getLoot() {
-        return loot;
     }
 
     public int getType() {
@@ -244,27 +247,6 @@ public abstract class Item {
         this.amount = amount;
     }
 
-    public void draw(Graphics2D g2) {
-        if (inCamera()) {
-            int tempScreenX = getWorldX() - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
-            int tempScreenY = getWorldY() - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
-            g2.drawImage(getImage(), tempScreenX, tempScreenY, null);
-        }
-    }
-
-    // If you want items to manage their own stacking, you can add:
-    public void addToInventory(java.util.List<Item> inventory) {
-        if (isStackable()) {
-            for (Item invItem : inventory) {
-                if (invItem.getName().equals(getName())) {
-                    invItem.setAmount(invItem.getAmount() + getAmount());
-                    return;
-                }
-            }
-        }
-        inventory.add(this);
-    }
-
     public boolean isTemp() {
         return temp;
     }
@@ -289,13 +271,8 @@ public abstract class Item {
         this.collision = collision;
     }
 
-
     public String[][] getDialogues() {
         return dialogues;
-    }
-
-    public void setDialogues(String[][] dialogues) {
-        this.dialogues = dialogues;
     }
 
     public GamePanel getGp() {
