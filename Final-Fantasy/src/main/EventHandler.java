@@ -48,15 +48,8 @@ public class EventHandler{
                 }
             }
         }
-        setDialogue();
     }
-    public void setDialogue()
-    {
-        eventMaster.getDialogues()[0][0] = "Bạn vừa ngã xuống hố!";
-
-        eventMaster.getDialogues()[1][0] = "Bạn vừa uông nước.\nNăng lượng và sức mạnh của bạn sẽ được phục hồi.\n"+ "(Tiến trình đã được lưu)";
-        eventMaster.getDialogues()[1][1] = "Khà, nước được phết đấy.";
-    }
+    
     public void checkEvent()
     // Kiểm tra và kích hoạt các sự kiện khi người chơi di chuyển đến các vị trí cụ thể
     {
@@ -83,7 +76,6 @@ public class EventHandler{
 
 
         }
-
     }
     public boolean hit(int map, int col, int row, String reqDirection)
     // Kiểm tra xem người chơi có va chạm với một EventRect tại vị trí cụ thể và hướng di chuyển có khớp với yêu cầu không.

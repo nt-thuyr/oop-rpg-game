@@ -3,7 +3,6 @@ package character;
 import main.GamePanel;
 import main.KeyHandler;
 import item.*;
-import tile_interactive.InteractiveTile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -147,7 +146,6 @@ public class Player extends Character {
                 gp.getcChecker().checkObject(this, true);
                 gp.getcChecker().checkEntity(this, gp.getNpc());
                 gp.getcChecker().checkEntity(this, gp.getMonster());
-                gp.getcChecker().checkEntity(this, gp.getiTile());
             }
 
             if (getState().isCollisionOn()) {
@@ -200,8 +198,6 @@ public class Player extends Character {
 
             int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
             contactMonster(monsterIndex);
-
-            int iTileIndex = gp.getcChecker().checkEntity(this, gp.getiTile());
 
             if (isMoving() || keyH.isEnterPressed()) {
                 gp.geteHandler().checkEvent();
@@ -362,25 +358,6 @@ public class Player extends Character {
                     gp.getUi().addMessage("Exp +" + monster.getExp() + "!");
                     setExp(getExp() + monster.getExp());
                     checkLevelUp();
-                }
-            }
-        }
-    }
-
-    public void damageInteractiveTile(int i) {
-        if (i != 999 && gp.getiTile()[gp.getCurrentMap()][i] != null) {
-            InteractiveTile tile = gp.getiTile()[gp.getCurrentMap()][i];
-
-            if (tile.isDestructible() && tile.isCorrectItem(this) && !tile.getState().isInvincible()) {
-                tile.playSE();
-                tile.setLife(tile.getLife() - 1);
-                tile.getState().setInvincible(true);
-
-                // Generate Particle
-                generateParticle(tile, tile);
-
-                if (tile.getLife() == 0) {
-                    gp.getiTile()[gp.getCurrentMap()][i] = tile.getDestroyedForm();
                 }
             }
         }

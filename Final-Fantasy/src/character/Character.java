@@ -211,7 +211,6 @@ public class Character {
         gp.getcChecker().checkObject(this, false);
         gp.getcChecker().checkEntity(this, gp.getNpc());
         gp.getcChecker().checkEntity(this, gp.getMonster());
-        gp.getcChecker().checkEntity(this, gp.getiTile());
         boolean contactPlayer = gp.getcChecker().checkPlayer(this);
         if (getType() == getType_monster() && contactPlayer) {
             damagePlayer(getAttack());
@@ -439,9 +438,6 @@ public class Character {
                 // Check monster collision with the updated worldX, worldY and solidArea
                 int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
                 gp.getPlayer().damageMonster(monsterIndex, this, getAttack(), getCurrentWeapon().getKnockBackPower());
-
-                int iTileIndex = gp.getcChecker().checkEntity(this, gp.getiTile());
-                gp.getPlayer().damageInteractiveTile(iTileIndex);
 
                 int projectileIndex = gp.getcChecker().checkEntity(this, gp.getProjectile());
                 gp.getPlayer().damageProjectile(projectileIndex);

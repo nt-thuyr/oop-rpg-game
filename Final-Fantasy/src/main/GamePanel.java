@@ -6,7 +6,6 @@ import character.Player;
 import item.Item;
 import tile.Map;
 import tile.TileManager;
-import tile_interactive.InteractiveTile;
 
 import javax.swing.JPanel;
 import java.awt.*;
@@ -63,7 +62,6 @@ public class GamePanel extends JPanel implements Runnable {
     private final Item[][] obj = new Item[maxMap][20];
     private final Character[][] npc = new Character[maxMap][10];
     private Character[][] monster = new Character[maxMap][20];
-    private final InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
     private final Character[][] projectile = new Character[maxMap][20];
     private ArrayList<Character> particleList = new ArrayList<>();
     private ArrayList<Character> charactersList = new ArrayList<>();
@@ -233,16 +231,6 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                 }
             }
-
-            //INTERACTIVE TILE
-            for(int i = 0; i < iTile[1].length; i++)
-            {
-                if(iTile[currentMap][i] != null)
-                {
-                    iTile[currentMap][i].update();
-                }
-            }
-
         }
 
         if(gameState == pauseState)
@@ -280,15 +268,6 @@ public class GamePanel extends JPanel implements Runnable {
         {
             //TILE
             tileM.draw(g2);
-
-            //INTERACTIVE TILE
-            for(int i = 0; i < iTile[1].length; i++)
-            {
-                if(iTile[currentMap][i] != null)
-                {
-                    iTile[currentMap][i].draw(g2);
-                }
-            }
 
             // Xóa danh sách trước khi thêm mới
             charactersList.clear();
@@ -488,7 +467,6 @@ public class GamePanel extends JPanel implements Runnable {
         return eHandler;
     }
 
-
     public int getFPS() {
         return FPS;
     }
@@ -515,10 +493,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int getIndoor() {
         return indoor;
-    }
-
-    public InteractiveTile[][] getiTile() {
-        return iTile;
     }
 
     public KeyHandler getKeyH() {
