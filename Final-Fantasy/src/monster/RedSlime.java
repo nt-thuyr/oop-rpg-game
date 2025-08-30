@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class RedSlime extends Character {
 
-    private final GamePanel gp; // Encapsulated GamePanel
+
 
     public RedSlime(GamePanel gp) {
         super(gp);

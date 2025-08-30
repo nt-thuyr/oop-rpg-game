@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class GreenSlime extends Character {
 
-    private final GamePanel gp; // Encapsulated GamePanel
 
     public GreenSlime(GamePanel gp) {
         super(gp);

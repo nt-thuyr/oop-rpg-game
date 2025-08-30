@@ -9,8 +9,6 @@ import java.util.Random;
 
 public class SkeletonLord extends Character {
 
-    private final GamePanel gp;
-
     public SkeletonLord(GamePanel gp) {
         super(gp);
 

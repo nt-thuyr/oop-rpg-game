@@ -12,7 +12,7 @@ public class Map extends TileManager {
 
     private GamePanel gp;
     private BufferedImage[] worldMap;
-    public boolean miniMapOn = false;
+
 
     public Map(GamePanel gp) {
         super(gp);

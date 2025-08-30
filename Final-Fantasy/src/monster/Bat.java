@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class Bat extends Character {
 
-    private final GamePanel gp; // Encapsulated GamePanel
 
     public Bat(GamePanel gp) {
         super(gp);

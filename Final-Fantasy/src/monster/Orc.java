@@ -9,8 +9,6 @@ import java.util.Random;
 
 public class Orc extends Character {
 
-    private final GamePanel gp; // Encapsulated GamePanel
-
     public Orc(GamePanel gp) {
         super(gp);
 
