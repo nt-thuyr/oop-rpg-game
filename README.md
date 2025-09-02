@@ -106,15 +106,18 @@ Please follow standard Java coding conventions and include meaningful documentat
 
 ## 📄 License
 
-This project is intended for **educational purposes**.  
-See the `LICENSE` file for details.
+This project is intended for **educational purposes**. 
 
 ---
 
-## 👤 Credits
+## 👤 Team members
 
-Developed by **nt-thuyr**.  
-Inspired by classic JRPG titles like **Final Fantasy**.
+1. Nguyễn Thanh Thủy
+2. Đặng Thị Hiền Lương
+3. Nguyễn Duy Hưng
+4. Trần Duy Hưng
+5. Nguyễn Minh An
+6. Phạm Quỳnh Anh
 
 ---
 
